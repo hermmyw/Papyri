@@ -1,0 +1,28 @@
+* {
+    text-align: center;
+}
+
+body {
+    background-image: url("../images/background-image.png");
+}
+
+#root {
+    /*position: relative;
+    top: 50%;
+    transform: translateY(-50%);*/
+    padding-top: 10%;
+}
+
+.papyri-heading {
+    color: #F9DC5C;
+    font-size: 64pt;
+    text-align: center;
+}
+
+.narrow-container {
+    max-width: 600px;
+    margin-top: auto;
+    margin-bottom: auto;
+    vertical-align: middle;
+    display: inline-block;
+}

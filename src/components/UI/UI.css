@@ -1,0 +1,32 @@
+.yellow-button {
+    background-color: #F9DC5C;
+    border: none;
+    margin: 4px 2px;
+    color:#011936;
+}
+
+.white-button {
+    background-color: white;
+    margin: 4px 2px;
+    color:#011936;
+}
+
+.standard-button:hover {
+    background-color: #011936;
+    color: white;
+    transition: 1s;
+}
+
+.link-button {
+    color:#F9DC5C;
+}
+
+.link-button:hover {
+    color: #F9DC5C;
+}
+
+.custom-input {
+    font-size: 1.25rem;
+    padding: .5rem 1rem;
+    margin: 4px 2px;
+}
