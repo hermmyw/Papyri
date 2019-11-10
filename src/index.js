@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import './styles/index.css';
 import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Landing from './containers/Landing';
 
 ReactDOM.render(
     <Router>
         <Switch>
-            <Route path="/" exact="true" component={Landing}/>
+            <Route path="/" exact={true} component={Landing}/>
         </Switch>
     </Router>, 
     document.getElementById('root'));
