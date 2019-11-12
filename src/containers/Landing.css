@@ -34,3 +34,15 @@ body {
     vertical-align: top;
     display: inline-block;
 }
+
+.left-container {
+    float: left;
+    width: 25%;
+    height: 400px;
+}
+
+.right-container {
+    margin-left: 25%;
+    width: 70%;
+    height: 100%;
+}

@@ -1,7 +1,11 @@
+body {
+    background-image: url("../../images/background-image.png");
+}
+
 .register-heading {
     color: #011837;
     font-size: 20pt;
-    text-align: left;
+    text-align: center;
 }
 
 .register-info {
@@ -16,11 +20,32 @@
     text-align: center;
 }
 
+.register-input-center {
+    font-size: 1.25rem;
+    padding: .5rem 1rem;
+    margin: auto auto;
+    width: 250px;
+    text-align: center;
+}
+
 .submit-button {
     background-color: #F9DC5C;
-    margin: 20px auto;
+    margin: 50px 0px 0px 75%;
+    text-align: center;
     color:#011936;
-    width: 250px;
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
+}
+
+.submit-button-center {
+    background-color: #F9DC5C;
+    margin: 50px auto;
+    text-align: center;
+    color:#011936;
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
 }
 
 .snap-button {
@@ -30,10 +55,17 @@
     width: 90px;
 }
 
+.snap-photo {
+    width: 120px;
+    height: 120px;
+    margin: auto auto;
+}
+
 .register-sample-photo {
     width: 120px;
+    height: 150px;
     margin: 50px auto 0px;
-    border: 2px solid black;
+    border: 2px solid #F9DC5C;
     border-radius: 2px;
 }
 
@@ -44,20 +76,4 @@
     color: white;
     margin: auto auto;
     line-height: 120px; 
-}
-
-.left-container {
-    float: left;
-    width: 30%;
-    height: 400px;
-}
-
-.right-container {
-    margin-left: 35%;
-    width: 70%;
-    height: 100%;
-}
-
-.camera {
-    display: hidden;
 }
