@@ -1,119 +1,79 @@
 import React from 'react';
+import Webcam from 'react-webcam';
+
 import './Register.css';
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 
-
-const Camera = (props) => (
-    <div className="camera">
-    <video id="video" hidden></video>
-    <a id="startButton"
-      onClick={ props.handleStartClick }
-    >Take photo</a>
-  </div>
-);
-
-const Photo = (props) => (
-    <div className="output" hidden>
-    <img id="photo" alt="Your photo"
-    />
-    <a id="saveButton"
-      onClick={ props.handleSaveClick }
-    >Save Photo</a>
-  </div>
-);
-
-class Capture extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            constraints: {
-                audio: false,
-                video: {width: 0, height: 300}
-            }
-        }
-        this.handleStartClick = this.handleStartClick.bind(this);
-        this.takePicture = this.takePicture.bind(this);
-    }
-
-    load() {
-        const constraints = this.state.constraints;
-        const getUserMedia = (params) => (
-            new Promise((successCallback, errorCallback) => {
-                navigator.webkitGetUserMedia.call(navigator, params, successCallback, errorCallback);
-            })
-        );
-
-        getUserMedia(constraints).then((stream) => {
-            const video = document.querySelector('video');
-            const vendorURL = window.URL || window.webkitURL;
-
-            video.src = vendorURL.createObjectURL(stream);
-            video.play();
-        }).catch((err) => {
-            console.log(err);
-        });
-
-        this.clearPhoto();
-    }
-
-    clearPhoto() {
-        const canvas = document.querySelector('canvas');
-        const photo = document.getElementById('photo');
-        const context = canvas.getContext('2d');
-        const { width, height } = this.state.constraints.video;
-        context.fillStyle = '#FFF';
-        context.fillRect(0, 0, width, height);
-
-        const data = canvas.toDataURL('image/png');
-        photo.setAttribute('src', data);
-    }
-
-    takePicture() {
-        const canvas = document.querySelector('canvas');
-        const context = canvas.getContext('2d');
-        const video = document.querySelector('video');
-        const photo = document.getElementById('photo');
-        const { width, height } = this.state.constraints.video;
-
-        canvas.width = width;
-        canvas.height = height;
-        context.drawImage(video, 0, 0, width, height);
-
-        const data = canvas.toDataURL('image/png');
-        photo.setAttribute('src', data);
-    }
-
-    handleStartClick(event) {
-        event.preventDefault();
-        this.takePicture();
-    }
-
-    render() {
-        return (
-            <div className="capture">
-                <Camera handleStartClick={ this.handleStartClick }/>
-                <canvas id="canvas"></canvas>
-            </div>
-          );
-    }
-}
-
 class RegisStudent extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {snapClicked: false, submitClicked: false};
-        this.handleSnapClick = this.handleSnapClick.bind(this);
+        this.state = {
+            snapClicked1: false, 
+            imgData1: null,
+            snapClicked2: false, 
+            imgData2: null,
+            snapClicked3: false, 
+            imgData3: null,
+            snapClicked4: false, 
+            imgData4: null,
+            snapClicked5: false, 
+            imgData5: null,
+            submitClicked: false
+        };
+        this.handleSnapClick1 = this.handleSnapClick1.bind(this);
+        this.handleSnapClick2 = this.handleSnapClick2.bind(this);
+        this.handleSnapClick3 = this.handleSnapClick3.bind(this);
+        this.handleSnapClick4 = this.handleSnapClick4.bind(this);
+        this.handleSnapClick5 = this.handleSnapClick5.bind(this);
         this.handleSubmitClick = this.handleSubmitClick.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
     }
 
-    handleSnapClick() {
-        console.log("snapped a photo!");
+    handleSnapClick1() {
+        console.log("snapped a left90 photo!");
         this.setState(state => ({
-            snapClicked: true
+            snapClicked1: true
         }));
+        const imgSrc = this.webcam.getScreenshot();
+        this.setState({imgData1: imgSrc});
+    }
+
+    handleSnapClick2() {
+        console.log("snapped a left45 photo!");
+        this.setState(state => ({
+            snapClicked2: true
+        }));
+        const imgSrc = this.webcam.getScreenshot();
+        this.setState({imgData2: imgSrc});
+    }
+
+    handleSnapClick3() {
+        console.log("snapped a front photo!");
+        this.setState(state => ({
+            snapClicked3: true
+        }));
+        const imgSrc = this.webcam.getScreenshot();
+        this.setState({imgData3: imgSrc});
+    }
+
+    handleSnapClick4() {
+        console.log("snapped a right45 photo!");
+        this.setState(state => ({
+            snapClicked4: true
+        }));
+        const imgSrc = this.webcam.getScreenshot();
+        this.setState({imgData4: imgSrc});
+    }
+
+    handleSnapClick5() {
+        console.log("snapped a right90 photo!");
+        this.setState(state => ({
+            snapClicked5: true
+        }));
+        const imgSrc = this.webcam.getScreenshot();
+        this.setState({imgData5: imgSrc});
     }
 
     handleSubmitClick() {
@@ -132,25 +92,40 @@ class RegisStudent extends React.Component {
         this.props.history.push('/');
     }
 
-    render() {
-        var display, backButton, snaps, submitButton = null;
-        backButton = (
-            <div>
-                <Row>
-                    <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Back</Button></Col>
-                </Row>
-            </div>
-        );
+    setRef = (webcam) => {
+        this.webcam = webcam;
+    }
 
-        submitButton = (
-            <Row>
-                <Col><Button className="submit-button" block onClick={this.handleSubmitClick}>Submit</Button></Col>
-            </Row>
-        );
+    render() {
+        var display, backButton, camera, sample, snap1, snap2, snap3, snap4, snap5, submitButton = null;
+        const videoConstraints = {
+            width: 200,
+            height: 200,
+            audio: false,
+            facingMode: "user"
+        };
+
+        
 
         if (!this.state.submitClicked) {
+            backButton = (
+                <div className="right-container">
+                    <Row>
+                        <Col><Button className="cancel-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Cancel</Button></Col>
+                    </Row>
+                </div>
+            );
+    
+            submitButton = (
+                <div className="right-container">
+                    <Row>
+                        <Col><Button className="submit-button" block onClick={this.handleSubmitClick}>Submit</Button></Col>
+                    </Row>
+                </div>
+            );
+
             display = (
-                <div>
+                <div className="left-container">
                     <Row><p className="register-info">First name</p></Row>
                     <Row>
                         <Col>
@@ -194,7 +169,18 @@ class RegisStudent extends React.Component {
                 </div>
             );
 
-            snaps = (
+            camera = (
+                <Webcam
+                        audio={false}
+                        height={200}
+                        width={200}
+                        ref={this.setRef}
+                        screenshotFormat='image/jpeg'
+                        videoConstraints={videoConstraints}
+                />
+            );
+
+            sample = (
                 <div>
                     <Row>
                         <img src={require('./img/face_1.jpeg')} className="register-sample-photo" />
@@ -204,29 +190,72 @@ class RegisStudent extends React.Component {
                         <img src={require('./img/face_5.jpeg')} className="register-sample-photo" />
                     </Row>
                     <Row>
-                        <Button className="snap-button">Snap</Button>
-                        <Button className="snap-button">Snap</Button>
-                        <Button className="snap-button">Snap</Button>
-                        <Button className="snap-button">Snap</Button>
-                        <Button className="snap-button">Snap</Button>
-                    </Row>
-
-                    <Row>
-                        <div className="box-grey">snapshot</div>
-                        <div className="box-grey">snapshot</div>
-                        <div className="box-grey">snapshot</div>
-                        <div className="box-grey">snapshot</div>
-                        <div className="box-grey">snapshot</div>
+                        <Button className="snap-button" onClick={this.handleSnapClick1}>Snap</Button>
+                        <Button className="snap-button" onClick={this.handleSnapClick2}>Snap</Button>
+                        <Button className="snap-button" onClick={this.handleSnapClick3}>Snap</Button>
+                        <Button className="snap-button" onClick={this.handleSnapClick4}>Snap</Button>
+                        <Button className="snap-button" onClick={this.handleSnapClick5}>Snap</Button>
                     </Row>
                 </div>
 
             );
+
+            if (this.state.snapClicked1) {
+                snap1 = (
+                    <img src={this.state.imgData1} className="snap-photo"/>
+                );
+            } else {
+                snap1 = (
+                    <div className="box-grey">snapshot</div>
+                );
+            }
+
+            if (this.state.snapClicked2) {
+                snap2 = (
+                    <img src={this.state.imgData2} className="snap-photo"/>
+                );
+            } else {
+                snap2 = (
+                    <div className="box-grey">snapshot</div>
+                );
+            }
+
+            if (this.state.snapClicked3) {
+                snap3 = (
+                    <img src={this.state.imgData3} className="snap-photo"/>
+                );
+            } else {
+                snap3 = (
+                    <div className="box-grey">snapshot</div>
+                );
+            }
+
+            if (this.state.snapClicked4) {
+                snap4 = (
+                    <img src={this.state.imgData4} className="snap-photo"/>
+                );
+            } else {
+                snap4 = (
+                    <div className="box-grey">snapshot</div>
+                );
+            }
+
+            if (this.state.snapClicked5) {
+                snap5 = (
+                    <img src={this.state.imgData5} className="snap-photo"/>
+                );
+            } else {
+                snap5 = (
+                    <div className="box-grey">snapshot</div>
+                );
+            }
+
         }
         if (this.state.submitClicked) {
             display = (
                 <div>
                     <Row>
-                        <Col>Your submission is successful!</Col>
+                        <Col><p>Your submission is successful!</p></Col>
                     </Row>
                     
                 </div>
@@ -239,14 +268,19 @@ class RegisStudent extends React.Component {
                 </div>
             );
         }
-
         return (
             <Container className="wide-container">
                 <Row>
                     <Col><p className="register-heading">Become a Student</p></Col>
                 </Row>
-                <div className="left-container">{display}</div>
-                <div className="right-container"><Capture />{snaps}</div>
+                <div>{display}</div>
+                <div>
+                    <div className="right-container"><Row><Col>{camera}</Col></Row></div>
+                    <div className="right-container">
+                        {sample}
+                        <Row>{snap1}{snap2}{snap3}{snap4}{snap5}</Row>
+                    </div>
+                </div>
                 <div>
                     {submitButton}
                     {backButton}

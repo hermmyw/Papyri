@@ -22,7 +22,10 @@
     color:#F9DC5C;
 }
 
-
+.cancel-button {
+    color:#F9DC5C;
+    margin: auto auto auto 75%;
+}
 
 .link-button:hover {
     color: #F9DC5C;
