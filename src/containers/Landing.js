@@ -30,11 +30,21 @@ class Landing extends React.Component {
     }
 
     handleRegisterInstructor() {
-        
+        console.log("register instructor!");
+        this.setState(state => ({
+            registerClicked: true
+        }));
+        let path = '/register/instructor';
+        this.props.history.push(path);
     }
 
     handleRegisterStudent() {
-
+        console.log("register student!");
+        this.setState(state => ({
+            registerClicked: true
+        }));
+        let path = '/register/student';
+        this.props.history.push(path);
     }
 
     handleBackClick() {
@@ -79,7 +89,7 @@ class Landing extends React.Component {
             display = (
                 <div>
                     <Row>
-                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleRegisterInstructor}>I am a Instructor</Button></Col>
+                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleRegisterInstructor}>I am an Instructor</Button></Col>
                     </Row>
                     <Row>
                         <Col><Button className="white-button" size="lg" block onClick={this.handleRegisterStudent}>I am a Student</Button></Col>

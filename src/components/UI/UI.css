@@ -5,6 +5,7 @@
     color:#011936;
 }
 
+
 .white-button {
     background-color: white;
     margin: 4px 2px;
@@ -20,6 +21,8 @@
 .link-button {
     color:#F9DC5C;
 }
+
+
 
 .link-button:hover {
     color: #F9DC5C;
