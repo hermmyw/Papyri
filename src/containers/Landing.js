@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/index.css';
 import './Landing.css';
-import StandardButton from '../components/UI/StandardButton'
+import '../components/UI/UI.css';
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 
