@@ -26,3 +26,11 @@ body {
     vertical-align: middle;
     display: inline-block;
 }
+
+.wide-container {
+    max-width: 1200px;
+    margin-top: auto;
+    margin-bottom: auto;
+    vertical-align: top;
+    display: inline-block;
+}

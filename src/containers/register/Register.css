@@ -1,0 +1,63 @@
+.register-heading {
+    color: #011837;
+    font-size: 20pt;
+    text-align: left;
+}
+
+.register-info {
+    margin: 0px 40px;
+}
+
+.register-input {
+    font-size: 1.25rem;
+    padding: .5rem 1rem;
+    margin: 0px 20px;
+    width: 250px;
+    text-align: center;
+}
+
+.submit-button {
+    background-color: #F9DC5C;
+    margin: 20px auto;
+    color:#011936;
+    width: 250px;
+}
+
+.snap-button {
+    background-color: #F9DC5C;
+    margin: 20px auto;
+    color:#011936;
+    width: 90px;
+}
+
+.register-sample-photo {
+    width: 120px;
+    margin: 50px auto 0px;
+    border: 2px solid black;
+    border-radius: 2px;
+}
+
+.box-grey {
+    width: 120px;
+    height: 120px;
+    background-color: lightgrey;
+    color: white;
+    margin: auto auto;
+    line-height: 120px; 
+}
+
+.left-container {
+    float: left;
+    width: 30%;
+    height: 400px;
+}
+
+.right-container {
+    margin-left: 35%;
+    width: 70%;
+    height: 100%;
+}
+
+.camera {
+    display: hidden;
+}
