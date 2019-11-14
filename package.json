@@ -12,7 +12,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "react-webcam": "^4.0.0",
-    "reactstrap": "^8.1.1"
+    "reactstrap": "^8.1.1",
+    "selenium-webdriver": "^4.0.0-alpha.5"
   },
   "scripts": {
     "start": "react-scripts start",

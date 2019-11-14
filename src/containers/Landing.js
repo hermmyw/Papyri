@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/index.css';
 import './Landing.css';
 import '../components/UI/UI.css';
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Container, Row, Col, Button, Form, FormGroup, Input } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 
 class Landing extends React.Component {
@@ -14,6 +14,19 @@ class Landing extends React.Component {
         this.handleRegisterInstructor = this.handleRegisterInstructor.bind(this);
         this.handleRegisterStudent = this.handleRegisterStudent.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
+    }
+
+    componentDidMount() {
+        console.log("mounting");
+    }
+
+    componentWillUnmount() {
+        console.log("unmounting");
+    }
+
+    authenticateLogin(e) {
+        e.preventDefault();
+        console.log("attempted login");
     }
 
     handleLoginClick() {
@@ -73,12 +86,15 @@ class Landing extends React.Component {
         else if (this.state.loginClicked) {
             display = (
                 <div>
-                    <Form>
+                    <Form  onSubmit={ e => this.authenticateLogin(e) }>
                         <FormGroup>
-                        <Input className="custom-input" type="email" name="email" id="exampleEmail" placeholder="Email" />
+                            <Input className="custom-input" type="email" name="email" id="exampleEmail" placeholder="Email" />
                         </FormGroup>
                         <FormGroup>
-                        <Input className="custom-input" type="password" name="password" id="examplePassword" placeholder="Password" />
+                            <Input className="custom-input" type="password" name="password" id="examplePassword" placeholder="Password" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Button className="yellow-button" size="lg" block type="submit">Login</Button>
                         </FormGroup>
                     </Form>
                 </div>
