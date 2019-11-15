@@ -36,3 +36,49 @@
     padding: .5rem 1rem;
     margin: 4px 2px;
 }
+
+.dashboard-sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #011936;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.profile-image {
+    padding-bottom: 20px;
+}
+
+
+.selected-sidebar-button {
+    background-color: #F9DC5C;
+    padding: 10px 2px;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.nonselected-sidebar-button {
+    background-color: #011936;
+    padding: 10px 2px;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+    color: white;
+}
+
+.nonselected-sidebar-button:hover {
+    background-color: #F9DC5C;
+    transition: background-color .5s ease;
+}
+
+.main-area {
+    display: inline-block;
+    margin-left: 250px;
+    height: 100%;
+    padding: 4%;
+}
