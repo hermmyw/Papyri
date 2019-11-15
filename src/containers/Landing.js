@@ -5,7 +5,18 @@ import '../components/UI/UI.css';
 import { Container, Row, Col, Button, Form, FormGroup, Input } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 
+/**
+ * Landing page for our web application
+ */
 class Landing extends React.Component {
+
+    /**
+     * 
+     * Constructor for Landing component.
+     * Sets state for login and register.
+     * Renders different views based on login and register states.
+     * @param {array} props properties that are passed into element when being used
+     */
     constructor(props) {
         super(props);
         this.state = {loginClicked: false, registerClicked: false};
@@ -24,11 +35,20 @@ class Landing extends React.Component {
         console.log("unmounting");
     }
 
+    /**
+     * 
+     * Makes http request to endpoint to authenticate login with email and password
+     * @param {event} e event that triggered this onclick function
+     */
     authenticateLogin(e) {
         e.preventDefault();
         console.log("attempted login");
     }
 
+    /**
+     * Event handler for when user chooses to login
+     * Changes component state
+     */
     handleLoginClick() {
         console.log("login button clicked!");
         this.setState(state => ({
@@ -36,12 +56,20 @@ class Landing extends React.Component {
         }));
     }
 
+    /**
+     * Event handler for when user chooses to register.
+     * Changes component state.
+     */
     handleRegisterClick() {
         this.setState(state => ({
             registerClicked: true
         }));
     }
 
+    /**
+     * Event handler for when user chooses to register as instructor.
+     * Changes component state and redirects to instructor register form.
+     */
     handleRegisterInstructor() {
         console.log("register instructor!");
         this.setState(state => ({
@@ -51,6 +79,10 @@ class Landing extends React.Component {
         this.props.history.push(path);
     }
 
+    /**
+     * Event handler for when user chooses to register as student.
+     * Changes component state and redirects to student register form.
+     */
     handleRegisterStudent() {
         console.log("register student!");
         this.setState(state => ({
@@ -60,6 +92,10 @@ class Landing extends React.Component {
         this.props.history.push(path);
     }
 
+    /**
+     * Event handler for when back button is clicked.
+     * Changes component state and redirects to previous view
+     */
     handleBackClick() {
         this.setState(state => ({
             loginClicked: false,
