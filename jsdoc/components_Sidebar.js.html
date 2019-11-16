@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Sidebar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Sidebar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import { SelectedButton, NonselectedButton } from './UI/SidebarComponents.js';
+import headshot from '../containers/images/headshot.png';
+import './UI/UI.css';
+import { withRouter} from 'react-router-dom';
+
+/**
+ * Renders a sidebar for all the different pages on the User interface.
+ */
+class Sidebar extends React.Component {
+
+    /**
+     * Constructor for Sidebar component.
+     * Sets the view state based on value passed into props.
+     * Renders differently depending on whether user is Instructor or Student.
+     * @param {array} props Properties that are passed into element when being used.
+     */
+    constructor(props) {
+        super(props);
+        this.handleShowDashboard = this.handleShowDashboard.bind(this);
+        this.handleShowClasses = this.handleShowClasses.bind(this);
+        this.handleCreateClass = this.handleCreateClass.bind(this);
+        this.handleTakeAttendance = this.handleTakeAttendance.bind(this);
+        this.handleCreateQuiz = this.handleCreateQuiz.bind(this);
+        this.handleForum = this.handleForum.bind(this);
+        this.getNavButtons = this.getNavButtons.bind(this);
+
+        var viewProp = this.props.view;
+        this.state = { view: viewProp };
+    }
+
+    componentDidMount() {
+        console.log("mounting");
+    }
+
+    componentWillUnmount() {
+        console.log("unmounting");
+    }
+
+    /**
+     * Event handler for when user clicks on profile name.
+     * Changes button selection on sidebar and redirects to dashboard page.
+     */
+    handleShowDashboard() {
+        console.log("show dashboard");
+        this.setState(state => ({
+            view: "dashboard"
+        }));
+
+        let path = '/instructor/dashboard';
+        this.props.history.push(path);
+    }
+
+    /**
+     * Event handler for when user clicks on show classes button.
+     * Changes button selection on sidebar and redirects to page showing all classes.
+     */
+    handleShowClasses() {
+        console.log("show class");
+        this.setState(state => ({
+            view: "show classes",
+        }));
+
+        let path = '/instructor/classes';
+        this.props.history.push(path);
+    }
+
+    /**
+     * Event handler for when user clicks on create class button.
+     * Changes button selection on sidebar and redirects to form to create new class.
+     */
+    handleCreateClass() {
+        console.log("create class");
+        this.setState(state => ({
+            view: "create class"
+        }));
+
+        let path = '/instructor/createclass';
+        this.props.history.push(path);
+    }
+
+    /**
+     * Event handler for when user clicks on take attendance button.
+     * Changes button selection on sidebar and redirects to page to take attendance.
+     */
+    handleTakeAttendance() {
+        console.log("take attendance");
+        this.setState(state => ({
+            view: "take attendance"
+        }));
+
+        let path = '/instructor/takeattendance';
+        this.props.history.push(path);
+    }
+
+    /**
+     * Event hanler for when user clicks on create quiz button.
+     * Changes button selection on sidebar and redirects to form to create quiz.
+     */
+    handleCreateQuiz() {
+        console.log("create quiz");
+        this.setState(state => ({
+            view: "create quiz"
+        }));
+
+        let path = '/instructor/createquiz';
+        this.props.history.push(path);
+    }
+
+    /**
+     * Even handler for when user clicks on forum button.
+     * Changes button selection on sidear and redirects to forum page.
+     */
+    handleForum() {
+        console.log("forum");
+        this.setState(state => ({
+            view: "forum"
+        }));
+    }
+
+    /**
+     * Renders the sidebar based on state of sidebar so that correct button is selected.
+     */
+    getNavButtons() {
+        var instructorName = localStorage.getItem('name');
+        if (instructorName === null || instructorName === "") {
+            instructorName = "Professor Kim";
+            console.log("no name");
+        }
+        switch(this.state.view) {
+            case "dashboard":
+                return (
+                    &lt;div>
+                        &lt;SelectedButton style="margin-top: 20px">{instructorName}&lt;/SelectedButton>
+                        &lt;NonselectedButton onClick={this.handleShowClasses.bind(this)}>Classes&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleForum.bind(this)}>Forum&lt;/NonselectedButton>
+                    &lt;/div>
+                )
+            
+            case "show classes":
+                return (
+                    &lt;div>
+                        &lt;NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{instructorName}&lt;/NonselectedButton>
+                        &lt;SelectedButton>Classes&lt;/SelectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleForum.bind(this)}>Forum&lt;/NonselectedButton>
+                    &lt;/div>
+                ) 
+                
+            case "create class":
+                return (
+                    &lt;div>
+                        &lt;NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{instructorName}&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleShowClasses.bind(this)}>Classes&lt;/NonselectedButton>
+                        &lt;SelectedButton>Create Class&lt;/SelectedButton>
+                        &lt;NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleForum.bind(this)}>Forum&lt;/NonselectedButton>
+                    &lt;/div>
+                )
+            
+            case "take attendance":
+                return (
+                    &lt;div>
+                        &lt;NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{instructorName}&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleShowClasses.bind(this)}>Classes&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class&lt;/NonselectedButton>
+                        &lt;SelectedButton>Take Attendance&lt;/SelectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleForum.bind(this)}>Forum&lt;/NonselectedButton>
+                    &lt;/div>
+                )
+            
+            case "create quiz":
+                return (
+                    &lt;div>
+                        &lt;NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{instructorName}&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleShowClasses.bind(this)}>Classes&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance&lt;/NonselectedButton>
+                        &lt;SelectedButton>Create Quiz&lt;/SelectedButton>
+                        &lt;NonselectedButton onClick={this.handleForum.bind(this)}>Forum&lt;/NonselectedButton>
+                    &lt;/div>
+                )
+            
+            case "forum":
+                return (
+                    &lt;div>
+                        &lt;NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{instructorName}&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleShowClasses.bind(this)}>Classes&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance&lt;/NonselectedButton>
+                        &lt;NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz&lt;/NonselectedButton>
+                        &lt;SelectedButton>Forum&lt;/SelectedButton>
+                    &lt;/div>
+                )
+        }
+    }
+
+    render() {
+        return (
+            &lt;div className="dashboard-sidebar">
+                &lt;img className="profile-image" src={headshot} />
+                {this.getNavButtons()}
+            &lt;/div>
+        )
+    }
+
+}
+
+var SidebarRouter = withRouter(Sidebar)
+export default SidebarRouter;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CreateClass.html">CreateClass</a></li><li><a href="CreateQuiz.html">CreateQuiz</a></li><li><a href="InstructorDashboard.html">InstructorDashboard</a></li><li><a href="Landing.html">Landing</a></li><li><a href="ShowClasses.html">ShowClasses</a></li><li><a href="Sidebar.html">Sidebar</a></li><li><a href="TakeAttendance.html">TakeAttendance</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 15:53:33 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

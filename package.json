@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "javadoc": "^1.0.6",
     "react": "^16.11.0",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-day-picker": "^7.4.0",
@@ -21,7 +22,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "docs": "./node_modules/.bin/jsdoc -c jsdoc.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "jsdoc": "^3.6.3",
     "webpack-cli": "^3.3.10"
   }
 }
