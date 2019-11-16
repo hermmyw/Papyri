@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Landing from './containers/Landing';
 import RegisStudent from './containers/register/RegisStudent';
 import RegisInstr from './containers/register/RegisInstr';
+import StudentDashboard from './containers/StudentDashboard';
 
 ReactDOM.render(
     <Router>
