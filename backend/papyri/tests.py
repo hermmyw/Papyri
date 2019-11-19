@@ -1,5 +1,5 @@
 from django.test import TestCase
-from api import RegistrationAPI, LoginAPI, UserAPI
+from . import RegistrationAPI, LoginAPI, UserAPI
 
 import requests
 
@@ -7,9 +7,8 @@ import requests
 
 class LoginTestCase(TestCase):
     def test_login_and_registration(self):
-        user_info = 
-        {
-            'id': '204748664'
+        user_info = {
+            'id': '204748664',
             'username': 'test',
             'password': 'test',
             'email': 'test@test.com'
