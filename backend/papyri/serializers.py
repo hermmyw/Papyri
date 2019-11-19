@@ -29,3 +29,9 @@ class LoginUserSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
+
+class ClassSerializer(serializers.Serializer):
+    class_id = serializers.UUIDField()
+    name = serializers.CharField(max_length=200)
+    teacher_id = serializers.CharField(max_length=10)
+    
