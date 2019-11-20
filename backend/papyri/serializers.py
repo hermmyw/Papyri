@@ -6,13 +6,15 @@ from .models import UserInfo, ProfilePic
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta():
         model = User
-        fields = ('id', 'username', 'password', 'email')
+        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
         extra_kwargs = {'password':{'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'],
                                         validated_data['email'],
-                                        validated_data['password'])
+                                        validated_data['password'],
+                                        validated_data['first_name'],
+                                        validated_data['last_name'])
         return user
 
 class UserSerializer(serializers.ModelSerializer):
