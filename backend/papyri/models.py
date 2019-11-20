@@ -48,7 +48,6 @@ class LectureAttendance(models.Model):
     class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
     lecture_id = models.ForeignKey(Lecture, on_delete=models.CASCADE)
     student_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    attended = models.BooleanField(default=False)
 
 
 class Quiz(models.Model):
