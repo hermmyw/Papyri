@@ -3,24 +3,63 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import UserInfo, ProfilePic
 
-class CreateUserSerializer(serializers.ModelSerializer):
-    class Meta():
-        model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
-        extra_kwargs = {'password':{'write_only': True}}
+# class CreateUserSerializer(serializers.ModelSerializer):
+#     class Meta():
+#         model = User
+#         fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
+#         extra_kwargs = {'password':{'write_only': True}}
+
+#     def create(self, validated_data):
+#         user = User.objects.create_user(validated_data['username'],
+#                                         validated_data['email'],
+#                                         validated_data['password'])
+#         user.first_name = validated_data['first_name']
+#         user.last_name = validated_data['last_name']
+#         user.save()
+#         return user
+
+class CreateUserSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=50)
+    password = serializers.CharField(max_length=50, write_only=True)
+    email = serializers.EmailField()
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
+    # create userinfo in background
+    uid = serializers.CharField(max_length=50, allow_blank=True)
+    is_student = serializers.BooleanField(default=True)
+    # create profile_pic
+    pic1 = serializers.ImageField()
+    pic2 = serializers.ImageField(allow_null=True)
+    pic3 = serializers.ImageField(allow_null=True)
+    pic4 = serializers.ImageField(allow_null=True)
+    pic5 = serializers.ImageField(allow_null=True)
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'],
                                         validated_data['email'],
-                                        validated_data['password'],
-                                        validated_data['first_name'],
-                                        validated_data['last_name'])
+                                        validated_data['password'])
+        user.first_name = validated_data['first_name']
+        user.last_name = validated_data['last_name']
+        user.save()
+        # create userinfo
+        userinfo = UserInfo(owner=user, 
+                            uid=validated_data['uid'], 
+                            is_student=validated_data['is_student'])
+        userinfo.save()
+        # create profile_pic
+        profile_pic = ProfilePic(owner=userinfo,
+                                    pic1=validated_data['pic1'],
+                                    pic2=validated_data['pic2'],
+                                    pic3=validated_data['pic3'],
+                                    pic4=validated_data['pic4'],
+                                    pic5=validated_data['pic5'])
+        profile_pic.save()
         return user
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name')
 
 class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField()
