@@ -26,9 +26,9 @@ class CreateUserSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=50)
     # create userinfo in background
     uid = serializers.CharField(max_length=50, allow_blank=True)
-    is_student = serializers.BooleanField(default=True)
+    is_student = serializers.BooleanField(default=False)
     # create profile_pic
-    pic1 = serializers.ImageField()
+    pic1 = serializers.ImageField(allow_null=True)
     pic2 = serializers.ImageField(allow_null=True)
     pic3 = serializers.ImageField(allow_null=True)
     pic4 = serializers.ImageField(allow_null=True)
