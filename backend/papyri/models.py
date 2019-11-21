@@ -17,7 +17,7 @@ class UserInfo(models.Model):
 
 class ProfilePic(models.Model):
     owner = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name='profile_pic')
-    pic1 = models.ImageField(upload_to='profile_pics')
+    pic1 = models.ImageField(upload_to='profile_pics', blank=True)
     pic2 = models.ImageField(upload_to='profile_pics', blank=True)
     pic3 = models.ImageField(upload_to='profile_pics', blank=True)
     pic4 = models.ImageField(upload_to='profile_pics', blank=True)
