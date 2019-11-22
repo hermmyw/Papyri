@@ -20,7 +20,13 @@ class RegisStudent extends React.Component {
             imgData4: null,
             snapClicked5: false, 
             imgData5: null,
-            submitClicked: false
+            submitClicked: false,
+            submitClicked: false,
+            firstname: '',
+            lastname: '',
+            email: '',
+            password: '',
+            uid: '',
         };
         this.handleSnapClick1 = this.handleSnapClick1.bind(this);
         this.handleSnapClick2 = this.handleSnapClick2.bind(this);
@@ -29,6 +35,7 @@ class RegisStudent extends React.Component {
         this.handleSnapClick5 = this.handleSnapClick5.bind(this);
         this.handleSubmitClick = this.handleSubmitClick.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleSnapClick1() {
@@ -76,11 +83,51 @@ class RegisStudent extends React.Component {
         this.setState({imgData5: imgSrc});
     }
 
-    handleSubmitClick() {
+    handleSubmitClick(e) {
+        e.preventDefault();
         console.log("student submitted!");
-        this.setState(state => ({
+        /*this.setState(state => ({
             submitClicked: true
-        }));
+        }));*/
+
+        // make api call
+        if (!this.state.snapClicked1 ||
+            !this.state.snapClicked2 ||
+            !this.state.snapClicked3 ||
+            !this.state.snapClicked4 ||
+            !this.state.snapClicked5) {
+                alert("Please provide all profile shots!");
+        }
+        else {
+            console.log(e.target.querySelector("#image1"));
+            fetch("http://127.0.0.1:8000/api/user/register/", {
+                method: "POST",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username:  this.state.email,
+                    email: this.state.email,
+                    password: this.state.password,
+                    first_name: this.state.firstname,
+                    last_name: this.state.lastname,
+                    uid: this.state.uid,
+                    is_student: true,
+                    pic1: this.state.imgData1,
+                    pic2: this.state.imgData2,
+                    pic3: this.state.imgData3,
+                    pic4: this.state.imgData4,
+                    pic5: this.state.imgData5,
+                }),
+            })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log(result);
+                    }
+                )
+        }
     }
 
     handleBackClick() {
@@ -92,11 +139,21 @@ class RegisStudent extends React.Component {
         this.props.history.push('/');
     }
 
+    handleChange = async (event) => {
+        const { target } = event;
+        const value = target.value;
+        const { name } = target;
+        await this.setState({
+            [ name ]: value,
+        });
+    }
+
     setRef = (webcam) => {
         this.webcam = webcam;
     }
 
     render() {
+        const { firstname, lastname, uid, email, password} = this.state;
         var display, backButton, camera, sample, snap1, snap2, snap3, snap4, snap5, submitButton = null;
         const videoConstraints = {
             width: 200,
@@ -108,66 +165,6 @@ class RegisStudent extends React.Component {
         
 
         if (!this.state.submitClicked) {
-            backButton = (
-                <div className="right-container">
-                    <Row>
-                        <Col><Button className="cancel-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Cancel</Button></Col>
-                    </Row>
-                </div>
-            );
-    
-            submitButton = (
-                <div className="right-container">
-                    <Row>
-                        <Col><Button className="submit-button" block onClick={this.handleSubmitClick}>Submit</Button></Col>
-                    </Row>
-                </div>
-            );
-
-            display = (
-                <div className="left-container">
-                    <Row><p className="register-info">First name</p></Row>
-                    <Row>
-                        <Col>
-                            <Form>
-                                <FormGroup>
-                                    <Input className="register-input" type="name" name="firstname" id="exampleFirstName" />
-                                </FormGroup>
-                            </Form>
-                        </Col>
-                    </Row>
-                    <Row><p className="register-info">Last name</p></Row>
-                    <Row>
-                        <Col>
-                            <Form>
-                                <FormGroup>
-                                    <Input className="register-input" type="name" name="lastname" id="exampleLastName" />
-                                </FormGroup>
-                            </Form>
-                        </Col>
-                    </Row>
-                    <Row><p className="register-info">University ID</p></Row>
-                    <Row>
-                        <Col>
-                        <Form>
-                            <FormGroup>
-                                <Input className="register-input" type="id" name="id" id="exampleId" />
-                            </FormGroup>
-                        </Form>
-                        </Col>
-                    </Row>
-                    <Row><p className="register-info">Email</p></Row>
-                    <Row>
-                    <Col>
-                        <Form>
-                            <FormGroup>
-                                <Input className="register-input" type="email" name="email" id="exampleEmail" />
-                            </FormGroup>
-                        </Form>
-                    </Col>
-                    </Row>
-                </div>
-            );
 
             camera = (
                 <Webcam
@@ -199,10 +196,17 @@ class RegisStudent extends React.Component {
                 </div>
 
             );
+            
 
             if (this.state.snapClicked1) {
                 snap1 = (
-                    <img src={this.state.imgData1} className="snap-photo"/>
+                    //<img src={this.state.imgData1} className="snap-photo"/>
+                    <input 
+                        className="snap-photo"
+                        type="image" 
+                        name="image1"
+                        id="image1"
+                        src={this.state.imgData1} />
                 );
             } else {
                 snap1 = (
@@ -212,7 +216,11 @@ class RegisStudent extends React.Component {
 
             if (this.state.snapClicked2) {
                 snap2 = (
-                    <img src={this.state.imgData2} className="snap-photo"/>
+                    <img
+                        className="snap-photo" 
+                        src={this.state.imgData2} 
+                        id="image2"
+                    />
                 );
             } else {
                 snap2 = (
@@ -222,7 +230,11 @@ class RegisStudent extends React.Component {
 
             if (this.state.snapClicked3) {
                 snap3 = (
-                    <img src={this.state.imgData3} className="snap-photo"/>
+                    <img
+                        className="snap-photo"
+                        src={this.state.imgData3}
+                        id="image3"
+                    />
                 );
             } else {
                 snap3 = (
@@ -232,7 +244,11 @@ class RegisStudent extends React.Component {
 
             if (this.state.snapClicked4) {
                 snap4 = (
-                    <img src={this.state.imgData4} className="snap-photo"/>
+                    <img
+                        className="snap-photo"
+                        src={this.state.imgData4}
+                        id="image4"
+                    />
                 );
             } else {
                 snap4 = (
@@ -242,7 +258,11 @@ class RegisStudent extends React.Component {
 
             if (this.state.snapClicked5) {
                 snap5 = (
-                    <img src={this.state.imgData5} className="snap-photo"/>
+                    <img
+                        className="snap-photo"
+                        src={this.state.imgData5}
+                        id="image1"
+                    />
                 );
             } else {
                 snap5 = (
@@ -250,7 +270,123 @@ class RegisStudent extends React.Component {
                 );
             }
 
+            backButton = (
+                <div className="right-container">
+                    <Row>
+                        <Col><Button className="cancel-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Cancel</Button></Col>
+                    </Row>
+                </div>
+            );
+
+            display = (
+                <div>
+                    <Form onSubmit={ (e) => this.handleSubmitClick(e) }>
+                        <div className="left-container">
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label>First Name</Label>
+                                        <Input 
+                                            className="register-input" 
+                                            type="name" 
+                                            name="firstname" 
+                                            id="exampleFirstName"
+                                            value={ firstname }
+                                            onChange={ (e) => {
+                                                this.handleChange(e)
+                                            }} 
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label>Last Name</Label>
+                                        <Input 
+                                            className="register-input" 
+                                            type="name" 
+                                            name="lastname" 
+                                            id="exampleLastName"
+                                            value={ lastname }
+                                            onChange={ (e) => {
+                                                this.handleChange(e)
+                                            }}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label>University ID</Label>
+                                        <Input 
+                                            className="register-input" 
+                                            type="id" 
+                                            name="id" 
+                                            id="exampleId" 
+                                            value={ uid }
+                                            onChange={ (e) => {
+                                                this.handleChange(e)
+                                            }}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label>Email</Label>
+                                        <Input 
+                                            className="register-input" 
+                                            type="email" 
+                                            name="email" 
+                                            id="exampleEmail" 
+                                            value={ email }
+                                            onChange={ (e) => {
+                                                this.handleChange(e)
+                                            }}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label>Password</Label>
+                                        <Input 
+                                            className="register-input" 
+                                            type="password" 
+                                            name="password" 
+                                            id="examplePassword" 
+                                            value={password}
+                                            onChange={ (e) => {
+                                                this.handleChange(e)
+                                            }}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>    
+                            <Row>
+                                <Col><Button className="submit-button-center" block>Submit</Button></Col>
+                            </Row>
+                        </div>
+                        <div>
+                            <div className="right-container"><Row><Col>{camera}</Col></Row></div>
+                            <div className="right-container">
+                                {sample}
+                                <Row>{snap1}{snap2}{snap3}{snap4}{snap5}</Row>
+                            </div>
+                        </div>
+                        <div>
+                            {backButton}
+                        </div>
+                    </Form>
+                </div>
+            );
+
         }
+
         if (this.state.submitClicked) {
             display = (
                 <div>
@@ -274,17 +410,6 @@ class RegisStudent extends React.Component {
                     <Col><p className="register-heading">Become a Student</p></Col>
                 </Row>
                 <div>{display}</div>
-                <div>
-                    <div className="right-container"><Row><Col>{camera}</Col></Row></div>
-                    <div className="right-container">
-                        {sample}
-                        <Row>{snap1}{snap2}{snap3}{snap4}{snap5}</Row>
-                    </div>
-                </div>
-                <div>
-                    {submitButton}
-                    {backButton}
-                </div>
             </Container>
         )
     }
