@@ -26,9 +26,9 @@ class CreateUserSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=50)
     # create userinfo in background
     uid = serializers.CharField(max_length=50, allow_blank=True)
-    is_student = serializers.BooleanField(default=True)
+    is_student = serializers.BooleanField(default=False)
     # create profile_pic
-    pic1 = serializers.ImageField()
+    pic1 = serializers.ImageField(allow_null=True)
     pic2 = serializers.ImageField(allow_null=True)
     pic3 = serializers.ImageField(allow_null=True)
     pic4 = serializers.ImageField(allow_null=True)
@@ -60,6 +60,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name')
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserInfo
+        fields = ('__all__')
+
+class ProfilePicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfilePic
+        fields = ('__all__')
 
 class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField()
