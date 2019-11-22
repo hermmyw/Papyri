@@ -61,6 +61,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name')
 
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserInfo
+        fields = ('__all__')
+
+class ProfilePicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfilePic
+        fields = ('__all__')
+
 class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
