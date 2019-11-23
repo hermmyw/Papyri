@@ -29,12 +29,12 @@ class ProfilePic(models.Model):
 
 class ClassInfo(models.Model):
     name = models.CharField(max_length=200)
-    teacher_id = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
 
-class UserClassRelationship(models.Model):
-    class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE) 
+class StudentClassRelationship(models.Model):
+    c = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE) 
 
 
 class Lecture(models.Model):
@@ -56,7 +56,6 @@ class Quiz(models.Model):
     description = models.CharField(max_length=2000)
     time_created = models.DateTimeField(auto_now_add=True)
     teacher_id = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
-
 
 
 class QuizQuestion(models.Model):

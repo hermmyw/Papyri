@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from .models import UserInfo, ProfilePic
+from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship
 
 # class CreateUserSerializer(serializers.ModelSerializer):
 #     class Meta():
@@ -47,14 +47,14 @@ class CreateUserSerializer(serializers.Serializer):
                             is_student=validated_data['is_student'])
         userinfo.save()
         # create profile_pic
-        profile_pic = ProfilePic(owner=userinfo,
-                                    pic1=validated_data['pic1'],
-                                    pic2=validated_data['pic2'],
-                                    pic3=validated_data['pic3'],
-                                    pic4=validated_data['pic4'],
-                                    pic5=validated_data['pic5'])
-        profile_pic.save()
-        return user
+        # profile_pic = ProfilePic(owner=userinfo,
+        #                             pic1=validated_data['pic1'],
+        #                             pic2=validated_data['pic2'],
+        #                             pic3=validated_data['pic3'],
+        #                             pic4=validated_data['pic4'],
+        #                             pic5=validated_data['pic5'])
+        # profile_pic.save()
+        return userinfo
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,7 +82,27 @@ class LoginUserSerializer(serializers.Serializer):
         raise serializers.ValidationError("Unable to log in with provided credentials.")
 
 class ClassSerializer(serializers.Serializer):
-    class_id = serializers.UUIDField()
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=200)
-    teacher_id = serializers.CharField(max_length=10)
-    
+    teacher_id = serializers.PrimaryKeyRelatedField(queryset=UserInfo.objects.filter(is_student=False))
+
+    class Meta:
+        model = ClassInfo
+        fields = ('__all__')
+
+    def create(self, validated_data):
+        return ClassInfo.objects.create(name=validated_data['name'],
+                                        teacher_id=validated_data['teacher_id'].id)
+
+class StudentClassSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    class_id = serializers.PrimaryKeyRelatedField(queryset=ClassInfo.objects.all())
+    student_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = StudentClassRelationship
+        fields = ('__all__')
+
+    def create(self, validated_data):
+        return StudentClassRelationship.objects.create(class_id=validated_data['class_id'],
+                                                        student_id=validated_data['student_id'])
