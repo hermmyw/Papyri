@@ -15,16 +15,13 @@ import {
     Nav, NavItem, NavLink } from 'reactstrap';
 import './Dashboard.css';
   
-class SpecificQuestion extends React.Component {
+class InstructorQuizzes extends React.Component {
     
-
     constructor(props) {
         super(props);
-        this.getQuestion = this.getQuestion.bind(this);
-        this.getStudentAnswers = this.getStudentAnswers.bind(this);
+        this.getQuizzes = this.getQuizzes.bind(this);
         this.state = {
-            question: this.getQuestion(),
-            answers: this.getStudentAnswers()
+            quizzes: this.getQuizzes(),
         }
     }
 
@@ -37,18 +34,12 @@ class SpecificQuestion extends React.Component {
     }
 
     /**
-     * Makes an http request to endpoint to retrieve information about a given question
+     * Makes an http request to endpoint to retrieve list of quizzes for instructor
      */
-    getQuestion() {
+    getQuizzes() {
         return 0;
     }
 
-    /*
-     * Makes http request to endpoint to retrieve list of student answers from a given question
-     */
-    getStudentAnswers() {
-        return 0;
-    }
 
     /**
      * renders the Specific Quiz page
@@ -95,4 +86,4 @@ class SpecificQuestion extends React.Component {
     }
 }
 
-export default SpecificQuestion;
+export default InstructorQuizzes;
