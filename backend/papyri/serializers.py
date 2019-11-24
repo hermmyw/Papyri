@@ -1,22 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship
+from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship, Quiz, QuizQuestion
 
-# class CreateUserSerializer(serializers.ModelSerializer):
-#     class Meta():
-#         model = User
-#         fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
-#         extra_kwargs = {'password':{'write_only': True}}
-
-#     def create(self, validated_data):
-#         user = User.objects.create_user(validated_data['username'],
-#                                         validated_data['email'],
-#                                         validated_data['password'])
-#         user.first_name = validated_data['first_name']
-#         user.last_name = validated_data['last_name']
-#         user.save()
-#         return user
 
 class CreateUserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=50)
@@ -46,8 +32,7 @@ class CreateUserSerializer(serializers.Serializer):
                             uid=validated_data['uid'], 
                             is_student=validated_data['is_student'])
         userinfo.save()
-<<<<<<< HEAD
-        #create profile_pic
+        # create profile_pic
         profile_pic = ProfilePic(owner=userinfo,
                                     pic1=validated_data['pic1'],
                                     pic2=validated_data['pic2'],
@@ -55,18 +40,7 @@ class CreateUserSerializer(serializers.Serializer):
                                     pic4=validated_data['pic4'],
                                     pic5=validated_data['pic5'])
         profile_pic.save()
-        return user
-=======
-        # create profile_pic
-        # profile_pic = ProfilePic(owner=userinfo,
-        #                             pic1=validated_data['pic1'],
-        #                             pic2=validated_data['pic2'],
-        #                             pic3=validated_data['pic3'],
-        #                             pic4=validated_data['pic4'],
-        #                             pic5=validated_data['pic5'])
-        # profile_pic.save()
         return userinfo
->>>>>>> a1331b5a9a5d8e858d6b7140536080a82dbcbba2
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -118,3 +92,13 @@ class StudentClassSerializer(serializers.Serializer):
     def create(self, validated_data):
         return StudentClassRelationship.objects.create(class_id=validated_data['class_id'],
                                                         student_id=validated_data['student_id'])
+
+class QuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = '__all__'
+
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizQuestion
+        fields = '__all__'
