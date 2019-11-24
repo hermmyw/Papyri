@@ -31,6 +31,9 @@ class ClassInfo(models.Model):
     name = models.CharField(max_length=200)
     teacher = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 
 class StudentClassRelationship(models.Model):
     c = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
@@ -55,7 +58,13 @@ class Quiz(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=2000)
     time_created = models.DateTimeField(auto_now_add=True)
-    teacher_id = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    active = models.BooleanField(default=False)
+    released = models.BooleanField(default=False)
+    score = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.name
 
 
 class QuizQuestion(models.Model):
@@ -69,6 +78,9 @@ class QuizQuestion(models.Model):
     answer_3 = models.CharField(max_length=200)
 
     correct_answer = models.PositiveIntegerField(validators=[MaxValueValidator(3, message="Only accepts values from 0 to 3")])
+
+    def __str__(self):
+        return self.quiz_id.name + ':' + str(self.question_number)
 
 
 
