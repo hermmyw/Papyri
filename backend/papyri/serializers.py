@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship
+from .models import Lecture, LectureAttendance
 
 # class CreateUserSerializer(serializers.ModelSerializer):
 #     class Meta():
@@ -17,6 +18,7 @@ from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship
 #         user.last_name = validated_data['last_name']
 #         user.save()
 #         return user
+
 
 class CreateUserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=50)
@@ -56,20 +58,24 @@ class CreateUserSerializer(serializers.Serializer):
         # profile_pic.save()
         return userinfo
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name')
+
 
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
         fields = ('__all__')
 
+
 class ProfilePicSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfilePic
         fields = ('__all__')
+
 
 class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -80,6 +86,7 @@ class LoginUserSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
+
 
 class ClassSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -94,10 +101,12 @@ class ClassSerializer(serializers.Serializer):
         return ClassInfo.objects.create(name=validated_data['name'],
                                         teacher_id=validated_data['teacher_id'].id)
 
+
 class StudentClassSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     class_id = serializers.PrimaryKeyRelatedField(queryset=ClassInfo.objects.all())
     student_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    in_session = serializers.BooleanField()
 
     class Meta:
         model = StudentClassRelationship
@@ -106,3 +115,32 @@ class StudentClassSerializer(serializers.Serializer):
     def create(self, validated_data):
         return StudentClassRelationship.objects.create(class_id=validated_data['class_id'],
                                                         student_id=validated_data['student_id'])
+
+
+class LectureSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    c_id = serializers.PrimaryKeyRelatedField(queryset=ClassInfo.objects.all())
+    date = serializers.DateTimeField(read_only=True, format='iso-8601')
+    in_session = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = Lecture
+        fields = ['id', 'c_id', 'date', 'in_session']
+
+    def create(self, validated_data):
+        return Lecture.objects.create(c=validated_data['c_id'],
+                                        in_session=True)
+
+
+class LectureAttendanceSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    lecture_id = serializers.PrimaryKeyRelatedField(queryset=Lecture.objects.all())
+    student_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = LectureAttendance
+        fields = ('__all__')
+    
+    def create(self, validated_data):
+        return LectureAttendance.objects.create(lecture=validated_data['lecture_id'],
+                                                student=validated_data['student_id'])
