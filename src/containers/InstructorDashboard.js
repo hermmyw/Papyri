@@ -9,7 +9,8 @@ import {
     Link,
     useRouteMatch
   } from "react-router-dom";
-  
+import DayPicker from 'react-day-picker';
+
 
 /**
  * Container for instructor dashboard

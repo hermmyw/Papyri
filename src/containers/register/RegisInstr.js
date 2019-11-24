@@ -26,9 +26,6 @@ class RegisInstr extends React.Component {
         e.preventDefault();
         console.log("instructor submitted!");
         console.log(`Email: ${ this.state.email }`)
-        /*this.setState(state => ({
-            submitClicked: true
-        }));*/
 
         // make api call
         fetch("http://127.0.0.1:8000/api/user/register/", {

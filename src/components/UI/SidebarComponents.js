@@ -50,6 +50,23 @@ class NonselectedButton extends React.Component {
     }
 }
 
+class BackButton extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.props.history.push('/');
+    }
+
+    render() {
+        var buttonStyle = this.props.style;
+        return (
+            <div className="back-sidebar-button" onClick={this.props.onClick} style={{buttonStyle}}>{this.props.children}</div>
+        )
+    }
+}
 //var RouterSelectedButton = withRouter(SelectedButton);
 //var RouterNonselectedButton = withRouter(NonselectedButton);
-export { SelectedButton, NonselectedButton };
+export { SelectedButton, NonselectedButton, BackButton };

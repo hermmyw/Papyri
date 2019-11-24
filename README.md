@@ -4,6 +4,4 @@
 
 $ npm install 
 
-$ npm install react-webcam
-
 $ npm start
