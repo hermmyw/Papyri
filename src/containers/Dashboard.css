@@ -1,10 +1,14 @@
-.mainContent {
-    background-color: white;
+.main-content {
+    margin-top: 10px;
+    margin-left: 270px;
+    background-color: white
 }
 
 .subheader {
     background-color: white;
-    padding: 20px;
+    margin-left: 20px;
+    font-size: 36px;
+    text-align: left;
 }
 
 .profile {
@@ -16,4 +20,31 @@
     background-color: #F9DC5C;
     padding: 4px 2px;
     width: 100%;
+}
+
+.class-list {
+    margin-top: 20px;
+}
+
+.card-header {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.card-title {
+    font-size: 18px;
+}
+.card-body {
+}
+
+
+.calendar {
+    height: 100%;
+    
+}
+
+.DayPicker {
+    display: inline-block;
+    font-size: 15px;
+    height: 350px;
 }

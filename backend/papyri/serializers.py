@@ -46,7 +46,7 @@ class CreateUserSerializer(serializers.Serializer):
                             uid=validated_data['uid'], 
                             is_student=validated_data['is_student'])
         userinfo.save()
-        # create profile_pic
+        #create profile_pic
         profile_pic = ProfilePic(owner=userinfo,
                                     pic1=validated_data['pic1'],
                                     pic2=validated_data['pic2'],
