@@ -40,15 +40,14 @@ class StudentClassRelationship(models.Model):
 class Lecture(models.Model):
     name = models.CharField(max_length=200)
     slide_link = models.URLField()
-    class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
-    in_session = models.BooleanField(default=False)
+    c = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    in_session = models.BooleanField(default=True)
 
 
 class LectureAttendance(models.Model):
-    class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
-    lecture_id = models.ForeignKey(Lecture, on_delete=models.CASCADE)
-    student_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Quiz(models.Model):
