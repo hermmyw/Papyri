@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from .account import RegistrationAPI, LoginAPI, UserAPI
-from .quiz import CreateQuizAPI, CreateQuestionAPI, ActivateQuizAPI, ReleaseQuizAPI, ListQuizAPI, ListQuestionAPI
+from .quiz import CreateQuizAPI, CreateQuestionAPI, ActivateQuizAPI, ReleaseQuizAPI, ListQuizAPI, ListQuestionAPI, DestroyQuizAPI
 from . import classes
 from . import attendance
 
@@ -24,5 +24,6 @@ urlpatterns = [
     path('quiz/list/unreleased/<int:class_id>/', ListQuizAPI.as_view(state='unreleased')),
     path('quiz/list/released/<int:class_id>/', ListQuizAPI.as_view(state='released')),
     path('quiz/list/active/<int:class_id>/', ListQuizAPI.as_view(state='active')),
-    path('quiz/list/question/<int:quiz_id>/', ListQuestionAPI.as_view())
+    path('quiz/list/question/<int:quiz_id>/', ListQuestionAPI.as_view()),
+    path('quiz/destroy/<int:id>', DestroyQuizAPI.as_view())
 ] 

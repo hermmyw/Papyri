@@ -42,7 +42,7 @@ class CreateUserSerializer(serializers.Serializer):
                                     pic4=validated_data['pic4'],
                                     pic5=validated_data['pic5'])
         profile_pic.save()
-        return userinfo
+        return user
 
 
 class UserSerializer(serializers.ModelSerializer):
