@@ -1,19 +1,10 @@
 import React from 'react';
-import { Nav, NavItem, NavLink } from 'reactstrap';
 import './Dashboard.css';
 import Sidebar from '../components/Sidebar.js';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import CardDeck from 'react-bootstrap/CardDeck';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    useRouteMatch
-  } from "react-router-dom";
-import DayPicker from 'react-day-picker';
 
 
 /**
@@ -29,6 +20,7 @@ class InstructorDashboard extends React.Component {
      */
     constructor(props) {
         super(props);
+        // Default values
         this.state = {
             lastname: 'Kim',
             classes: [
@@ -66,22 +58,22 @@ class InstructorDashboard extends React.Component {
 
     componentDidMount() {
         console.log("mounting");
-        // GET request
-        fetch("...") //TODO
-            .then(res => res.json())
-            .then(data => data.classes.map(myclass => (
-                {
-                    classname: `${myclass.name}`,
-                    classid: `${myclass.class_id}`,
-                    instructor: `${myclass.instructor}`,
-                    active: `${myclass.active}`,
-                }
-            )))
-            .then(classes => this.setState({
-                classes,
-                isLoading: false
-            }))
-            .catch(error => console.log('parsing failed', error));
+        // // make api call GET request
+        // fetch("http://127.0.0.1:8000/api/classes/teacher/")
+        //     .then(res => res.json())
+        //     .then(data => data.classes.map(myclass => (
+        //         {
+        //             classname: `${myclass.name}`,
+        //             classid: `${myclass.class_id}`,
+        //             instructor: `${myclass.instructor}`,
+        //             active: `${myclass.active}`,
+        //         }
+        //     )))
+        //     .then(classes => this.setState({
+        //         classes,
+        //         isLoading: false
+        //     }))
+        //     .catch(error => console.log('parsing failed', error));
     }
 
     componentWillUnmount() {
@@ -112,7 +104,7 @@ class InstructorDashboard extends React.Component {
     }
 
     handleEndLecture(classid) {
-        console.log("end lecture");
+        console.log("end lecture ", this.state.classid, new Date());
         // make api call POST
         fetch("http://127.0.0.1:8000/api/attendance/stop/", { // TODO
         method: "POST",
@@ -121,17 +113,17 @@ class InstructorDashboard extends React.Component {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            class_id: this.state.classid,
+            lecture_id: this.state.classid,
             date: new Date(),
             active: false
         }),
-    })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result);
-            }
-        )
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result);
+                }
+            )
     }
 
     handleDetails(classid) {
@@ -201,7 +193,7 @@ class InstructorDashboard extends React.Component {
                         if (item.active === "true") {
                             attendanceButton = (
                                 // TODO: ButtonToggle
-                                <Button variant="danger" onClick={() => obj.handleStartLecture(item.classid)}>End Lecture</Button>
+                                <Button variant="danger" onClick={() => obj.handleEndLecture(item.classid)}>End Lecture</Button>
                             );
                         } else if (item.active === "false") {
                             attendanceButton = (

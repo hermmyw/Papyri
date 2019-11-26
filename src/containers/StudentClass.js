@@ -2,15 +2,11 @@ import React from 'react';
 import '../styles/index.css';
 import './Landing.css';
 import '../components/UI/UI.css';
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Media } from 'reactstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import './Dashboard.css';
 import Sidebar from '../components/SidebarStudent.js';
-
-// import Image from 'react-bootstrap/Image';
-import { IoIosArrowBack } from "react-icons/io";
-// import { ReactComponent } from '*.svg';
 
 class StudentDashboard extends React.Component {
 
@@ -21,7 +17,9 @@ class StudentDashboard extends React.Component {
             profilePic: this.props.profilePic,
             attended: this.props.attended,
             missed: this.props.missed,
-        }
+            submittedQuiz: false
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -30,15 +28,38 @@ class StudentDashboard extends React.Component {
 
     fetchData() {
        // GET request
-       fetch("...") //TODO
-       .then(res => res.json())
-       .then(function(data) {
-           this.state.attended = JSON.parse(data.attendedDates);
-           this.state.missed = JSON.parse(data.missedDates);
-        })
-       .catch(error => console.log('parsing failed', error));
+    //    fetch("...") //TODO
+    //    .then(res => res.json())
+    //    .then(function(data) {
+    //        this.state.attended = JSON.parse(data.attendedDates);
+    //        this.state.missed = JSON.parse(data.missedDates);
+    //     })
+    //    .catch(error => console.log('parsing failed', error));
     }
 
+    handleSubmit(e) {
+        this.setState(state => ({
+            submittedQuiz: true
+        }));
+        e.preventDefault();
+        console.log('submitted');
+        fetch("http://127.0.0.1:8000/api/quiz/create", { // TODO
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                // TODO
+            }),
+            })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log(result);
+                    }
+                )
+    }
 
     render() {
         const modifiers = {
@@ -85,8 +106,9 @@ class StudentDashboard extends React.Component {
                             showOutsideDays
                         />
                         </div>
+                        {/* </div>
                         
-                        <h3 className="subheader">Quizzes</h3>
+                        <h3 className="subheader">Current Quizzes</h3>
                         <ListGroup className="list-group-flush">
                             <ListGroupItem>
                                 <ListGroupItemHeading>Quiz 3</ListGroupItemHeading>
@@ -101,9 +123,27 @@ class StudentDashboard extends React.Component {
                                 <ListGroupItemText>Score: 17.5/20</ListGroupItemText>
                             </ListGroupItem>
                         </ListGroup>
+                    </div> */}
+
+                        <Card className="quiz">
+                        <Card.Header as="h5">Current Quiz</Card.Header>
+                        <Card.Body>
+                            <Card.Title>Question Body</Card.Title>
+                            <Button className="quiz-option" variant="outline-dark">Choice 1</Button><br/>
+                            <Button className="quiz-option" variant="outline-dark">Choice 2</Button><br/>
+                            <Button className="quiz-option" variant="outline-dark">Choice 3</Button><br/>
+                            <Button className="quiz-option" variant="outline-dark">Choice 4</Button><br/>
+                            <Button 
+                                className="quiz-option"
+                                variant="primary"
+                                type="submit"
+                                onClick={ (e) => this.handleSubmit(e) }
+                            >submit</Button>
+                        </Card.Body>
+                        </Card>
                     </div>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
             </Container>
         )
     }
