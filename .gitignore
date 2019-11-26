@@ -24,3 +24,8 @@ yarn-error.log*
 
 # notes
 notes.txt
+
+# backend
+.vscode
+/backend/.vscode
+/backend/db.sqlite3

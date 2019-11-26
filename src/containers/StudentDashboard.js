@@ -52,7 +52,7 @@ class StudentDashboard extends React.Component {
                     active: 'false'
                 },
             ]
-        }
+        };
         this.handleDetails = this.handleDetails.bind(this);
         this.handleAttendance = this.handleAttendance.bind(this);
     }
@@ -86,6 +86,24 @@ class StudentDashboard extends React.Component {
         console.log(classid);
         // make api call
 
+        // make api call POST
+        fetch("http://127.0.0.1:8000/api/attendance/attend/", { // TODO
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            class_id: this.state.classid,
+            student_id: this.state.studentid
+        }),
+    })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+            }
+        )
 
     }
 
