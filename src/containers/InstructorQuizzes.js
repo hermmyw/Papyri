@@ -42,7 +42,19 @@ class InstructorQuizzes extends React.Component {
     }
 
     renderQuizzes() {
-        return 0;
+        this.state.quizzes.map(quiz => {
+            return (
+                <Card>
+                    <CardTitle>{quiz.title}</CardTitle>
+                    <CardBody>
+                        <CardText>{quiz.date}</CardText>
+                        <CardText>{quiz.id}</CardText>
+                        <CardText>{quiz.score}</CardText>
+                    </CardBody>
+                </Card>
+
+            )
+        })
     }
 
 
