@@ -20,6 +20,7 @@ class InstructorQuizzes extends React.Component {
     constructor(props) {
         super(props);
         this.getQuizzes = this.getQuizzes.bind(this);
+        this.renderQuizzes = this.renderQuizzes.bind(this);
         this.state = {
             quizzes: this.getQuizzes(),
         }
@@ -40,6 +41,10 @@ class InstructorQuizzes extends React.Component {
         return 0;
     }
 
+    renderQuizzes() {
+        return 0;
+    }
+
 
     /**
      * renders the Specific Quiz page
@@ -50,35 +55,7 @@ class InstructorQuizzes extends React.Component {
             <div>
                 <Card>
                     <CardBody>
-                        <CardTitle>{this.state.question.title}</CardTitle>
-                        <CardBody>
-                            <CardTitle>{this.state.question.choiceA.title}</CardTitle>
-                            <CardText>{this.state.question.choiceA.content}</CardText>
-                            <Progress value={this.state.question.choiceA.numResponses} />
-                            <Button>View Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
-                        <CardBody>
-                            <CardTitle>{this.state.question.choiceB.title}</CardTitle>
-                            <CardText>{this.state.question.choiceB.content}</CardText>
-                            <Progress value={this.state.question.choiceB.numResponses} />
-                            <Button>View Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
-                        <CardBody>
-                            <CardTitle>{this.state.question.choiceC.title}</CardTitle>
-                            <CardText>{this.state.question.choiceC.content}</CardText>
-                            <Progress value={this.state.question.choiceC.numResponses} />
-                            <Button>View Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
-                        <CardBody>
-                            <CardTitle>{this.state.question.choiceD.title}</CardTitle>
-                            <CardText>{this.state.question.choiceD.content}</CardText>
-                            <Progress value={this.state.question.choiceD.numResponses} />
-                            <Button>View Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
+                        {this.renderQuizzes}
                     </CardBody>
                 </Card>
             </div>
