@@ -80,7 +80,7 @@ class Landing extends React.Component {
                 })
                 .then(
                     (result) => {
-                        docCookies.setItem('token', result.token);
+                        docCookies.setItem('token', result.token, Infinity, '/');
                         this.checkAuthorization();
                     }
                 )
@@ -203,7 +203,8 @@ class Landing extends React.Component {
                 )
                 .catch (error => {
                     console.log("Error: ", error);
-                    docCookies.removeItem('token');
+                    docCookies.removeItem('token', '/');
+                    localStorage.clear();
                     this.setState({
                         loginClicked: false, 
                         registerClicked: false,

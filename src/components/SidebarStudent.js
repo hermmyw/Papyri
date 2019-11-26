@@ -4,7 +4,7 @@ import headshot from '../containers/images/headshot.png';
 import Button from 'react-bootstrap/Button';
 import './UI/UI.css';
 import { withRouter} from 'react-router-dom';
-
+import * as docCookies from 'doc-cookies';
 
 /**
  * Renders a sidebar for all the different pages on the User interface.
@@ -27,6 +27,7 @@ class SidebarStudent extends React.Component {
 
         var viewProp = this.props.view;
         this.state = { view: viewProp };
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     componentDidMount() {
@@ -95,15 +96,26 @@ class SidebarStudent extends React.Component {
         this.props.history.push("/student/dashboard");
     }
 
+    handleLogout() {
+        console.log("logging out");
+
+        const promise = new Promise(() => {
+            if (docCookies.hasItem('token')) {
+                console.log("removing token");
+                docCookies.removeItem('token', '/');
+                localStorage.clear();
+            }
+        });
+
+        promise.then(this.props.history.push('/'));
+    }
+
     /**
      * Renders the sidebar based on state of sidebar so that correct button is selected.
      */
     getNavButtons() {
-        var studentName = localStorage.getItem('name');
-        if (studentName === null || studentName === "") {
-            studentName = "Katie Lin";
-            console.log("no name");
-        }
+        var studentName = localStorage.getItem('firstName') + " " + localStorage.getItem('lastName');
+
         switch(this.state.view) {
             case "dashboard":
                 return (
@@ -112,6 +124,7 @@ class SidebarStudent extends React.Component {
                         <NonselectedButton onClick={this.handleEnrollClass.bind(this)}>Enroll Class</NonselectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             
@@ -122,6 +135,7 @@ class SidebarStudent extends React.Component {
                         <SelectedButton>Enroll Class</SelectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 ) 
                 
@@ -132,6 +146,7 @@ class SidebarStudent extends React.Component {
                         <NonselectedButton onClick={this.handleEnrollClass.bind(this)}>Enroll Class</NonselectedButton>
                         <SelectedButton>Forum</SelectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
 
@@ -143,6 +158,7 @@ class SidebarStudent extends React.Component {
                         <NonselectedButton onClick={this.handleEnrollClass.bind(this)}>Enroll Class</NonselectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <SelectedButton>Setting</SelectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             

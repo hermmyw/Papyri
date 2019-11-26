@@ -5,6 +5,10 @@ import './Register.css';
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
+import * as docCookies from 'doc-cookies';
+
+const userInfoURL = "http://127.0.0.1:8000/api/user/";
+const registerURL = "http://127.0.0.1:8000/api/user/register/";
 
 class RegisStudent extends React.Component {
     constructor(props) {
@@ -100,7 +104,7 @@ class RegisStudent extends React.Component {
         }
         else {
             console.log(e.target.querySelector("#image1"));
-            fetch("http://127.0.0.1:8000/api/user/register/", {
+            fetch(registerURL, {
                 method: "POST",
                 headers: {
                     Accept: 'application/json',
@@ -121,13 +125,85 @@ class RegisStudent extends React.Component {
                     pic5: this.state.imgData5,
                 }),
             })
-                .then(res => res.json())
+                .then(res => {
+                    if (res.ok) {
+                        return(res.json());
+                    }
+    
+                    throw Error(res.statusText);
+                })
                 .then(
                     (result) => {
+    
+                        // user object and authentication token
                         console.log(result);
+                        docCookies.setItem('token', result.token, Infinity, '/');
+                        this.checkAuthorization();
                     }
                 )
+                .catch (error => {
+                    console.log("Error: ", error);
+                    this.setState({
+                        errorText: error.message,
+                        error: true
+                    })
+                })
         }
+    }
+
+    checkAuthorization() {
+        console.log("checking whether authentication exists");
+        var authenticationField = "Token " + docCookies.getItem('token');
+        console.log(authenticationField);
+        
+        //try {
+            fetch(userInfoURL, {
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization':  authenticationField
+                },
+            })
+                .then(res => {
+                    console.log(res);
+                    if (res.ok) {
+                        return (res.json());
+                    }
+                    
+                    throw Error(res.statusText);
+                })
+                .then(
+                    (result) => {
+                        console.log("status:");
+                        console.log(result);
+                        let userType = result.user_info.is_student;
+                        localStorage.setItem('userID', result.user.id);
+                        localStorage.setItem('firstName', result.user.first_name);
+                        localStorage.setItem('lastName', result.user.last_name);
+                        localStorage.setItem('isStudent', userType);
+                        localStorage.setItem('uid', result.user_info.uid);
+
+                        if (userType) {
+                            localStorage.setItem('user', 'student');
+                            this.props.history.push('student/dashboard');
+                        }
+                        else {
+                            localStorage.setItem('user', 'instructor');
+                            this.props.history.push('/instructor/dashboard');
+                        }
+                    }
+                )
+                .catch (error => {
+                    console.log("Error: ", error);
+                    docCookies.removeItem('token', '/');
+                    localStorage.clear();
+                    this.props.history.push('/');
+                })
+        // } catch (error) {
+        //     console.log("Error: ", error);
+        //     this.setState({authorizationError: true})
+        // }
     }
 
     handleBackClick() {
