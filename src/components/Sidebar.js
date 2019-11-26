@@ -3,6 +3,7 @@ import { SelectedButton, NonselectedButton } from './UI/SidebarComponents.js';
 import headshot from '../containers/images/headshot.png';
 import './UI/UI.css';
 import { withRouter} from 'react-router-dom';
+import * as docCookies from 'doc-cookies';
 
 /**
  * Renders a sidebar for all the different pages on the User interface.
@@ -28,6 +29,8 @@ class Sidebar extends React.Component {
 
         var viewProp = this.props.view;
         this.state = { view: viewProp };
+
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     componentDidMount() {
@@ -130,15 +133,30 @@ class Sidebar extends React.Component {
         }));
     }
 
+    handleLogout() {
+        console.log("logging out");
+
+        const promise = new Promise(() => {
+            if (docCookies.hasItem('token')) {
+                console.log("removing token");
+                docCookies.removeItem('token', '/');
+                localStorage.clear();
+            }
+        });
+
+        promise.then(this.props.history.push('/'));
+    }
+
     /**
      * Renders the sidebar based on state of sidebar so that correct button is selected.
      */
     getNavButtons() {
-        var instructorName = localStorage.getItem('name');
-        if (instructorName === null || instructorName === "") {
-            instructorName = "Professor Kim";
-            console.log("no name");
-        }
+        var instructorName = localStorage.getItem('firstName') + " " + localStorage.getItem('lastName');
+        console.log(localStorage);
+        // if (instructorName === null || instructorName === "") {
+        //     instructorName = "Professor Kim";
+        //     console.log("no name");
+        // }
         switch(this.state.view) {
             case "dashboard":
                 return (
@@ -150,6 +168,7 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             
@@ -163,6 +182,7 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 ) 
                 
@@ -176,6 +196,7 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             
@@ -189,6 +210,7 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             
@@ -202,6 +224,7 @@ class Sidebar extends React.Component {
                         <SelectedButton>Create Quiz</SelectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             
@@ -215,6 +238,7 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
                         <SelectedButton>Forum</SelectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             
@@ -228,6 +252,7 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
                         <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <SelectedButton>Setting</SelectedButton>
+                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
             
