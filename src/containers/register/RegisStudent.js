@@ -288,7 +288,7 @@ class RegisStudent extends React.Component {
                                         <Label>First Name</Label>
                                         <Input 
                                             className="register-input" 
-                                            type="name" 
+                                            type="text" 
                                             name="firstname" 
                                             id="exampleFirstName"
                                             value={ firstname }
@@ -305,7 +305,7 @@ class RegisStudent extends React.Component {
                                         <Label>Last Name</Label>
                                         <Input 
                                             className="register-input" 
-                                            type="name" 
+                                            type="text" 
                                             name="lastname" 
                                             id="exampleLastName"
                                             value={ lastname }
@@ -322,10 +322,9 @@ class RegisStudent extends React.Component {
                                         <Label>University ID</Label>
                                         <Input 
                                             className="register-input" 
-                                            type="id" 
-                                            name="id" 
-                                            id="exampleId" 
-                                            value={ uid }
+                                            type="text"
+                                            name="name" 
+                                            id="exampleLastName"
                                             onChange={ (e) => {
                                                 this.handleChange(e)
                                             }}

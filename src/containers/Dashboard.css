@@ -1,14 +1,14 @@
 .main-content {
     margin-top: 10px;
     margin-left: 270px;
-    background-color: white
 }
 
 .subheader {
     background-color: white;
-    margin-left: 20px;
-    font-size: 36px;
-    text-align: left;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 .profile {
@@ -34,8 +34,7 @@
 .card-title {
     font-size: 18px;
 }
-.card-body {
-}
+
 
 
 .calendar {
@@ -45,6 +44,20 @@
 
 .DayPicker {
     display: inline-block;
+    background-color: white;
     font-size: 15px;
-    height: 350px;
+    border: 1px solid lightgrey;
+    margin-bottom: 3rem;
+    border-radius: 1rem;
+}
+
+.quiz {
+    display: inline-block;
+    padding: 0.5rem;
+    margin-bottom: 3rem;
+    width: 70%;
+}
+.quiz-option {
+    margin: 5px;
+    width: 70%;
 }
