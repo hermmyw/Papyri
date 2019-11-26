@@ -323,7 +323,7 @@ class RegisStudent extends React.Component {
                                         <Input 
                                             className="register-input" 
                                             type="id" 
-                                            name="id" 
+                                            name="uid" 
                                             id="exampleId" 
                                             value={ uid }
                                             onChange={ (e) => {
