@@ -62,3 +62,8 @@ class ListQuestionAPI(generics.ListAPIView):
         quiz_id = self.kwargs['quiz_id']
         queryset = QuizQuestion.objects.filter(quiz_id=quiz_id)
         return queryset
+
+class DestroyQuizAPI(generics.DestroyAPIView):
+    serializer_class = QuizSerializer
+    queryset = Quiz.objects.all()
+    lookup_field = 'id'
