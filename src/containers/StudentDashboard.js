@@ -159,7 +159,7 @@ class StudentDashboard extends React.Component {
             <Container className="main-content">
                 <Sidebar view="dashboard" />
                 <div className="subheader">
-                    Hello,  {this.state.firstname}!
+                    Hello,  {localStorage.getItem('firstName')}!
                 </div>
                 <CardDeck className="class-list">
                     {this.state.classes.map(function(item, index) {

@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 import './Register.css';
+import * as docCookies from 'doc-cookies';
+
+const userInfoURL = "http://127.0.0.1:8000/api/user/";
+const registerURL = "http://127.0.0.1:8000/api/user/register/";
+
 
 class RegisInstr extends React.Component {
     constructor(props) {
@@ -13,11 +18,14 @@ class RegisInstr extends React.Component {
             lastname: '',
             email: '',
             password: '',
-            uid: ''
+            uid: '',
+            error: false,
+            errorText: ""
         };
         this.handleSubmitClick = this.handleSubmitClick.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.checkAuthorization = this.checkAuthorization.bind(this);
     }
 
     handleSubmitClick(e) {
@@ -31,7 +39,7 @@ class RegisInstr extends React.Component {
         console.log(`UID: ${ this.state.uid }`);
 
         // make api call
-        fetch("http://127.0.0.1:8000/api/user/register/", {
+        fetch(registerURL, {
             method: "POST",
             headers: {
                 Accept: 'application/json',
@@ -52,12 +60,84 @@ class RegisInstr extends React.Component {
                 pic5: null
             }),
         })
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok) {
+                    return(res.json());
+                }
+
+                throw Error(res.statusText);
+            })
             .then(
                 (result) => {
+
+                    // user object and authentication token
                     console.log(result);
+                    docCookies.setItem('token', result.token, Infinity, '/');
+                    this.checkAuthorization();
                 }
             )
+            .catch (error => {
+                console.log("Error: ", error);
+                this.setState({
+                    errorText: error.message,
+                    error: true
+                })
+            })
+    }
+
+    checkAuthorization() {
+        console.log("checking whether authentication exists");
+        var authenticationField = "Token " + docCookies.getItem('token');
+        console.log(authenticationField);
+        
+        //try {
+            fetch(userInfoURL, {
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization':  authenticationField
+                },
+            })
+                .then(res => {
+                    console.log(res);
+                    if (res.ok) {
+                        return (res.json());
+                    }
+                    
+                    throw Error(res.statusText);
+                })
+                .then(
+                    (result) => {
+                        console.log("status:");
+                        console.log(result);
+                        let userType = result.user_info.is_student;
+                        localStorage.setItem('userID', result.user.id);
+                        localStorage.setItem('firstName', result.user.first_name);
+                        localStorage.setItem('lastName', result.user.last_name);
+                        localStorage.setItem('isStudent', userType);
+                        localStorage.setItem('uid', result.user_info.uid);
+
+                        if (userType) {
+                            localStorage.setItem('user', 'student');
+                            this.props.history.push('student/dashboard');
+                        }
+                        else {
+                            localStorage.setItem('user', 'instructor');
+                            this.props.history.push('/instructor/dashboard');
+                        }
+                    }
+                )
+                .catch (error => {
+                    console.log("Error: ", error);
+                    docCookies.removeItem('token', '/');
+                    localStorage.clear();
+                    this.props.history.push('/');
+                })
+        // } catch (error) {
+        //     console.log("Error: ", error);
+        //     this.setState({authorizationError: true})
+        // }
     }
 
     handleBackClick() {
@@ -80,7 +160,14 @@ class RegisInstr extends React.Component {
 
     render() {
         const { firstname, lastname, uid, email, password } = this.state;
-        var display, backButton = null;
+        var display, backButton, errorDisplay = null;
+
+        if (this.state.error) {
+            errorDisplay = (
+                <FormText style={{color: 'red'}}>There was a problem registering user: {this.state.errorText}. Please try again.</FormText>
+            )
+        }
+
         if (!this.state.submitClicked) {
             display = (
                 <div>
@@ -167,6 +254,7 @@ class RegisInstr extends React.Component {
                                             this.handleChange(e)
                                         }}
                                     />
+                                    {errorDisplay}
                                 </FormGroup>
                             </Col>
                         </Row>
