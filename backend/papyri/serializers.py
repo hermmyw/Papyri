@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship
 from .models import Lecture, LectureAttendance
 from .models import Quiz, QuizQuestion
-
+from django.utils.crypto import get_random_string
 
 class CreateUserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=50)
@@ -78,14 +78,23 @@ class ClassSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=200)
     teacher_id = serializers.PrimaryKeyRelatedField(queryset=UserInfo.objects.filter(is_student=False))
+    term = serializers.CharField(max_length=200)
+    year = serializers.CharField(max_length=10)
+    registration_code = serializers.CharField(max_length=5)
 
     class Meta:
         model = ClassInfo
         fields = ('__all__')
 
     def create(self, validated_data):
+        code = get_random_string(length=5).upper()
+        while ClassInfo.objects.get(registration_code=code):
+            code = get_random_string(length=5).upper()
         return ClassInfo.objects.create(name=validated_data['name'],
-                                        teacher_id=validated_data['teacher_id'].id)
+                                        teacher_id=validated_data['teacher_id'].id,
+                                        term=validated_data['term'],
+                                        year=validated_data['year'],
+                                        registration_code=code)
 
 
 class StudentClassSerializer(serializers.Serializer):
