@@ -6,6 +6,41 @@ from .models import Lecture, LectureAttendance
 from .models import Quiz, QuizQuestion
 from django.utils.crypto import get_random_string
 
+### from package drf-base64
+import base64
+import uuid
+from django.core.files.base import ContentFile
+from rest_framework import serializers
+from rest_framework.fields import SkipField
+class Base64FieldMixin(object):
+
+    def _decode(self, data):
+        if isinstance(data, str) and data.startswith('data:'):
+            # base64 encoded file - decode
+            format, datastr = data.split(';base64,')    # format ~= data:image/X,
+            ext = format.split('/')[-1]    # guess file extension
+            if ext[:3] == 'svg':
+                ext = 'svg'
+
+            data = ContentFile(
+                base64.b64decode(datastr),
+                name='{}.{}'.format(uuid.uuid4(), ext)
+            )
+
+        elif isinstance(data, str) and data.startswith('http'):
+            raise SkipField()
+
+        return data
+
+    def to_internal_value(self, data):
+        data = self._decode(data)
+        return super(Base64FieldMixin, self).to_internal_value(data)
+class Base64ImageField(Base64FieldMixin, serializers.ImageField):
+    pass
+
+
+
+
 class CreateUserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=50)
     password = serializers.CharField(max_length=50, write_only=True)
@@ -16,11 +51,11 @@ class CreateUserSerializer(serializers.Serializer):
     uid = serializers.CharField(max_length=50, allow_blank=True)
     is_student = serializers.BooleanField(default=False)
     # create profile_pic
-    pic1 = serializers.ImageField(allow_null=True)
-    pic2 = serializers.ImageField(allow_null=True)
-    pic3 = serializers.ImageField(allow_null=True)
-    pic4 = serializers.ImageField(allow_null=True)
-    pic5 = serializers.ImageField(allow_null=True)
+    pic1 = Base64ImageField(allow_null=True)
+    pic2 = Base64ImageField(allow_null=True)
+    pic3 = Base64ImageField(allow_null=True)
+    pic4 = Base64ImageField(allow_null=True)
+    pic5 = Base64ImageField(allow_null=True)
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'],
