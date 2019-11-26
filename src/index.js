@@ -15,6 +15,9 @@ import ShowClasses from './containers/ShowClasses';
 import CreateClass from './containers/CreateClass';
 import CreateQuiz from './containers/CreateQuiz';
 import TakeAttendance from './containers/TakeAttendance';
+import EnrollClass from './containers/EnrollClass';
+import SpecificInstructorClass from './containers/SpecificInstructorClass'
+import CurrentQuizzes from './containers/CurrentQuizzes'
 
 ReactDOM.render(
     <Router>
@@ -29,6 +32,9 @@ ReactDOM.render(
             <Route path="/instructor/createclass" exact={true} component={CreateClass} />
             <Route path="/instructor/createquiz" exact={true} component={CreateQuiz} />
             <Route path="/instructor/takeattendance" exact={true} component={TakeAttendance} />
+            <Route path="/student/enroll" exact={true} component={EnrollClass} />
+            <Route path="/instructor/class" exact={true} component={SpecificInstructorClass} />
+            <Route path="/instructor/quizzes" exact={true} component={CurrentQuizzes} />
         </Switch>
     </Router>,
     document.getElementById('root'));
