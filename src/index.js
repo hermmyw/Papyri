@@ -34,7 +34,6 @@ ReactDOM.render(
             <Route path="/instructor/takeattendance" exact={true} component={TakeAttendance} />
             <Route path="/student/enroll" exact={true} component={EnrollClass} />
             <Route path="/instructor/class" exact={true} component={SpecificInstructorClass} />
-            <Route path="/instructor/quizzes" exact={true} component={CurrentQuizzes} />
         </Switch>
     </Router>,
     document.getElementById('root'));
