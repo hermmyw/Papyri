@@ -134,11 +134,12 @@ class Sidebar extends React.Component {
      * Renders the sidebar based on state of sidebar so that correct button is selected.
      */
     getNavButtons() {
-        var instructorName = localStorage.getItem('name');
-        if (instructorName === null || instructorName === "") {
-            instructorName = "Professor Kim";
-            console.log("no name");
-        }
+        var instructorName = localStorage.getItem('firstName') + " " + localStorage.getItem('lastName');
+        console.log(localStorage);
+        // if (instructorName === null || instructorName === "") {
+        //     instructorName = "Professor Kim";
+        //     console.log("no name");
+        // }
         switch(this.state.view) {
             case "dashboard":
                 return (

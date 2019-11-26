@@ -4,8 +4,6 @@ import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'reac
 import { IoIosArrowBack } from "react-icons/io";
 import './Register.css';
 
-const proxyurl = "https://cors-anywhere.herokuapp.com/";
-
 class RegisInstr extends React.Component {
     constructor(props) {
         super(props);
@@ -25,7 +23,12 @@ class RegisInstr extends React.Component {
     handleSubmitClick(e) {
         e.preventDefault();
         console.log("instructor submitted!");
-        console.log(`Email: ${ this.state.email }`)
+        console.log(`Email: ${ this.state.email }`);
+        console.log(`Username: ${ this.state.email }`);
+        console.log(`Password: ${ this.state.password }`);
+        console.log(`First Name: ${ this.state.firstname }`);
+        console.log(`Last Name: ${ this.state.lastname }`);
+        console.log(`UID: ${ this.state.uid }`);
 
         // make api call
         fetch("http://127.0.0.1:8000/api/user/register/", {
@@ -41,7 +44,12 @@ class RegisInstr extends React.Component {
                 first_name: this.state.firstname,
                 last_name: this.state.lastname,
                 uid: this.state.uid,
-                is_student: false
+                is_student: false,
+                pic1: null,
+                pic2: null,
+                pic3: null,
+                pic4: null,
+                pic5: null
             }),
         })
             .then(res => res.json())
@@ -60,7 +68,7 @@ class RegisInstr extends React.Component {
         }));
         this.props.history.push('/');
     }
-    
+
     handleChange = async (event) => {
         const { target } = event;
         const value = target.value;
