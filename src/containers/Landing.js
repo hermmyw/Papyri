@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/index.css';
 import './Landing.css';
 import '../components/UI/UI.css';
-import { Container, Row, Col, Button, Form, FormGroup, Input } from 'reactstrap';
+import { Container, Row, Col, Button, Form, FormGroup, Input, FormText } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 import * as docCookies from 'doc-cookies';
 
@@ -28,15 +28,18 @@ class Landing extends React.Component {
             registerClicked: false,
             email: "",
             password: "",
-            hasAuthentication: false
+            authorizationError: false,
+            loginError: false,
+            errorText: ""
         };
         this.handleLoginClick = this.handleLoginClick.bind(this);
         this.handleRegisterClick = this.handleRegisterClick.bind(this);
         this.handleRegisterInstructor = this.handleRegisterInstructor.bind(this);
         this.handleRegisterStudent = this.handleRegisterStudent.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
-        this.checkAuthentication = this.checkAuthentication.bind(this);
+        this.checkAuthorization = this.checkAuthorization.bind(this);
         this.getLoginScreen = this.getLoginScreen.bind(this);
+        this.handleAuthorizationError = this.handleAuthorizationError.bind(this);
     }
 
     componentDidMount() {
@@ -55,24 +58,39 @@ class Landing extends React.Component {
     authenticateLogin(e) {
         e.preventDefault();
         console.log("attempted login");
-        fetch(loginURL, {
-            method: "POST",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username:  this.state.email,
-                password: this.state.password
-            }),
-        })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    docCookies.setItem('token', result.token);
-                    this.checkAuthentication();
-                }
-            )
+        
+            fetch(loginURL, {
+                method: "POST",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username:  this.state.email,
+                    password: this.state.password
+                }),
+            })
+                .then(res => {
+                    console.log(res);
+                    if (res.ok) {
+                        return (res.json());
+                    }
+                    
+                    throw Error(res.statusText);
+                })
+                .then(
+                    (result) => {
+                        docCookies.setItem('token', result.token);
+                        this.checkAuthorization();
+                    }
+                )
+                .catch (error => {
+                    console.log("Error: ", error);
+                    this.setState({
+                        errorText: error.message,
+                        loginError: true
+                    })
+                })
     }
 
     /**
@@ -129,7 +147,8 @@ class Landing extends React.Component {
     handleBackClick() {
         this.setState(state => ({
             loginClicked: false,
-            registerClicked: false
+            registerClicked: false,
+            loginError: false
         }))
     }
 
@@ -139,45 +158,105 @@ class Landing extends React.Component {
         });
     }
 
-    checkAuthentication() {
+    checkAuthorization() {
         console.log("checking whether authentication exists");
         var authenticationField = "Token " + docCookies.getItem('token');
         console.log(authenticationField);
         
-        fetch(userInfoURL, {
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'authorization':  authenticationField
-            },
-        })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    let userType = result.user_info.is_student;
-                    localStorage.setItem('userID', result.user.id);
-                    localStorage.setItem('firstName', result.user.first_name);
-                    localStorage.setItem('lastName', result.user.last_name);
-                    localStorage.setItem('isStudent', userType);
-                    localStorage.setItem('uid', result.user_info.uid);
+        //try {
+            fetch(userInfoURL, {
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization':  authenticationField
+                },
+            })
+                .then(res => {
+                    console.log(res);
+                    if (res.ok) {
+                        return (res.json());
+                    }
+                    
+                    throw Error(res.statusText);
+                })
+                .then(
+                    (result) => {
+                        console.log("status:");
+                        console.log(result);
+                        let userType = result.user_info.is_student;
+                        localStorage.setItem('userID', result.user.id);
+                        localStorage.setItem('firstName', result.user.first_name);
+                        localStorage.setItem('lastName', result.user.last_name);
+                        localStorage.setItem('isStudent', userType);
+                        localStorage.setItem('uid', result.user_info.uid);
 
-                    if (userType) {
-                        localStorage.setItem('user', 'student');
-                        this.props.history.push('student/dashboard');
+                        if (userType) {
+                            localStorage.setItem('user', 'student');
+                            this.props.history.push('student/dashboard');
+                        }
+                        else {
+                            localStorage.setItem('user', 'instructor');
+                            this.props.history.push('/instructor/dashboard');
+                        }
                     }
-                    else {
-                        localStorage.setItem('user', 'instructor');
-                        this.props.history.push('/instructor/dashboard');
-                    }
-                }
-            )
+                )
+                .catch (error => {
+                    console.log("Error: ", error);
+                    docCookies.removeItem('token');
+                    this.setState({
+                        loginClicked: false, 
+                        registerClicked: false,
+                        email: "",
+                        password: "",
+                        authorizationError: false,
+                        loginError: false,
+                        errorText: ""
+                    })
+                })
+        // } catch (error) {
+        //     console.log("Error: ", error);
+        //     this.setState({authorizationError: true})
+        // }
     }
 
     getLoginScreen() {
         var display, backButton = null;
 
-        if (!this.state.loginClicked && !this.state.registerClicked) {
+        if (this.state.loginError) {
+            display = (
+                <div>
+                    <Form  onSubmit={ e => this.authenticateLogin(e) }>
+                        <FormGroup>
+                            <Input 
+                                className="custom-input" 
+                                type="email" 
+                                name="email" 
+                                id="exampleEmail" 
+                                placeholder="Email"
+                                value={this.state.email}
+                                onChange={ (e) => this.handleChange(e) } />
+                        </FormGroup>
+                        <FormGroup>
+                            <Input 
+                                className="custom-input" 
+                                type="password" 
+                                name="password" 
+                                id="examplePassword" 
+                                placeholder="Password"
+                                value={this.state.password}
+                                onChange={ (e) => this.handleChange(e) } />
+                            <FormText style={{color: 'red'}}>Login credentials incorrect!</FormText>
+                        </FormGroup>
+                        <FormGroup>
+                            <Button className="yellow-button" size="lg" block type="submit">Login</Button>
+                        </FormGroup>
+                    </Form>
+                </div>
+            );
+        }
+
+        else if (!this.state.loginClicked && !this.state.registerClicked) {
             display = (
                 <div>
                     <Row>
@@ -201,6 +280,7 @@ class Landing extends React.Component {
                                 name="email" 
                                 id="exampleEmail" 
                                 placeholder="Email"
+                                value={this.state.email}
                                 onChange={ (e) => this.handleChange(e) } />
                         </FormGroup>
                         <FormGroup>
@@ -210,6 +290,7 @@ class Landing extends React.Component {
                                 name="password" 
                                 id="examplePassword" 
                                 placeholder="Password"
+                                value={this.state.passsword}
                                 onChange={ (e) => this.handleChange(e) } />
                         </FormGroup>
                         <FormGroup>
@@ -251,18 +332,33 @@ class Landing extends React.Component {
             </Container>
         )
     }
+
+    handleAuthorizationError() {
+        this.setState({
+            loginClicked: false, 
+            registerClicked: false,
+            email: "",
+            password: "",
+            authorizationError: false,
+            loginError: false,
+            errorText: ""
+        })
+    }
     
     render() {
         console.log("rendering");
+        console.log(this.state);
+
         if (docCookies.hasItem('token')) {
-            this.checkAuthentication();
+            this.checkAuthorization();
             return (
                 <div></div>
             )
         }
         else {
-            return(this.getLoginScreen());
+            return (this.getLoginScreen());
         }
+
     }
 }
 
