@@ -124,17 +124,6 @@ class SidebarStudent extends React.Component {
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 ) 
-                
-            case "forum":
-                return (
-                    <div>
-                        <NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{studentName}</NonselectedButton>
-                        <NonselectedButton onClick={this.handleEnrollClass.bind(this)}>Enroll Class</NonselectedButton>
-                        <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
-                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
-                    </div>
-                )
-
             
             case "setting":
                 return (
