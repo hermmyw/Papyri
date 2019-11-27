@@ -62,8 +62,8 @@ class SidebarStudent extends React.Component {
             view: "enroll class"
         }));
 
-        //let path = '/student/enrollclass';
-        //this.props.history.push(path);
+        let path = '/student/enroll';
+        this.props.history.push(path);
     }
 
     /**
