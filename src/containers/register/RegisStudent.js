@@ -1,5 +1,6 @@
 import React from 'react';
 import Webcam from 'react-webcam';
+import authorization from '../../functions/authorization'
 
 import './Register.css';
 
@@ -138,7 +139,7 @@ class RegisStudent extends React.Component {
                         // user object and authentication token
                         console.log(result);
                         docCookies.setItem('token', result.token, Infinity, '/');
-                        this.checkAuthorization();
+                        authorization(this);
                     }
                 )
                 .catch (error => {
@@ -149,61 +150,6 @@ class RegisStudent extends React.Component {
                     })
                 })
         }
-    }
-
-    checkAuthorization() {
-        console.log("checking whether authentication exists");
-        var authenticationField = "Token " + docCookies.getItem('token');
-        console.log(authenticationField);
-        
-        //try {
-            fetch(userInfoURL, {
-                method: "GET",
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'authorization':  authenticationField
-                },
-            })
-                .then(res => {
-                    console.log(res);
-                    if (res.ok) {
-                        return (res.json());
-                    }
-                    
-                    throw Error(res.statusText);
-                })
-                .then(
-                    (result) => {
-                        console.log("status:");
-                        console.log(result);
-                        let userType = result.user_info.is_student;
-                        localStorage.setItem('userID', result.user.id);
-                        localStorage.setItem('firstName', result.user.first_name);
-                        localStorage.setItem('lastName', result.user.last_name);
-                        localStorage.setItem('isStudent', userType);
-                        localStorage.setItem('uid', result.user_info.uid);
-
-                        if (userType) {
-                            localStorage.setItem('user', 'student');
-                            this.props.history.push('student/dashboard');
-                        }
-                        else {
-                            localStorage.setItem('user', 'instructor');
-                            this.props.history.push('/instructor/dashboard');
-                        }
-                    }
-                )
-                .catch (error => {
-                    console.log("Error: ", error);
-                    docCookies.removeItem('token', '/');
-                    localStorage.clear();
-                    this.props.history.push('/');
-                })
-        // } catch (error) {
-        //     console.log("Error: ", error);
-        //     this.setState({authorizationError: true})
-        // }
     }
 
     handleBackClick() {

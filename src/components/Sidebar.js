@@ -51,7 +51,7 @@ class Sidebar extends React.Component {
             view: "dashboard"
         }));
 
-        let path = '/instructor/dashboard';
+        let path = '/';
         this.props.history.push(path);
     }
 

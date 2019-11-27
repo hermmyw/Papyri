@@ -25,9 +25,9 @@ ReactDOM.render(
             <Route path="/" exact={true} component={Landing}/>
             <Route path="/register/student" exact={true} component={RegisStudent}/>
             <Route path="/register/instructor" exact={true} component={RegisInstr}/>
-            <Route path="/student/dashboard" exact={true} component={StudentDashboard} />
+            <Route path="/student/:userid" exact={true} component={StudentDashboard} />
             <Route path='/student/class' exact={true} component={StudentClass} />
-            <Route path="/instructor/dashboard" exact={true} component={InstructorDashboard} />
+            <Route path="/instructor/:userid" exact={true} component={InstructorDashboard} />
             <Route path="/instructor/classes" exact={true} component={ShowClasses} />
             <Route path="/instructor/createclass" exact={true} component={CreateClass} />
             <Route path="/instructor/createquiz" exact={true} component={CreateQuiz} />

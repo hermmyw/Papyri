@@ -5,6 +5,7 @@ import '../components/UI/UI.css';
 import { Container, Row, Col, Button, Form, FormGroup, Input, FormText } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 import * as docCookies from 'doc-cookies';
+import authorization from '../functions/authorization'
 
 const loginURL = "http://127.0.0.1:8000/api/user/login/";
 const userInfoURL = "http://127.0.0.1:8000/api/user/";
@@ -37,7 +38,6 @@ class Landing extends React.Component {
         this.handleRegisterInstructor = this.handleRegisterInstructor.bind(this);
         this.handleRegisterStudent = this.handleRegisterStudent.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
-        this.checkAuthorization = this.checkAuthorization.bind(this);
         this.getLoginScreen = this.getLoginScreen.bind(this);
         this.handleAuthorizationError = this.handleAuthorizationError.bind(this);
     }
@@ -81,7 +81,7 @@ class Landing extends React.Component {
                 .then(
                     (result) => {
                         docCookies.setItem('token', result.token, Infinity, '/');
-                        this.checkAuthorization();
+                        authorization(this);
                     }
                 )
                 .catch (error => {
@@ -156,69 +156,6 @@ class Landing extends React.Component {
         this.setState({
             [ e.target.name ]: e.target.value,
         });
-    }
-
-    checkAuthorization() {
-        console.log("checking whether authentication exists");
-        var authenticationField = "Token " + docCookies.getItem('token');
-        console.log(authenticationField);
-        
-        //try {
-            fetch(userInfoURL, {
-                method: "GET",
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'authorization':  authenticationField
-                },
-            })
-                .then(res => {
-                    console.log(res);
-                    if (res.ok) {
-                        return (res.json());
-                    }
-                    
-                    throw Error(res.statusText);
-                })
-                .then(
-                    (result) => {
-                        console.log("status:");
-                        console.log(result);
-                        let userType = result.user_info.is_student;
-                        localStorage.setItem('userID', result.user.id);
-                        localStorage.setItem('firstName', result.user.first_name);
-                        localStorage.setItem('lastName', result.user.last_name);
-                        localStorage.setItem('isStudent', userType);
-                        localStorage.setItem('uid', result.user_info.uid);
-
-                        if (userType) {
-                            localStorage.setItem('user', 'student');
-                            this.props.history.push('student/dashboard');
-                        }
-                        else {
-                            localStorage.setItem('user', 'instructor');
-                            this.props.history.push('/instructor/dashboard');
-                        }
-                    }
-                )
-                .catch (error => {
-                    console.log("Error: ", error);
-                    docCookies.removeItem('token', '/');
-                    localStorage.clear();
-                    this.setState({
-                        loginClicked: false, 
-                        registerClicked: false,
-                        email: "",
-                        password: "",
-                        authorizationError: false,
-                        loginError: false,
-                        errorText: ""
-                    })
-                })
-        // } catch (error) {
-        //     console.log("Error: ", error);
-        //     this.setState({authorizationError: true})
-        // }
     }
 
     getLoginScreen() {
@@ -351,7 +288,8 @@ class Landing extends React.Component {
         console.log(this.state);
 
         if (docCookies.hasItem('token')) {
-            this.checkAuthorization();
+            console.log("checking authentication");
+            authorization(this);
             return (
                 <div></div>
             )
