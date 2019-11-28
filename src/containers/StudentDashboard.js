@@ -7,10 +7,12 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import CardDeck from 'react-bootstrap/CardDeck';
+import { Row, Col } from 'react-bootstrap';
 import 'react-day-picker/lib/style.css';
 import './Dashboard.css';
 import Sidebar from '../components/SidebarStudent.js';
 import StudentClass from './StudentClass.js';
+import handleLogout from '../functions/logout';
 
 
 
@@ -59,7 +61,10 @@ class StudentDashboard extends React.Component {
             ],
             detailClass: null
         };
+
         this.handleDetails = this.handleDetails.bind(this);
+        this.handleEnterClass = this.handleEnterClass.bind(this);
+        this.handleCreateClass = this.handleCreateClass.bind(this);
     }
 
     componentDidMount() {
@@ -137,6 +142,17 @@ class StudentDashboard extends React.Component {
             detailClass: classid
         }))
     }
+
+    handleEnterClass(classID) {
+        localStorage.setItem('classid', classID);
+        let userID = this.props.match.params.userid;
+        this.props.history.push(`/student/class/${userID}/${classID}`)
+    }
+
+    handleCreateClass() {
+        let userID = this.props.match.params.userid;
+        this.props.history.push(`/instructor/createclass/${userID}`);
+    }
     
     render() {
 
@@ -144,11 +160,7 @@ class StudentDashboard extends React.Component {
         var obj = this;
         //if (this.state.detailClass === null) {
             main = (
-                <Container className="main-content">
-                    <Sidebar 
-                        view="dashboard"
-                        profilepic={localStorage.getItem('profilepic')}
-                    />
+                <Container>
                     <div className="subheader">
                         Hello,  {localStorage.getItem('firstName')}!
                     </div>
@@ -156,7 +168,7 @@ class StudentDashboard extends React.Component {
                         {this.state.classes.map(function(item, index) {
                             console.log("The class is active: ", item.active);
                             return (
-                                <Card style={{ width: '14rem' }} key={index}>
+                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.classid)}>
                                     <Card.Header className="card-header">{item.classname}</Card.Header>
                                     <Card.Body className="card-body">
                                     <Card.Title>Professor {item.instructor}</Card.Title>
@@ -169,6 +181,9 @@ class StudentDashboard extends React.Component {
                             );
                         })}
                     </CardDeck>
+                    <Row>
+                        <Col><Button className="yellow-button" size="lg" block onClick={() => handleLogout(this)}>Log Out</Button></Col>
+                    </Row>
                 </Container>
             );
         // } else {

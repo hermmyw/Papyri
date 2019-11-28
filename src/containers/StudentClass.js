@@ -6,7 +6,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import './Dashboard.css';
-import Sidebar from '../components/SidebarStudent.js';
+import Sidebar from '../components/Sidebar.js';
 import Modal from 'react-bootstrap/Modal';
 import Webcam from 'react-webcam';
 import headshot from './images/headshot.png';
@@ -32,6 +32,7 @@ class StudentClass extends React.Component {
         this.fetchData = this.fetchData.bind(this);
         this.postData = this.postData.bind(this);
         //this.setWebcamRef = this.setWebcamRef.bind(this);
+        this.handleExitClass = this.handleExitClass.bind(this);
     }
 
     componentDidMount() {
@@ -140,6 +141,12 @@ class StudentClass extends React.Component {
         this.webcam = webcam;
     }
 
+    handleExitClass() {
+        localStorage.removeItem('classid');
+        let userID = this.props.match.params.userid;
+        this.props.history.push(`/student/${userID}`);
+    }
+
     render() {
         const videoConstraints = {
             width: 200,
@@ -210,13 +217,13 @@ class StudentClass extends React.Component {
 
         return (
             <Container>
-                <Sidebar 
-                    profilePic={headshot}
-                    view="class"
-                />
+                <Sidebar view="class home"/>
                 <Row>
                 <Col>
                     <div className="main-content">
+                        <Row>
+                            <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
+                        </Row>
                         <h3 className="subheader">Attendance</h3>
                         <div className="calendar">
                             <Row>

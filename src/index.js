@@ -11,31 +11,26 @@ import RegisInstr from './containers/register/RegisInstr';
 import StudentDashboard from './containers/StudentDashboard';
 import StudentClass from './containers/StudentClass';
 import InstructorDashboard from './containers/InstructorDashboard';
-import ShowClasses from './containers/ShowClasses';
 import CreateClass from './containers/CreateClass';
 import CreateQuiz from './containers/CreateQuiz';
-import TakeAttendance from './containers/TakeAttendance';
 import EnrollClass from './containers/EnrollClass';
 import SpecificInstructorClass from './containers/SpecificInstructorClass'
-import CurrentQuizzes from './containers/CurrentQuizzes'
+import PendingQuizzes from './containers/PendingQuizzes'
+import Settings from './containers/Settings'
+import StudentQuizzes from './containers/StudentQuizzes'
 
 
 /*
-    specific quiz for instructor -> /instructor/quiz/:quizID
-    specific quiz for student -> /student/quiz/:quizID
-    
-    /student/class -> /student/:userID/:classID
-    /instructor/class -> /instructor/:userID/:classID
-    /instructor/createclass -> /createclass/:userID
-    /instructor/createquiz -> /createquiz/:userID/:classID
-    /student/enroll -> /enroll/:userID
+    TODO: Need to link following pages to sidebar
+    past quizzes page for instructor (virgil)
+
 
 */
 
 ReactDOM.render(
     <Router>
         <Switch>
-            <Route path="/" exact={true} component={Landing}/>
+            {/* <Route path="/" exact={true} component={Landing}/>
             <Route path="/register/student" exact={true} component={RegisStudent}/>
             <Route path="/register/instructor" exact={true} component={RegisInstr}/>
             <Route path='/student/class' exact={true} component={StudentClass} /> 
@@ -43,6 +38,21 @@ ReactDOM.render(
             <Route path="/instructor/createclass" exact={true} component={CreateClass} />
             <Route path="/instructor/createquiz" exact={true} component={CreateQuiz} />
             <Route path="/student/enroll" exact={true} component={EnrollClass} />
+            <Route path="/student/:userid" exact={true} component={StudentDashboard} />
+            <Route path="/instructor/:userid" exact={true} component={InstructorDashboard} /> */}
+
+            <Route path="/" exact={true} component={Landing}/>
+            <Route path="/register/student" exact={true} component={RegisStudent}/>
+            <Route path="/register/instructor" exact={true} component={RegisInstr}/>
+            <Route path='/student/class/:userid/:classid' exact={true} component={StudentClass} /> 
+            <Route path="/instructor/class/:userid/:classid" exact={true} component={SpecificInstructorClass} />
+            <Route path="/instructor/createclass/:userid" exact={true} component={CreateClass} />
+            <Route path="/instructor/createquiz/:userid/:classid" exact={true} component={CreateQuiz} />
+            <Route path="/instructor/pendingquizzes/:userid/:classid" exact={true} component={PendingQuizzes} />
+            <Route path="/student/quizzes/:userid/:classid" exact={true} component={StudentQuizzes} />
+            <Route path="/student/enroll/:userid" exact={true} component={EnrollClass} />
+            <Route path="/instructor/settings/:userid" exact={true} component={Settings} />
+            <Route path="/student/settings/:userid" exact={true} component={Settings} />
             <Route path="/student/:userid" exact={true} component={StudentDashboard} />
             <Route path="/instructor/:userid" exact={true} component={InstructorDashboard} />
         </Switch>
