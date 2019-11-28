@@ -23,7 +23,6 @@ class Sidebar extends React.Component {
         this.handleCreateClass = this.handleCreateClass.bind(this);
         this.handleTakeAttendance = this.handleTakeAttendance.bind(this);
         this.handleCreateQuiz = this.handleCreateQuiz.bind(this);
-        this.handleForum = this.handleForum.bind(this);
         this.handleSetting = this.handleSetting.bind(this);
         this.getNavButtons = this.getNavButtons.bind(this);
 
@@ -51,7 +50,7 @@ class Sidebar extends React.Component {
             view: "dashboard"
         }));
 
-        let path = '/instructor/dashboard';
+        let path = '/';
         this.props.history.push(path);
     }
 
@@ -112,17 +111,6 @@ class Sidebar extends React.Component {
     }
 
     /**
-     * Even handler for when user clicks on forum button.
-     * Changes button selection on sidear and redirects to forum page.
-     */
-    handleForum() {
-        console.log("forum");
-        this.setState(state => ({
-            view: "forum"
-        }));
-    }
-
-    /**
      * Event handler for when user clicks on setting button.
      * Changes button selection on sidebar and redirects to account setting page.
      */
@@ -166,7 +154,6 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class</NonselectedButton>
                         <NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance</NonselectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
@@ -180,7 +167,6 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class</NonselectedButton>
                         <NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance</NonselectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
@@ -194,7 +180,6 @@ class Sidebar extends React.Component {
                         <SelectedButton>Create Class</SelectedButton>
                         <NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance</NonselectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
@@ -208,7 +193,6 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class</NonselectedButton>
                         <SelectedButton>Take Attendance</SelectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
@@ -222,26 +206,11 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class</NonselectedButton>
                         <NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance</NonselectedButton>
                         <SelectedButton>Create Quiz</SelectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 )
-            
-            case "forum":
-                return (
-                    <div>
-                        <NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{instructorName}</NonselectedButton>
-                        <NonselectedButton onClick={this.handleShowClasses.bind(this)}>Classes</NonselectedButton>
-                        <NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class</NonselectedButton>
-                        <NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance</NonselectedButton>
-                        <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
-                        <SelectedButton>Forum</SelectedButton>
-                        <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
-                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
-                    </div>
-                )
-            
+        
             case "setting":
                 return (
                     <div>
@@ -250,7 +219,6 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handleCreateClass.bind(this)}>Create Class</NonselectedButton>
                         <NonselectedButton onClick={this.handleTakeAttendance.bind(this)}>Take Attendance</NonselectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <SelectedButton>Setting</SelectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
