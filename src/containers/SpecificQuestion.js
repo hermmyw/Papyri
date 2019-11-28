@@ -23,7 +23,7 @@ class SpecificQuestion extends React.Component {
         this.getQuestion = this.getQuestion.bind(this);
         this.getStudentAnswers = this.getStudentAnswers.bind(this);
         this.state = {
-            question: this.getQuestion(),
+            question: this.props.question,
             answers: this.getStudentAnswers()
         }
     }
@@ -36,22 +36,17 @@ class SpecificQuestion extends React.Component {
         console.log("unmounting");
     }
 
-    /**
-     * Makes an http request to endpoint to retrieve information about a given question
-     */
-    getQuestion() {
-        return 0;
-    }
 
     /*
-     * Makes http request to endpoint to retrieve list of student answers from a given question
+     * TODO: Makes http request to endpoint to retrieve list of student answers from a given question
      */
     getStudentAnswers() {
         return 0;
     }
 
     /**
-     * renders the Specific Quiz page
+     * renders the Specific Question page
+     * NOTE: API needs to return number of responses for a given answer choice
      */
     render() {
 
@@ -61,29 +56,29 @@ class SpecificQuestion extends React.Component {
                     <CardBody>
                         <CardTitle>{this.state.question.title}</CardTitle>
                         <CardBody>
-                            <CardTitle>{this.state.question.choiceA.title}</CardTitle>
-                            <CardText>{this.state.question.choiceA.content}</CardText>
+                            <CardTitle>A</CardTitle>
+                            <CardText>{this.state.question.answer_0}</CardText>
                             <Progress value={this.state.question.choiceA.numResponses} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody>
-                            <CardTitle>{this.state.question.choiceB.title}</CardTitle>
-                            <CardText>{this.state.question.choiceB.content}</CardText>
+                            <CardTitle>B</CardTitle>
+                            <CardText>{this.state.question.answer_1}</CardText>
                             <Progress value={this.state.question.choiceB.numResponses} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody>
-                            <CardTitle>{this.state.question.choiceC.title}</CardTitle>
-                            <CardText>{this.state.question.choiceC.content}</CardText>
+                            <CardTitle>C</CardTitle>
+                            <CardText>{this.state.question.answer_2}</CardText>
                             <Progress value={this.state.question.choiceC.numResponses} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody>
-                            <CardTitle>{this.state.question.choiceD.title}</CardTitle>
-                            <CardText>{this.state.question.choiceD.content}</CardText>
+                            <CardTitle>D</CardTitle>
+                            <CardText>{this.state.question.answer_3}</CardText>
                             <Progress value={this.state.question.choiceD.numResponses} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
