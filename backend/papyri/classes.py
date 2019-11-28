@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import ClassInfo, StudentClassRelationship
+from .models import ClassInfo, StudentClassRelationship, UserInfo
 from .serializers import ClassSerializer, StudentClassSerializer
 from django.core import serializers
 
@@ -18,9 +18,10 @@ def class_list(request):
         return Response(serializer.data)
 
     elif request.method == "POST":
-        print(request.data)
+        teacher_id = request.data.get("teacher_id")
         serializer = ClassSerializer(data=request.data)
-        if serializer.is_valid():
+        user_info = UserInfo.objects.filter(is_student=False).get(owner_id=teacher_id)
+        if serializer.is_valid() and user_info:
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -81,6 +82,6 @@ def get_classes_by_student(request, student_id):
             'teacher_id': c.teacher.id,
             'teacher_name': c.teacher.owner.first_name + " " + c.teacher.owner.last_name
         })
-        
+
     return Response(ret_data)
     
