@@ -1,10 +1,13 @@
 import React from 'react';
 import './Dashboard.css';
-import Sidebar from '../components/Sidebar.js';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import CardDeck from 'react-bootstrap/CardDeck';
+import { Row, Col } from 'react-bootstrap';
+import handleLogout from '../functions/logout';
+
+
 
 
 /**
@@ -50,10 +53,11 @@ class InstructorDashboard extends React.Component {
                 },
             ]
         };
-        this.getDashboard = this.getDashboard.bind(this);
         this.handleDetails = this.handleDetails.bind(this);
         this.handleStartLecture = this.handleStartLecture.bind(this);
         this.handleEndLecture = this.handleEndLecture.bind(this);
+        this.handleEnterClass = this.handleEnterClass.bind(this);
+        this.handleCreateClass = this.handleCreateClass.bind(this);
     }
 
     componentDidMount() {
@@ -158,11 +162,15 @@ class InstructorDashboard extends React.Component {
             this.props.history.push(path);
     }
 
-    /**
-     * Makes an http request to endpoint to retrieve information about attendance and quiz scores to display in the form of graphs
-     */
-    getDashboard() {
+    handleEnterClass(classID) {
+        localStorage.setItem('classid', classID);
+        let userID = this.props.match.params.userid;
+        this.props.history.push(`/instructor/class/${userID}/${classID}`)
+    }
 
+    handleCreateClass() {
+        let userID = this.props.match.params.userid;
+        this.props.history.push(`/instructor/createclass/${userID}`);
     }
 
     /**
@@ -181,8 +189,7 @@ class InstructorDashboard extends React.Component {
         var obj = null;
         obj = this;
         return(
-            <Container className="main-content">
-                <Sidebar view="dashboard" />
+            <Container>
                 <div className="subheader">
                     Hello, Professor {this.state.lastname}!
                 </div>
@@ -201,7 +208,7 @@ class InstructorDashboard extends React.Component {
                             );
                         }
                         return (
-                            <Card style={{ width: '14rem' }} key={index}>
+                            <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.classid)}>
                                 <Card.Header className="card-header">{item.classname}</Card.Header>
                                 <Card.Body className="card-body">
                                 <Card.Title>Professor {item.instructor}</Card.Title>
@@ -215,6 +222,13 @@ class InstructorDashboard extends React.Component {
                         );
                     })}
                 </CardDeck>
+                <Row>
+                    <Col><Button className="yellow-button" size="lg" block onClick={this.handleCreateClass}>Create Class</Button></Col>
+                </Row>
+                <Row>
+                    <Col><Button className="yellow-button" size="lg" block onClick={() => handleLogout(this)}>Log Out</Button></Col>
+                </Row>
+
             </Container>
             
         )

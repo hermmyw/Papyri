@@ -29,7 +29,7 @@ var authorization = (comp) => {
                     console.log(result);
 
                     let userType = result.user_info.is_student;
-                    localStorage.setItem('userID', result.user.id);
+                    localStorage.setItem('userid', result.user.id);
                     localStorage.setItem('firstName', result.user.first_name);
                     localStorage.setItem('lastName', result.user.last_name);
                     localStorage.setItem('isStudent', userType);
