@@ -128,9 +128,9 @@ class InstructorDashboard extends React.Component {
 
     handleDetails(classid) {
         console.log("click details");
-        let currentDate = new Date();
-        let month = currentDate.getMonth()+1;
-        let year = currentDate.getFullYear();
+        // let currentDate = new Date();
+        // let month = currentDate.getMonth()+1;
+        // let year = currentDate.getFullYear();
 
         // make api call
         // fetch("http://127.0.0.1:8000/api/user/", { // TODO

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SelectedButton, NonselectedButton, BackButton } from './UI/SidebarComponents.js';
+import { SelectedButton, NonselectedButton } from './UI/SidebarComponents.js';
 import headshot from '../containers/images/headshot.png';
 import Button from 'react-bootstrap/Button';
 import './UI/UI.css';
@@ -26,7 +26,11 @@ class SidebarStudent extends React.Component {
         this.getNavButtons = this.getNavButtons.bind(this);
 
         var viewProp = this.props.view;
-        this.state = { view: viewProp };
+        var profilePic = this.props.profilepic;
+        this.state = { 
+            view: viewProp,
+            profilepic: profilePic
+         };
         this.handleLogout = this.handleLogout.bind(this);
     }
 
@@ -174,9 +178,10 @@ class SidebarStudent extends React.Component {
     }
 
     render() {
+        // TODO: headshot
         return (
             <div className="dashboard-sidebar">
-                <img className="profile-image" src={headshot} />
+                <img className="profile-image" src={headshot} />  
                 {this.getNavButtons()}
             </div>
         )

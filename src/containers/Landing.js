@@ -190,6 +190,7 @@ class Landing extends React.Component {
                         localStorage.setItem('lastName', result.user.last_name);
                         localStorage.setItem('isStudent', userType);
                         localStorage.setItem('uid', result.user_info.uid);
+                        localStorage.setItem('profilepic', result.profile_pic.pic3);
 
                         if (userType) {
                             localStorage.setItem('user', 'student');
