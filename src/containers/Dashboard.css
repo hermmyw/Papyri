@@ -54,6 +54,7 @@
 .quiz {
     display: inline-block;
     padding: 0.5rem;
+    margin-top: 3rem;
     margin-bottom: 3rem;
     width: 70%;
 }

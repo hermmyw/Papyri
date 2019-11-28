@@ -25,7 +25,6 @@ class RegisStudent extends React.Component {
             snapClicked5: false, 
             imgData5: null,
             submitClicked: false,
-            submitClicked: false,
             firstname: '',
             lastname: '',
             email: '',
@@ -256,11 +255,11 @@ class RegisStudent extends React.Component {
             sample = (
                 <div>
                     <Row>
-                        <img src={require('./img/face_1.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_2.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_3.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_4.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_5.jpeg')} className="register-sample-photo" />
+                        <img src={require('./img/face_1.jpeg')} className="register-sample-photo" alt="sample-1"/>
+                        <img src={require('./img/face_2.jpeg')} className="register-sample-photo" alt="sample-2"/>
+                        <img src={require('./img/face_3.jpeg')} className="register-sample-photo" alt="sample-3"/>
+                        <img src={require('./img/face_4.jpeg')} className="register-sample-photo" alt="sample-4"/>
+                        <img src={require('./img/face_5.jpeg')} className="register-sample-photo" alt="sample-5"/>
                     </Row>
                     <Row>
                         <Button className="snap-button" onClick={this.handleSnapClick1}>Snap</Button>
@@ -296,6 +295,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo" 
                         src={this.state.imgData2} 
                         id="image2"
+                        alt="user-2"
                     />
                 );
             } else {
@@ -310,6 +310,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo"
                         src={this.state.imgData3}
                         id="image3"
+                        alt="user-3"
                     />
                 );
             } else {
@@ -324,6 +325,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo"
                         src={this.state.imgData4}
                         id="image4"
+                        alt="user-4"
                     />
                 );
             } else {
@@ -338,6 +340,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo"
                         src={this.state.imgData5}
                         id="image1"
+                        alt="user-5"
                     />
                 );
             } else {
