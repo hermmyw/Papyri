@@ -1,5 +1,6 @@
 import React from 'react';
 import Webcam from 'react-webcam';
+import authorization from '../../functions/authorization'
 
 import './Register.css';
 
@@ -24,7 +25,6 @@ class RegisStudent extends React.Component {
             imgData4: null,
             snapClicked5: false, 
             imgData5: null,
-            submitClicked: false,
             submitClicked: false,
             firstname: '',
             lastname: '',
@@ -138,7 +138,7 @@ class RegisStudent extends React.Component {
                         // user object and authentication token
                         console.log(result);
                         docCookies.setItem('token', result.token, Infinity, '/');
-                        this.checkAuthorization();
+                        authorization(this);
                     }
                 )
                 .catch (error => {
@@ -149,61 +149,6 @@ class RegisStudent extends React.Component {
                     })
                 })
         }
-    }
-
-    checkAuthorization() {
-        console.log("checking whether authentication exists");
-        var authenticationField = "Token " + docCookies.getItem('token');
-        console.log(authenticationField);
-        
-        //try {
-            fetch(userInfoURL, {
-                method: "GET",
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'authorization':  authenticationField
-                },
-            })
-                .then(res => {
-                    console.log(res);
-                    if (res.ok) {
-                        return (res.json());
-                    }
-                    
-                    throw Error(res.statusText);
-                })
-                .then(
-                    (result) => {
-                        console.log("status:");
-                        console.log(result);
-                        let userType = result.user_info.is_student;
-                        localStorage.setItem('userID', result.user.id);
-                        localStorage.setItem('firstName', result.user.first_name);
-                        localStorage.setItem('lastName', result.user.last_name);
-                        localStorage.setItem('isStudent', userType);
-                        localStorage.setItem('uid', result.user_info.uid);
-
-                        if (userType) {
-                            localStorage.setItem('user', 'student');
-                            this.props.history.push('student/dashboard');
-                        }
-                        else {
-                            localStorage.setItem('user', 'instructor');
-                            this.props.history.push('/instructor/dashboard');
-                        }
-                    }
-                )
-                .catch (error => {
-                    console.log("Error: ", error);
-                    docCookies.removeItem('token', '/');
-                    localStorage.clear();
-                    this.props.history.push('/');
-                })
-        // } catch (error) {
-        //     console.log("Error: ", error);
-        //     this.setState({authorizationError: true})
-        // }
     }
 
     handleBackClick() {
@@ -256,11 +201,11 @@ class RegisStudent extends React.Component {
             sample = (
                 <div>
                     <Row>
-                        <img src={require('./img/face_1.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_2.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_3.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_4.jpeg')} className="register-sample-photo" />
-                        <img src={require('./img/face_5.jpeg')} className="register-sample-photo" />
+                        <img src={require('./img/face_1.jpeg')} className="register-sample-photo" alt="sample-1"/>
+                        <img src={require('./img/face_2.jpeg')} className="register-sample-photo" alt="sample-2"/>
+                        <img src={require('./img/face_3.jpeg')} className="register-sample-photo" alt="sample-3"/>
+                        <img src={require('./img/face_4.jpeg')} className="register-sample-photo" alt="sample-4"/>
+                        <img src={require('./img/face_5.jpeg')} className="register-sample-photo" alt="sample-5"/>
                     </Row>
                     <Row>
                         <Button className="snap-button" onClick={this.handleSnapClick1}>Snap</Button>
@@ -296,6 +241,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo" 
                         src={this.state.imgData2} 
                         id="image2"
+                        alt="user-2"
                     />
                 );
             } else {
@@ -310,6 +256,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo"
                         src={this.state.imgData3}
                         id="image3"
+                        alt="user-3"
                     />
                 );
             } else {
@@ -324,6 +271,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo"
                         src={this.state.imgData4}
                         id="image4"
+                        alt="user-4"
                     />
                 );
             } else {
@@ -338,6 +286,7 @@ class RegisStudent extends React.Component {
                         className="snap-photo"
                         src={this.state.imgData5}
                         id="image1"
+                        alt="user-5"
                     />
                 );
             } else {
