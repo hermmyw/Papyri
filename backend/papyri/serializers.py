@@ -112,18 +112,19 @@ class LoginUserSerializer(serializers.Serializer):
 class ClassSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=200)
-    teacher_id = serializers.PrimaryKeyRelatedField(queryset=UserInfo.objects.filter(is_student=False))
+    teacher_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     term = serializers.CharField(max_length=200)
     year = serializers.CharField(max_length=10)
-    registration_code = serializers.CharField(max_length=5)
+    registration_code = serializers.CharField(max_length=5, read_only=True)
 
     class Meta:
         model = ClassInfo
         fields = ('__all__')
 
     def create(self, validated_data):
+        #print(validated_data['teacher_id'].id)
         code = get_random_string(length=5).upper()
-        while ClassInfo.objects.get(registration_code=code):
+        while ClassInfo.objects.filter(registration_code=code).exists():
             code = get_random_string(length=5).upper()
         return ClassInfo.objects.create(name=validated_data['name'],
                                         teacher_id=validated_data['teacher_id'].id,
