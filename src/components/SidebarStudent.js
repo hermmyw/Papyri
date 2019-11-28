@@ -21,7 +21,6 @@ class SidebarStudent extends React.Component {
         super(props);
         this.handleShowDashboard = this.handleShowDashboard.bind(this);
         this.handleEnrollClass = this.handleEnrollClass.bind(this);
-        this.handleForum = this.handleForum.bind(this);
         this.handleSetting = this.handleSetting.bind(this);
         this.getNavButtons = this.getNavButtons.bind(this);
 
@@ -52,7 +51,7 @@ class SidebarStudent extends React.Component {
             view: "dashboard"
         }));
 
-        let path = '/student/dashboard';
+        let path = '/';
         this.props.history.push(path);
     }
 
@@ -66,19 +65,8 @@ class SidebarStudent extends React.Component {
             view: "enroll class"
         }));
 
-        //let path = '/student/enrollclass';
-        //this.props.history.push(path);
-    }
-
-    /**
-     * Even handler for when user clicks on forum button.
-     * Changes button selection on sidear and redirects to forum page.
-     */
-    handleForum() {
-        console.log("forum");
-        this.setState(state => ({
-            view: "forum"
-        }));
+        let path = '/student/enroll';
+        this.props.history.push(path);
     }
 
     /**
@@ -126,7 +114,6 @@ class SidebarStudent extends React.Component {
                     <div>
                         <SelectedButton style="margin-top: 20px">{studentName}</SelectedButton>
                         <NonselectedButton onClick={this.handleEnrollClass.bind(this)}>Enroll Class</NonselectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
@@ -137,30 +124,16 @@ class SidebarStudent extends React.Component {
                     <div>
                         <NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{studentName}</NonselectedButton>
                         <SelectedButton>Enroll Class</SelectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>
                 ) 
-                
-            case "forum":
-                return (
-                    <div>
-                        <NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{studentName}</NonselectedButton>
-                        <NonselectedButton onClick={this.handleEnrollClass.bind(this)}>Enroll Class</NonselectedButton>
-                        <SelectedButton>Forum</SelectedButton>
-                        <NonselectedButton onClick={this.handleSetting.bind(this)}>Setting</NonselectedButton>
-                        <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
-                    </div>
-                )
-
             
             case "setting":
                 return (
                     <div>
                         <NonselectedButton onClick={this.handleShowDashboard.bind(this)} style="margin-top: 20px">{studentName}</NonselectedButton>
                         <NonselectedButton onClick={this.handleEnrollClass.bind(this)}>Enroll Class</NonselectedButton>
-                        <NonselectedButton onClick={this.handleForum.bind(this)}>Forum</NonselectedButton>
                         <SelectedButton>Setting</SelectedButton>
                         <NonselectedButton onClick={this.handleLogout}>Log Out</NonselectedButton>
                     </div>

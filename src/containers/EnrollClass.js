@@ -1,13 +1,15 @@
 import React from 'react';
-import Sidebar from '../components/Sidebar.js';
+import Sidebar from '../components/SidebarStudent.js';
 import { Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText} from 'reactstrap';
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 
+const enrollClassURL = "http://127.0.0.1:8000/api/classes/student/";
+
 
 /**
- * Container for the Create Class page on the Instructor interface.
- * Renders a form to register a new class
+ * Container for the Enroll in Class page on the Student interface.
+ * Renders a form to enroll in a new class
  */
 class EnrollClass extends React.Component {
 
@@ -17,8 +19,8 @@ class EnrollClass extends React.Component {
             registrationCode: '',
             failedToEnroll: false,
             enrolled: false,
-            classID: '',
-            className: ''
+            error: false,
+            errorText: ''
         }
         
         this.enrollClass = this.enrollClass.bind(this);
@@ -35,24 +37,40 @@ class EnrollClass extends React.Component {
         // REPLACE WITH API CALL
         // response from api call
         // test input
-        var response = {
-            enrolled: false,
-            classID: "123456",
-            className: "CS130"
-        }
-        /////////////////////
 
-        if (response.enrolled) {
-            this.setState({
-                enrolled: true,
-                classID: response.classID,
-                className: response.className
-            });
-        }
+        fetch(enrollClassURL, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: localStorage.getItem('userID'),
+                registration_code: this.state.registrationCode
+            }),
+        })
+            .then(res => {
+                if (res.ok) {
+                    return(res.json());
+                }
 
-        else {
-            this.setState({failedToEnroll: true});
-        }
+                throw Error(res.statusText);
+            })
+            .then(
+                (result) => {
+
+                    // user object and authentication token
+                    console.log(result);
+                    localStorage.push('classID', result.class_id);
+                    this.props.history.push('/student/class')
+                }
+            )
+            .catch (error => {
+                console.log("Error: ", error);
+                this.setState({
+                    failedToEnroll: true
+                })
+            })
     }
 
     handleRegistrationCodeChange(e) {
@@ -113,7 +131,7 @@ class EnrollClass extends React.Component {
         if (this.state.enrolled) {
             display = (
                 <div>
-                    <Sidebar view="create class" />
+                    <Sidebar view="enroll class" />
                     <div className="main-area">
                         Success! You have enrolled in {this.state.className}
                         <Row>
@@ -127,7 +145,7 @@ class EnrollClass extends React.Component {
         else {
             display = (
                 <div>
-                    <Sidebar view="create class" />
+                    <Sidebar view="enroll class" />
                     <div className="main-area">
                         <Form>
                             {inputField}
