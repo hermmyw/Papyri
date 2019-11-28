@@ -112,6 +112,7 @@ class SpecificInstructorClass extends React.Component {
         this.handleViewAllClosedQuizzes = this.handleViewAllClosedQuizzes.bind(this);
         this.showRecentClosedQuizzes = this.showRecentClosedQuizzes.bind(this);
         this.showAttendanceGraph = this.showAttendanceGraph.bind(this);
+        this.handleExitClass = this.handleExitClass.bind(this);
         
         // var closedQuizData = this.makeRecentClosedQuizzesCall();
         // var attendanceData = this.makeAttendanceCall();
@@ -207,6 +208,12 @@ class SpecificInstructorClass extends React.Component {
         )
     }
 
+    handleExitClass() {
+        localStorage.removeItem('classid');
+        let userID = this.props.match.params.userid;
+        this.props.history.push(`/instructor/${userID}`);
+    }
+
     render() {
         console.log("rendering");
         console.log(this.state);
@@ -218,8 +225,11 @@ class SpecificInstructorClass extends React.Component {
 
         return (
             <div>
-                <Sidebar view="create class" />
+                <Sidebar view="class home" />
                 <div className="main-area">
+                    <Row>
+                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
+                    </Row>
                     {graph}
                     {recentQuizzes}
                     <Button className="yellow-button" size="lg" block onClick={this.handleViewAllClosedQuizzes}>

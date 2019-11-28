@@ -2,6 +2,8 @@ import React from 'react';
 import Sidebar from '../components/Sidebar.js';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 
+const createQuizURL = "http://127.0.0.1:8000/api/quiz/create/";
+
 /**
  * Container for the Create Quiz page on the Instructor interface 
  * Renders form for Instructor to create a multiple choice quiz
@@ -18,17 +20,97 @@ class CreateQuiz extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         //this.handleAddAnswer = this.handleAddAnswer.bind(this);
         this.state = {
+            quizName: '',
+            quizQuestion: '',
             nQuestions: 1
         }
+    }
+
+
+    handleChange(e) {
+        this.setState({
+            [ e.target.name ]: e.target.value,
+        });
+    }
+
+    addAnswersCall(e) {
+        fetch(createQuizURL, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: this.state.quizName,
+                description: this.state.quizQuestion,
+                class_id: localStorage.getItem('classID')
+            }),
+        })
+            .then(res => {
+                if (res.ok) {
+                    return(res.json());
+                }
+
+                throw Error(res.statusText);
+            })
+            .then(
+                (result) => {
+
+                    // user object and authentication token
+                    console.log(result);
+                    this.props.history.push('/instructor/class')
+                }
+            )
+            .catch (error => {
+                console.log("Error: ", error);
+                this.setState({
+                    errorText: error.message,
+                    error: true
+                })
+            })
     }
 
     /**
      * Makes an http request to an endpoint to create a quiz.
      */
-    handleSubmit() {
+    handleSubmit(e) {
 
 
         // go back to quiz page after submit
+        fetch(createQuizURL, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: this.state.quizName,
+                description: this.state.quizQuestion,
+                class_id: localStorage.getItem('classID')
+            }),
+        })
+            .then(res => {
+                if (res.ok) {
+                    return(res.json());
+                }
+
+                throw Error(res.statusText);
+            })
+            .then(
+                (result) => {
+
+                    // user object and authentication token
+                    console.log(result);
+                    this.props.history.push('/instructor/class')
+                }
+            )
+            .catch (error => {
+                console.log("Error: ", error);
+                this.setState({
+                    errorText: error.message,
+                    error: true
+                })
+            })
     }
 
     render() {
@@ -37,18 +119,31 @@ class CreateQuiz extends React.Component {
             <div>
                 <Sidebar view="create quiz" />
                 <div className="main-area">
-                <div>
-                    <Form  onSubmit={ e => this.handleSubmit(e) }>
-                        <FormGroup>
-                            <Label>Quiz Question</Label>
-                            <Input className="custom-input" type="textarea" name="quizQuestion" id="quizQuestion" placeholder="Quiz Question" />
-                        </FormGroup>
-                        <AnswerList />
-                        <FormGroup>
-                            <Button className="yellow-button" size="lg" block onClick={this.handleSubmit}>Add Quiz</Button>
-                        </FormGroup>
-                    </Form>
-                </div>
+                    <div>
+                        <Form  onSubmit={ e => this.handleSubmit(e) }>
+                            <FormGroup>
+                                <Label>Quiz Question</Label>
+                                <Input 
+                                    className="custom-input" 
+                                    type="textarea" 
+                                    name="quizQuestion" 
+                                    id="quizQuestion" 
+                                    placeholder="Quiz Question"
+                                    value={this.state.quizName} />
+                                <Input 
+                                    className="custom-input" 
+                                    type="textarea" 
+                                    name="quizName" 
+                                    id="quizName" 
+                                    placeholder="Quiz Name"
+                                    value={this.state.quizQuestion} />
+                            </FormGroup>
+                            <AnswerList />
+                            <FormGroup>
+                                <Button className="yellow-button" size="lg" block onClick={this.handleSubmit}>Add Quiz</Button>
+                            </FormGroup>
+                        </Form>
+                    </div>
                 </div>
             </div>
         )
@@ -107,6 +202,7 @@ class AnswerList extends React.Component {
 
         return (
             <div>
+                <Sidebar view="create quiz" />
                 {this.state.answers.map((currAnswer, id) => 
                     <FormGroup key={id}>
                         <Input 

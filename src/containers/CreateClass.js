@@ -1,8 +1,10 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar.js';
-import { Button, Form, FormGroup, Input, Label, CustomInput} from 'reactstrap';
+import { Button, Form, FormGroup, FormText, Input, Label, CustomInput} from 'reactstrap';
 import '../components/UI/UI.css';
+import { Container } from 'react-bootstrap';
 
+const createClassURL = "http://127.0.0.1:8000/api/classes/";
 
 /**
  * Container for the Create Class page on the Instructor interface.
@@ -33,7 +35,10 @@ class CreateClass extends React.Component {
                 friday: false,
                 saturday: false,
                 sunday: false
-            }
+            },
+
+            error: false,
+            errorText: '',
         }
 
         this.createClass = this.createClass.bind(this);
@@ -44,10 +49,49 @@ class CreateClass extends React.Component {
     /**
      * Makes an http request to endpoint to register a new class for the instructor.
      */
-    createClass() {
+    createClass(e) {
+
+        e.preventDefault();
 
         // response to http request should contain access token
         // go to new class page
+        fetch(createClassURL, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: localStorage.getItem('userID'),
+                name: this.state.name,
+                teacher_id: localStorage.getItem('uid'),
+                term: this.state.term,
+                year: this.state.year,
+                registration_code: '12345'
+            }),
+        })
+            .then(res => {
+                if (res.ok) {
+                    return(res.json());
+                }
+
+                throw Error(res.statusText);
+            })
+            .then(
+                (result) => {
+
+                    // user object and authentication token
+                    console.log(result);
+                    this.props.history.push('/instructor/class')
+                }
+            )
+            .catch (error => {
+                console.log("Error: ", error);
+                this.setState({
+                    errorText: error.message,
+                    error: true
+                })
+            })
     }
 
     handleSelectTerm(e) {
@@ -88,55 +132,62 @@ class CreateClass extends React.Component {
     render() {
         console.log("rendering");
         console.log(this.state);
+
+        var errorMessage = null;
+
+        if (this.state.error) {
+            errorMessage = (
+                <FormText>Error creating class: {this.state.errorText}. Please try again later.</FormText>
+            )
+        }
+
         return (
-            <div>
-                <Sidebar view="create class" />
-                <div className="main-area">
-                    <Form  onSubmit={this.createClass}>
-                        <FormGroup>
-                            <Input 
-                                className="custom-input" 
-                                type="text" 
-                                name="class" 
-                                id="classID" 
-                                onChange={this.handleNameChange}
-                                value={this.state.name} 
-                                placeholder="Class ID" />
-                        </FormGroup>
-                        <FormGroup>
-                            <Input type="select" bsSize="lg" name="term" onChange={ (e) => this.handleSelectTerm(e) }>
-                                <option selected disabled hidden>Term</option>
-                                <option value="fall">Fall</option>
-                                <option value="winter">Winter</option>
-                                <option value="spring">Spring</option>
-                            </Input>                        
-                        </FormGroup>
-                        <FormGroup>
-                            <Input type="select" bsSize="lg" name="year" onChange={ (e) => this.handleSelectYear(e) }>
-                                <option selected disabled hidden>Year</option>
-                                {this.state.yearsOptions.map((year) => 
-                                    <option value={year}>{year}</option>
-                                )}
-                            </Input>                        
-                        </FormGroup>
-                        <FormGroup>
-                            <Label>Lecture Days</Label>
-                            <div>
-                                <CustomInput type="checkbox" id="monday" label="Monday" onClick={ (e) => this.handleDayChange(e) }/>
-                                <CustomInput type="checkbox" id="tuesday" label="Tuesday"  onChange={ (e) => this.handleDayChange(e) }/>
-                                <CustomInput type="checkbox" id="wednesday" label="Wednesday"  onChange={ (e) => this.handleDayChange(e) }/>
-                                <CustomInput type="checkbox" id="thursday" label="Thursday"  onChange={ (e) => this.handleDayChange(e) }/>
-                                <CustomInput type="checkbox" id="friday" label="Friday"  onChange={ (e) => this.handleDayChange(e) }/>
-                                <CustomInput type="checkbox" id="saturday" label="Saturday"  onChange={ (e) => this.handleDayChange(e) }/>
-                                <CustomInput type="checkbox" id="sunday" label="Sunday"  onChange={ (e) => this.handleDayChange(e) }/>
-                            </div>
-                        </FormGroup>
-                        <FormGroup>
-                            <Button className="yellow-button" size="lg" block type="submit">Create New Class</Button>
-                        </FormGroup>
-                    </Form>
-                </div>
-            </div>
+            <Container>
+                <Form  onSubmit={ (e) => this.createClass(e) }>
+                    <FormGroup>
+                        <Input 
+                            className="custom-input" 
+                            type="text" 
+                            name="class" 
+                            id="classID" 
+                            onChange={this.handleNameChange}
+                            value={this.state.name} 
+                            placeholder="Class ID" />
+                    </FormGroup>
+                    <FormGroup>
+                        <Input type="select" bsSize="lg" name="term" onChange={ (e) => this.handleSelectTerm(e) }>
+                            <option selected disabled hidden>Term</option>
+                            <option value="fall">Fall</option>
+                            <option value="winter">Winter</option>
+                            <option value="spring">Spring</option>
+                        </Input>                        
+                    </FormGroup>
+                    <FormGroup>
+                        <Input type="select" bsSize="lg" name="year" onChange={ (e) => this.handleSelectYear(e) }>
+                            <option selected disabled hidden>Year</option>
+                            {this.state.yearsOptions.map((year) => 
+                                <option value={year}>{year}</option>
+                            )}
+                        </Input>                        
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Lecture Days</Label>
+                        <div>
+                            <CustomInput type="checkbox" id="monday" label="Monday" onClick={ (e) => this.handleDayChange(e) }/>
+                            <CustomInput type="checkbox" id="tuesday" label="Tuesday"  onChange={ (e) => this.handleDayChange(e) }/>
+                            <CustomInput type="checkbox" id="wednesday" label="Wednesday"  onChange={ (e) => this.handleDayChange(e) }/>
+                            <CustomInput type="checkbox" id="thursday" label="Thursday"  onChange={ (e) => this.handleDayChange(e) }/>
+                            <CustomInput type="checkbox" id="friday" label="Friday"  onChange={ (e) => this.handleDayChange(e) }/>
+                            <CustomInput type="checkbox" id="saturday" label="Saturday"  onChange={ (e) => this.handleDayChange(e) }/>
+                            <CustomInput type="checkbox" id="sunday" label="Sunday"  onChange={ (e) => this.handleDayChange(e) }/>
+                        </div>
+                    </FormGroup>
+                    {errorMessage}
+                    <FormGroup>
+                        <Button className="yellow-button" size="lg" block type="submit">Create New Class</Button>
+                    </FormGroup>
+                </Form>
+            </Container>
         )
     }
 }
