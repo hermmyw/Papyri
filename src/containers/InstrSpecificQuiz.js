@@ -72,6 +72,16 @@ class InstrSpecificQuiz extends React.Component {
         return 0;
     }
 
+    getPercentage(question, answerChoice) {
+
+        return ( 
+            (answerChoice.numResponses /
+            (question.answer_0.numResponses + 
+                question.answer_1.numResponses +
+                question.answer_2.numResponses +
+                question.answer_3.numResponses))*100).toString();
+    }
+
 
     /**
      * RENDERQUESTIONS
@@ -86,28 +96,28 @@ class InstrSpecificQuiz extends React.Component {
                         <CardBody inverse color={question.correct_answer == 0 ? "success" : "danger"}>
                             <CardTitle>A</CardTitle>
                             <CardText>{question.answer_0}</CardText>
-                            <Progress value={question.choiceA.numResponses} />
+                            <Progress value={this.getPercentage(question, question.answer_0)} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody inverse color={question.correct_answer == 1 ? "success" : "danger"}>
                             <CardTitle>B</CardTitle>
                             <CardText>{question.answer_1}</CardText>
-                            <Progress value={question.choiceB.numResponses} />
+                            <Progress value={this.getPercentage(question, question.answer_1)} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody inverse color={question.correct_answer == 2 ? "success" : "danger"}>
                             <CardTitle>C</CardTitle>
                             <CardText>{question.answer_2}</CardText>
-                            <Progress value={question.choiceC.numResponses} />
+                            <Progress value={this.getPercentage(question, question.answer_2)} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody inverse color={question.correct_answer == 3 ? "success" : "danger"}>
                             <CardTitle>D</CardTitle>
                             <CardText>{question.answer_3}</CardText>
-                            <Progress value={question.choiceD.numResponses} />
+                            <Progress value={this.getPercentage(question, question.answer_3)} />
                             <Button>View Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
