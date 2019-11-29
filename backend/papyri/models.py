@@ -29,10 +29,10 @@ class ProfilePic(models.Model):
 
 class ClassInfo(models.Model):
     name = models.CharField(max_length=200)
-    teacher = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
     term = models.CharField(max_length=200)
     year = models.CharField(max_length=10)
-    registration_code = models.CharField(unique=True, max_length=5)
+    registration_code = models.CharField(max_length=5)
 
     def __str__(self):
         return self.name
