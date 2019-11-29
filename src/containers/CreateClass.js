@@ -1,8 +1,8 @@
 import React from 'react';
-import Sidebar from '../components/Sidebar.js';
-import { Button, Form, FormGroup, FormText, Input, Label, CustomInput} from 'reactstrap';
+import { Row, Col, Button, Form, FormGroup, FormText, Input, Label, CustomInput} from 'reactstrap';
 import '../components/UI/UI.css';
 import { Container } from 'react-bootstrap';
+import { IoIosArrowBack } from "react-icons/io";
 
 const createClassURL = "http://127.0.0.1:8000/api/classes/";
 
@@ -43,7 +43,7 @@ class CreateClass extends React.Component {
 
         this.createClass = this.createClass.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
-            
+        this.handleBackClick = this.handleBackClick.bind(this);
     }
 
     /**
@@ -129,6 +129,11 @@ class CreateClass extends React.Component {
         this.setState({days: newDays});
     }
 
+    handleBackClick() {
+        const userID = this.props.match.params.userid;
+        this.props.history.push(`/instructor/${userID}`);
+    }
+
     render() {
         console.log("rendering");
         console.log(this.state);
@@ -186,6 +191,9 @@ class CreateClass extends React.Component {
                     <FormGroup>
                         <Button className="yellow-button" size="lg" block type="submit">Create New Class</Button>
                     </FormGroup>
+                    <Row>
+                        <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Back</Button></Col>
+                    </Row>
                 </Form>
             </Container>
         )

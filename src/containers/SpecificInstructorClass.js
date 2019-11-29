@@ -4,10 +4,12 @@ import { Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 import Chart from 'react-google-charts';
+import handleQuizClick from '../functions/handleQuizClick';
+import convertDate from '../functions/convertDate';
 
 const getAttendanceURL = "";
 const getClosedQuizzesURL = "";
-// var closedQuizData, attendanceData = null;
+
 var closedQuizData = {
     data: [
             {
@@ -72,22 +74,6 @@ var attendanceData = {
     ]
 }
 
-function convertDate(isoShortDate) {
-    var newDate = new Date(isoShortDate);
-    var dd = newDate.getDate();
-    var mm = newDate.getMonth() + 1; //January is 0!
-
-    var yyyy = newDate.getFullYear();
-    if (dd < 10) {
-        dd = '0' + dd;
-    } 
-    if (mm < 10) {
-        mm = '0' + mm;
-    }
-
-    return(mm + '/' + dd + '/' + yyyy);
-}
-
 var attendanceDataG = attendanceData.data.map((d) => [convertDate(d.date), d.n_students]).reverse();
 
 
@@ -125,14 +111,8 @@ class SpecificInstructorClass extends React.Component {
         console.log("view all closed quizzes");
 
         // go to View All Closed Quizzes Page
-    }
 
-    // set localstorage variable and go to 
-    handleQuizClick(qid) {
-        console.log("quizID: " + qid);
-        localStorage.setItem('quizID', qid);
-
-        // go to specific quiz view for instructor
+        this.props.history.push(`/instructor/quizzes/${this.props.match.params.userid}/${this.props.match.params.classid}`);
     }
 
     /*makeRecentClosedQuizzesCall() {
@@ -173,7 +153,7 @@ class SpecificInstructorClass extends React.Component {
                 <div>
                     <Row>
                         <Col>
-                            <Button className="yellow-button" size="lg" block onClick={() => this.handleQuizClick(d.quiz_id)}>
+                            <Button className="yellow-button" size="lg" block onClick={() => handleQuizClick(this, d.quiz_id)}>
                                 <span style={{float: "left"}}>{d.question}</span><span style={{float: "right"}}>{convertDate(d.date)}</span>
                             </Button>
                         </Col>
