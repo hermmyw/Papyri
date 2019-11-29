@@ -65,6 +65,14 @@ class InstrSpecificQuiz extends React.Component {
         //     .catch(error => console.log('parsing failed', error));
     }
 
+    /*
+     * TODO: Makes http request to endpoint to retrieve list of student answers from a given question
+     */
+    getStudentAnswers() {
+        return 0;
+    }
+
+
     /**
      * RENDERQUESTIONS
      * Render each question
@@ -75,11 +83,34 @@ class InstrSpecificQuiz extends React.Component {
                 <Card>
                     <CardTitle>{question.question}</CardTitle>
                     <CardBody>
-                        <CardText>{question.answer_0}</CardText>
-                        <CardText>{question.answer_1}</CardText>
-                        <CardText>{question.answer_2}</CardText>
-                        <CardText>{question.answer_3}</CardText>
-                        <Button onClick={this.handleClick(quiz)}>View Question</Button>
+                        <CardBody inverse color={question.correct_answer == 0 ? "success" : "danger"}>
+                            <CardTitle>A</CardTitle>
+                            <CardText>{question.answer_0}</CardText>
+                            <Progress value={question.choiceA.numResponses} />
+                            <Button>View Responses</Button>
+                            <Collapse>{this.getStudentAnswers}</Collapse>
+                        </CardBody>
+                        <CardBody inverse color={question.correct_answer == 1 ? "success" : "danger"}>
+                            <CardTitle>B</CardTitle>
+                            <CardText>{question.answer_1}</CardText>
+                            <Progress value={question.choiceB.numResponses} />
+                            <Button>View Responses</Button>
+                            <Collapse>{this.getStudentAnswers}</Collapse>
+                        </CardBody>
+                        <CardBody inverse color={question.correct_answer == 2 ? "success" : "danger"}>
+                            <CardTitle>C</CardTitle>
+                            <CardText>{question.answer_2}</CardText>
+                            <Progress value={question.choiceC.numResponses} />
+                            <Button>View Responses</Button>
+                            <Collapse>{this.getStudentAnswers}</Collapse>
+                        </CardBody>
+                        <CardBody inverse color={question.correct_answer == 3 ? "success" : "danger"}>
+                            <CardTitle>D</CardTitle>
+                            <CardText>{question.answer_3}</CardText>
+                            <Progress value={question.choiceD.numResponses} />
+                            <Button>View Responses</Button>
+                            <Collapse>{this.getStudentAnswers}</Collapse>
+                        </CardBody>
                     </CardBody>
                 </Card>
 
