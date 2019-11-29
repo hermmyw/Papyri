@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {     
     Card, CardImg, CardText, CardBody,
     CardTitle, CardSubtitle, Button,
@@ -14,9 +14,13 @@ class InstrSpecificQuiz extends React.Component {
     
     constructor(props) {
         super(props);
+
         this.getQuestions = this.getQuestions.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.getPercentage = this.getPercentage.bind(this);
+        this.getStudentAnswers = this.getStudentAnswers.bind(this);
         this.renderQuestions = this.renderQuestions.bind(this);
+        this.toggle = this.toggle.bind(this);
+
         this.state = {
             quiz: this.props.quiz,
         }
@@ -31,12 +35,12 @@ class InstrSpecificQuiz extends React.Component {
     }
 
 
-    // Go to specific question page
-    // Pass in the specific question as a prop to the SpecificQuestion object
-    handleClick() {
-        // TODO: IMPLEMENT STACK NAVIGATION (AS WITH INSTRLISTQUIZZES): QUIZZES/SPECIFICQUIZ/SPECIFICQUESTION
-        return 0;
-    }
+    // // Go to specific question page
+    // // Pass in the specific question as a prop to the SpecificQuestion object
+    // handleClick() {
+    //     // TODO: IMPLEMENT STACK NAVIGATION (AS WITH INSTRLISTQUIZZES): QUIZZES/SPECIFICQUIZ/SPECIFICQUESTION
+    //     return 0;
+    // }
 
 
     /**
@@ -44,7 +48,7 @@ class InstrSpecificQuiz extends React.Component {
      * When page renders,
      * Retrieve list of quizzes, store in state
      */
-    getQuestions() {
+    getQuestions = () => {
         console.log("retrieving questions");
 
         // TODO: IMPLEMENT FETCH PROPERLY
@@ -67,12 +71,18 @@ class InstrSpecificQuiz extends React.Component {
 
     /*
      * TODO: Makes http request to endpoint to retrieve list of student answers from a given question
+     * Return such list as a JSX list of Cards representing student responses
      */
-    getStudentAnswers() {
+    getStudentAnswers = () => {
         return 0;
     }
 
-    getPercentage(question, answerChoice) {
+
+    /*
+    * GETPERCENTAGE
+    * Return the percentage of students who selected a given answer choice
+    */
+    getPercentage = (question, answerChoice) => {
 
         return ( 
             (answerChoice.numResponses /
@@ -83,11 +93,45 @@ class InstrSpecificQuiz extends React.Component {
     }
 
 
+    /*
+    * Constants to keep track of state for Collapse menu for list of students who selected a given answer
+    */
+    const [collapse_0, setCollapse_0] = useState(false);
+    const [collapse_1, setCollapse_1] = useState(false);
+    const [collapse_2, setCollapse_2] = useState(false);
+    const [collapse_3, setCollapse_3] = useState(false);
+
+    /*
+    * TOGGLE
+    * Upon clicking "View Responses" for a given answer, show/hide the responses
+    */
+    const toggle = answerChoice => {
+        switch(answerChoice) {
+            case 0:
+                setCollapse(!collapse_0);
+                break;
+            case 1:
+                setCollapse(!collapse_1);
+                break;
+            case 2:
+                setCollapse(!collapse_2);
+                break;
+            case 3:
+                setCollapse(!collapse_3);
+                break;
+            default:
+                break;
+        }
+    }
+
+
     /**
      * RENDERQUESTIONS
      * Render each question
+     * Current implementation of this application only supports one question per quiz,
+     * but this function is adaptable for multiple questions (which is why I left the map function alone)
      */
-    renderQuestions() {
+    renderQuestions = () => {
         this.state.quiz.map(question => {
             return (
                 <Card>
@@ -97,33 +141,32 @@ class InstrSpecificQuiz extends React.Component {
                             <CardTitle>A</CardTitle>
                             <CardText>{question.answer_0}</CardText>
                             <Progress value={this.getPercentage(question, question.answer_0)} />
-                            <Button>View Responses</Button>
+                            <Button onClick={toggle(0)}>View/Hide Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody inverse color={question.correct_answer == 1 ? "success" : "danger"}>
                             <CardTitle>B</CardTitle>
                             <CardText>{question.answer_1}</CardText>
                             <Progress value={this.getPercentage(question, question.answer_1)} />
-                            <Button>View Responses</Button>
+                            <Button onClick={toggle(1)}>View/Hide Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody inverse color={question.correct_answer == 2 ? "success" : "danger"}>
                             <CardTitle>C</CardTitle>
                             <CardText>{question.answer_2}</CardText>
                             <Progress value={this.getPercentage(question, question.answer_2)} />
-                            <Button>View Responses</Button>
+                            <Button onClick={toggle(2)}>View/Hide Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                         <CardBody inverse color={question.correct_answer == 3 ? "success" : "danger"}>
                             <CardTitle>D</CardTitle>
                             <CardText>{question.answer_3}</CardText>
                             <Progress value={this.getPercentage(question, question.answer_3)} />
-                            <Button>View Responses</Button>
+                            <Button onClick={toggle(3)}>View/Hide Responses</Button>
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                     </CardBody>
                 </Card>
-
             )
         })
     }
