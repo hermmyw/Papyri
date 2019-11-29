@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../components/SidebarStudent.js';
-import { Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText} from 'reactstrap';
+import { Container, Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText} from 'reactstrap';
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -25,6 +25,7 @@ class EnrollClass extends React.Component {
         
         this.enrollClass = this.enrollClass.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
+        this.handleBackToClasses = this.handleBackToClasses.bind(this);
     }
 
     /**
@@ -90,6 +91,11 @@ class EnrollClass extends React.Component {
         })
     }
 
+    handleBackToClasses() {
+        const userID = this.props.match.params.userid;
+        this.props.history.push(`/student/${userID}`);
+    }
+
     render() {
         console.log("rendering");
         console.log(this.state);
@@ -144,17 +150,17 @@ class EnrollClass extends React.Component {
 
         else {
             display = (
-                <div>
-                    <Sidebar view="enroll class" />
-                    <div className="main-area">
-                        <Form>
-                            {inputField}
-                            <FormGroup>
-                                <Button className="yellow-button" size="lg" block onClick={this.enrollClass}>Enroll In Class</Button>
-                            </FormGroup>
-                        </Form>
-                    </div>
-                </div>
+                <Container>
+                    <Form>
+                        {inputField}
+                        <FormGroup>
+                            <Button className="yellow-button" size="lg" block onClick={this.enrollClass}>Enroll In Class</Button>
+                        </FormGroup>
+                        <Row>
+                            <Col><Button className="link-button" color="link" onClick={this.handleBackToClasses}><IoIosArrowBack />Back</Button></Col>
+                        </Row>
+                    </Form>
+                </Container>
             );
         }
 

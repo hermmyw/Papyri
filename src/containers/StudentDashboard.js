@@ -10,8 +10,7 @@ import CardDeck from 'react-bootstrap/CardDeck';
 import { Row, Col } from 'react-bootstrap';
 import 'react-day-picker/lib/style.css';
 import './Dashboard.css';
-import Sidebar from '../components/SidebarStudent.js';
-import StudentClass from './StudentClass.js';
+import EnrollClass from './EnrollClass';
 import handleLogout from '../functions/logout';
 
 
@@ -64,7 +63,7 @@ class StudentDashboard extends React.Component {
 
         this.handleDetails = this.handleDetails.bind(this);
         this.handleEnterClass = this.handleEnterClass.bind(this);
-        this.handleCreateClass = this.handleCreateClass.bind(this);
+        this.handleEnroll = this.handleEnroll.bind(this);
     }
 
     componentDidMount() {
@@ -149,10 +148,12 @@ class StudentDashboard extends React.Component {
         this.props.history.push(`/student/class/${userID}/${classID}`)
     }
 
-    handleCreateClass() {
+    handleEnroll() {
         let userID = this.props.match.params.userid;
-        this.props.history.push(`/instructor/createclass/${userID}`);
+        this.props.history.push(`/student/enroll/${userID}`);
     }
+
+    
     
     render() {
 
@@ -181,6 +182,10 @@ class StudentDashboard extends React.Component {
                             );
                         })}
                     </CardDeck>
+                    <Row>
+                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleEnroll}>Enroll in Class</Button></Col>
+                    </Row>
+                    {/*<EnrollClass />*/}
                     <Row>
                         <Col><Button className="yellow-button" size="lg" block onClick={() => handleLogout(this)}>Log Out</Button></Col>
                     </Row>

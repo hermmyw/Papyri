@@ -191,7 +191,7 @@ class InstructorDashboard extends React.Component {
         return(
             <Container>
                 <div className="subheader">
-                    Hello, Professor {this.state.lastname}!
+                    Hello, Professor {localStorage.getItem('lastName')}!
                 </div>
                 <CardDeck className="class-list">
                     {this.state.classes.map(function(item, index) {
