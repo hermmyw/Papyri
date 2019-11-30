@@ -1,7 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
 from .account import RegistrationAPI, LoginAPI, UserAPI
-from .quiz import CreateQuizAPI, CreateQuestionAPI, ActivateQuizAPI, ReleaseQuizAPI, ListQuizAPI, ListQuestionAPI, DestroyQuizAPI
+from .quiz import (CreateQuizAPI, ActivateQuizAPI, ReleaseQuizAPI, ListQuizAPI, DestroyQuizAPI, 
+                    CreateAnswerAPI, AnswerByQuizAPI, AnswerByStudentAPI)
 from . import classes
 from . import attendance
 
@@ -20,12 +21,13 @@ urlpatterns = [
     path('attendance/<int:class_id>', attendance.get_attendance),
     path('attendance/<int:class_id>/<int:student_id>', attendance.get_student_attendance),
     path('quiz/create/', CreateQuizAPI.as_view()),
-    path('quiz/question/create/', CreateQuestionAPI.as_view()),
     path('quiz/activate/<int:id>/', ActivateQuizAPI.as_view()),
     path('quiz/release/<int:id>/', ReleaseQuizAPI.as_view()),
     path('quiz/list/unreleased/<int:class_id>/', ListQuizAPI.as_view(state='unreleased')),
     path('quiz/list/released/<int:class_id>/', ListQuizAPI.as_view(state='released')),
     path('quiz/list/active/<int:class_id>/', ListQuizAPI.as_view(state='active')),
-    path('quiz/list/question/<int:quiz_id>/', ListQuestionAPI.as_view()),
-    path('quiz/destroy/<int:id>', DestroyQuizAPI.as_view())
+    path('quiz/destroy/<int:id>', DestroyQuizAPI.as_view()),
+    path('answer/create', CreateAnswerAPI.as_view()),
+    path('answer/quiz/<int:quiz_id>', AnswerByQuizAPI.as_view()),
+    path('answer/student/<int:student>', AnswerByStudentAPI.as_view()),
 ] 
