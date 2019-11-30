@@ -52,7 +52,7 @@ class InstrSpecificQuiz extends React.Component {
         console.log("retrieving questions");
 
         // TODO: IMPLEMENT FETCH PROPERLY
-        fetch("http://127.0.0.1:8000/api/quiz/list/question/" + this.state.classid)
+        fetch("http://127.0.0.1:8000/api/quiz/list/question/" + this.props.match.params.classid)
         // .then(res => res.json())
         //     .then(data => data.classes.map(myclass => (
         //         {
