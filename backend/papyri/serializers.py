@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship
 from .models import Lecture, LectureAttendance
-from .models import Quiz, QuizQuestion
+from .models import Quiz, Answer
 from django.utils.crypto import get_random_string
 
 ### from package drf-base64
@@ -181,10 +181,7 @@ class QuizSerializer(serializers.ModelSerializer):
         model = Quiz
         fields = '__all__'
 
-
-class QuestionSerializer(serializers.ModelSerializer):
+class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = QuizQuestion
+        model = Answer
         fields = '__all__'
-
-
