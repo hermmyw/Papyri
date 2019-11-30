@@ -54,7 +54,7 @@ class InstrListQuizzes extends React.Component {
         console.log("retrieving quizzes");
 
         // TODO: IMPLEMENT FETCH
-        fetch("http://127.0.0.1:8000/api/quiz/list/unreleased/" + this.state.classid)
+        fetch("http://127.0.0.1:8000/api/quiz/list/released/" + this.props.match.params.classid)
         // .then(res => res.json())
         //     .then(data => data.classes.map(myclass => (
         //         {
