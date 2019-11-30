@@ -88,6 +88,7 @@ class CreateClass extends React.Component {
                     let userID = this.props.match.params.userid;
                     console.log(result);
                     localStorage.setItem('classid', result.id);
+                    localStorage.setItem('lastlecture', null);
                     this.props.history.push(`/instructor/class/${userID}/${result.id}`)
                 }
             )
