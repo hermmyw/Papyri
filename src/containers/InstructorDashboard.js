@@ -25,33 +25,7 @@ class InstructorDashboard extends React.Component {
         super(props);
         // Default values
         this.state = {
-            lastname: 'Kim',
-            classes: [
-                {
-                    classname: 'CS130',
-                    classid: '12345',
-                    instructor: 'Kim',
-                    active: 'true'
-                },
-                {
-                    classname: 'CS230',
-                    classid: '12346',
-                    instructor: 'Kim',
-                    active: 'false'
-                },
-                {
-                    classname: 'CS330',
-                    classid: '12347',
-                    instructor: 'Kim',
-                    active: 'false'
-                },
-                {
-                    classname: 'CS131',
-                    classid: '12367',
-                    instructor: 'Eggert',
-                    active: 'false'
-                },
-            ]
+            classes: []
         };
         this.handleDetails = this.handleDetails.bind(this);
         this.handleStartLecture = this.handleStartLecture.bind(this);
@@ -63,30 +37,38 @@ class InstructorDashboard extends React.Component {
     componentDidMount() {
         console.log("mounting");
         // // make api call GET request
-        fetch("http://127.0.0.1:8000/api/classes/teacher/", {
+        fetch(`http://127.0.0.1:8000/api/classes/teacher/${this.props.match.params.userid}`, {
             method: "GET",
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'teacher_id': this.props.match.params.userid
+                'Content-Type': 'application/json'
             }
         })
-            .then(res => res.json())
-            .then(data => {/*data.classes.map(myclass => (
-                {
-                    classname: `${myclass.name}`,
-                    classid: `${myclass.class_id}`,
-                    instructor: `${myclass.instructor}`,
-                    active: `${myclass.active}`,
+            .then(res => {
+                if (!res.ok) {
+                    throw Error(res.statusText);
                 }
-            ))*/
-                console.log(data);
+                return(res.json());
             })
-            /*.then(classes => this.setState({
-                classes,
+            .then(data => {
+                console.log('fetched data');
+                var classList = data.map(myclass => (
+                    {
+                        classname: `${myclass.name}`,
+                        classid: `${myclass.id}`,
+                        term: `${myclass.term}`,
+                        year: `${myclass.year}`,
+                        reg_code: `${myclass.registration_code}`
+                    }
+                ))
+                console.log(classList);
+                return classList;
+            })
+            .then(classList => this.setState({
+                classes: classList,
                 isLoading: false
             }))
-            .catch(error => console.log('parsing failed', error));*/
+            .catch(error => console.log('parsing failed', error));
     }
 
     componentWillUnmount() {
@@ -182,19 +164,15 @@ class InstructorDashboard extends React.Component {
         this.props.history.push(`/instructor/createclass/${userID}`);
     }
 
+    handleRegCode(idx) {
+        alert('Registration Code for ' + this.state.classes[idx].classname + ': ' + this.state.classes[idx].reg_code);
+    }
+
     /**
      * renders the Instructor Dashboard view
      */
     render() {
 
-        // return (
-        //     <div>
-        //         <Sidebar view="dashboard" />
-        //         <div className="main-area">
-        //             <p>Dashboard</p>
-        //         </div>
-        //     </div>
-        // )
         var obj = null;
         obj = this;
         return(
@@ -204,7 +182,7 @@ class InstructorDashboard extends React.Component {
                 </div>
                 <CardDeck className="class-list">
                     {this.state.classes.map(function(item, index) {
-                        console.log("The class is active: ", item.active);
+                        /*console.log("The class is active: ", item.active);
                         var attendanceButton = null;
                         if (item.active === "true") {
                             attendanceButton = (
@@ -215,17 +193,17 @@ class InstructorDashboard extends React.Component {
                             attendanceButton = (
                                 <Button variant="success" onClick={() => obj.handleStartLecture(item.classid)}>Start Lecture</Button>
                             );
-                        }
+                        }*/
                         return (
                             <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.classid)}>
                                 <Card.Header className="card-header">{item.classname}</Card.Header>
                                 <Card.Body className="card-body">
-                                <Card.Title>Professor {item.instructor}</Card.Title>
+                                <Card.Title>{item.term.toUpperCase()} {item.year}</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
                                 <Card.Text>
-                                {attendanceButton}
+                                {/*attendanceButton*/}
                                 </Card.Text>
-                                <Button variant='outline-primary' onClick={() => obj.handleDetails(item.classid)}>Details</Button>
+                                <Button variant='outline-primary' onClick={() => obj.handleRegCode(index)}>Show Registration Code</Button>
                                 </Card.Body>
                             </Card>
                         );
