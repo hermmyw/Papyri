@@ -34,8 +34,9 @@ def class_by_teacher(request, teacher_id):
     Get classes that a teacher teaches
     """
 
+    print("function called")
     try:
-        classes = ClassInfo.filter(teacher_id=teacher_id)
+        classes = ClassInfo.objects.filter(teacher_id=teacher_id)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
