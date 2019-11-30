@@ -238,7 +238,7 @@ class SpecificInstructorClass extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id: 1 // localStorage.getItem('activeLectureID')
+                id: localStorage.getItem('activeLectureID')
             }),
         })
         .then(res => res.json())
