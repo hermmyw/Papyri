@@ -63,7 +63,7 @@ class EnrollClass extends React.Component {
                     // localStorage.push('classID', result.class_id);
                     // this.props.history.push('/student/class')
                     this.setState({
-                        enrolled: tru
+                        enrolled: true,
                         className: result.class_name
                     })
                 }
