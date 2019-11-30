@@ -48,6 +48,7 @@ class CreateClass extends React.Component {
 
     /**
      * Makes an http request to endpoint to register a new class for the instructor.
+     * Should bring user to new class page after registering class
      */
     createClass(e) {
 
@@ -55,6 +56,11 @@ class CreateClass extends React.Component {
 
         // response to http request should contain access token
         // go to new class page
+        console.log('name: ' + this.state.name);
+        console.log('teacher_id: ' + parseInt(localStorage.getItem('userid')));
+        console.log(typeof parseInt(localStorage.getItem('userid')));
+        console.log('term: ' + this.state.term);
+        console.log('year: ' + this.state.year);
         fetch(createClassURL, {
             method: "POST",
             headers: {
@@ -62,12 +68,10 @@ class CreateClass extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id: localStorage.getItem('userID'),
                 name: this.state.name,
-                teacher_id: localStorage.getItem('uid'),
+                teacher_id: parseInt(localStorage.getItem('userid')),
                 term: this.state.term,
-                year: this.state.year,
-                registration_code: '12345'
+                year: this.state.year
             }),
         })
             .then(res => {
@@ -81,8 +85,10 @@ class CreateClass extends React.Component {
                 (result) => {
 
                     // user object and authentication token
+                    let userID = this.props.match.params.userid;
                     console.log(result);
-                    this.props.history.push('/instructor/class')
+                    localStorage.setItem('classid', result.id);
+                    this.props.history.push(`/instructor/class/${userID}/${result.id}`)
                 }
             )
             .catch (error => {

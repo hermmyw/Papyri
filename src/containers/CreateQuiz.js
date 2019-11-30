@@ -33,6 +33,11 @@ class CreateQuiz extends React.Component {
         });
     }
 
+    /**
+     * api call to add answer choices to a particular quiz
+     * user should be brought to pending quizzes page after submitting quiz
+     * @param {*} e event 
+     */
     addAnswersCall(e) {
         fetch(createQuizURL, {
             method: "POST",
@@ -56,9 +61,10 @@ class CreateQuiz extends React.Component {
             .then(
                 (result) => {
 
-                    // user object and authentication token
+                    const userID = this.props.match.params.userid;
+                    const classID = this.props.match.params.classid;
                     console.log(result);
-                    this.props.history.push('/instructor/class')
+                    this.props.history.push(`/instructor/pendingquizzes/${userID}/${classID}`)
                 }
             )
             .catch (error => {
@@ -86,7 +92,7 @@ class CreateQuiz extends React.Component {
             body: JSON.stringify({
                 name: this.state.quizName,
                 description: this.state.quizQuestion,
-                class_id: localStorage.getItem('classID')
+                class_id: this.props.match.params.classid
             }),
         })
             .then(res => {
@@ -98,10 +104,10 @@ class CreateQuiz extends React.Component {
             })
             .then(
                 (result) => {
-
-                    // user object and authentication token
+                    const userID = this.props.match.params.userid;
+                    const classID = this.props.match.params.classid;
                     console.log(result);
-                    this.props.history.push('/instructor/class')
+                    this.props.history.push(`/instructor/pendingquizzes/${userID}/${classID}`)
                 }
             )
             .catch (error => {

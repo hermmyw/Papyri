@@ -71,6 +71,7 @@ class Landing extends React.Component {
                 }),
             })
                 .then(res => {
+                    console.log('logging in');
                     console.log(res);
                     if (res.ok) {
                         return (res.json());
@@ -80,6 +81,7 @@ class Landing extends React.Component {
                 })
                 .then(
                     (result) => {
+                        console.log(result);
                         docCookies.setItem('token', result.token, Infinity, '/');
                         authorization(this);
                     }
