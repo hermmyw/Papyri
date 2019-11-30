@@ -59,11 +59,12 @@ class EnrollClass extends React.Component {
             })
             .then(
                 (result) => {
-
-                    // user object and authentication token
                     console.log(result);
-                    localStorage.push('classID', result.class_id);
+                    // localStorage.push('classID', result.class_id);
                     // this.props.history.push('/student/class')
+                    this.setState({
+                        enrolled: true
+                    })
                 }
             )
             .catch (error => {

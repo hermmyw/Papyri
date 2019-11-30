@@ -140,7 +140,7 @@ class StudentDashboard extends React.Component {
     
     
     render() {
-
+        console.log(this.state.classes);
         var main, detail, classView = null;
         var obj = this;
         //if (this.state.detailClass === null) {
