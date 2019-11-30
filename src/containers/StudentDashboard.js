@@ -38,26 +38,7 @@ class StudentDashboard extends React.Component {
             lastName: localStorage.getItem('lastName'),
             profile_pic: localStorage.getItem('profilepic'),
             student_id: localStorage.getItem('uid'),
-            classes: [
-                {
-                    classname: 'CS130',
-                    classid: '12345',
-                    instructor: 'Kim',
-                    active: 'true'
-                },
-                {
-                    classname: 'CS230',
-                    classid: '12346',
-                    instructor: 'Kim',
-                    active: 'false'
-                },
-                {
-                    classname: 'CS131',
-                    classid: '12367',
-                    instructor: 'Eggert',
-                    active: 'false'
-                },
-            ],
+            classes: [],
             detailClass: null
         };
 
@@ -71,7 +52,7 @@ class StudentDashboard extends React.Component {
         console.log(this.state);
 
         // get the class list for the student
-        fetch("http://127.0.0.1:8000/api/classes/student/"+this.state.student_id, {
+        fetch(`http://127.0.0.1:8000/api/classes/student/${this.props.match.params.userid}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -90,6 +71,9 @@ class StudentDashboard extends React.Component {
             .then(
                 (result) =>  {
                     console.log("get class list: ", result);
+                    this.setState({
+                        classes: result
+                    })
                      //if (result !== null) TODO (create_class)
                 }
             )
@@ -157,39 +141,30 @@ class StudentDashboard extends React.Component {
     
     render() {
 
-        var main, detail = null;
+        var main, detail, classView = null;
         var obj = this;
         //if (this.state.detailClass === null) {
+        if (this.state.classes.length > 0) {
             main = (
-                <Container>
-                    <div className="subheader">
-                        Hello,  {localStorage.getItem('firstName')}!
-                    </div>
+                <div>
                     <CardDeck className="class-list">
                         {this.state.classes.map(function(item, index) {
                             console.log("The class is active: ", item.active);
                             return (
-                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.classid)}>
-                                    <Card.Header className="card-header">{item.classname}</Card.Header>
+                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id)}>
+                                    <Card.Header className="card-header">{item.name}</Card.Header>
                                     <Card.Body className="card-body">
-                                    <Card.Title>Professor {item.instructor}</Card.Title>
+                                    <Card.Title>Professor {item.teacher_name}</Card.Title>
                                     <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
                                     <Card.Text>
                                     </Card.Text>
-                                    <Button variant='outline-primary' onClick={() => obj.handleDetails(item.classid)}>Details</Button>
+                                    <Button variant='outline-primary' onClick={() => obj.handleDetails(item.id)}>Details</Button>
                                     </Card.Body>
                                 </Card>
                             );
                         })}
                     </CardDeck>
-                    <Row>
-                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleEnroll}>Enroll in Class</Button></Col>
-                    </Row>
-                    {/*<EnrollClass />*/}
-                    <Row>
-                        <Col><Button className="yellow-button" size="lg" block onClick={() => handleLogout(this)}>Log Out</Button></Col>
-                    </Row>
-                </Container>
+                </div>
             );
         // } else {
         //     detail = (
@@ -198,12 +173,33 @@ class StudentDashboard extends React.Component {
         //         // />
         //     );
         // }
+        }
+
+        else {
+            main = (
+                <Container>
+                    You are not enrolled in any classes!
+                </Container>
+            )
+        }
 
         
         return( 
             <div>
-                {main}
-                {detail}
+                <Container>
+                    <div className="subheader">
+                        Hello,  {localStorage.getItem('firstName')}!
+                    </div>
+                    {main}
+                    {detail}
+                <Row>
+                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleEnroll}>Enroll in Class</Button></Col>
+                    </Row>
+                    {/*<EnrollClass />*/}
+                    <Row>
+                        <Col><Button className="yellow-button" size="lg" block onClick={() => handleLogout(this)}>Log Out</Button></Col>
+                    </Row>
+                </Container>
             </div>
             
         )

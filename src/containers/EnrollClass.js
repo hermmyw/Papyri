@@ -4,7 +4,7 @@ import { Container, Row, Col, Button, Form, FormGroup, Input, Label, FormFeedbac
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 
-const enrollClassURL = "http://127.0.0.1:8000/api/classes/student/";
+const enrollClassURL = "http://127.0.0.1:8000/api/classes/student/enroll/";
 
 
 /**
@@ -46,8 +46,8 @@ class EnrollClass extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id: localStorage.getItem('userID'),
-                registration_code: this.state.registrationCode
+                student_id: this.props.match.params.userid,
+                code: this.state.registrationCode
             }),
         })
             .then(res => {
@@ -63,7 +63,7 @@ class EnrollClass extends React.Component {
                     // user object and authentication token
                     console.log(result);
                     localStorage.push('classID', result.class_id);
-                    this.props.history.push('/student/class')
+                    // this.props.history.push('/student/class')
                 }
             )
             .catch (error => {
@@ -72,6 +72,21 @@ class EnrollClass extends React.Component {
                     failedToEnroll: true
                 })
             })
+
+            /*fetch(`http://127.0.0.1:8000/api/classes/`, {
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => {
+                return(res.json());
+            })
+            .then(data => {
+                console.log('fetched data');
+                console.log(data);
+            })*/
     }
 
     handleRegistrationCodeChange(e) {
