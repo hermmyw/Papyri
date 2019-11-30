@@ -91,14 +91,15 @@ class SpecificInstructorClass extends React.Component {
         localStorage.setItem('classID', '12345');
 
         this.state = {
-            classID: localStorage.getItem('classID'),
-            quizID: null,
+            isActive: localStorage.getItem('isClassActive')
         }
 
         this.handleViewAllClosedQuizzes = this.handleViewAllClosedQuizzes.bind(this);
         this.showRecentClosedQuizzes = this.showRecentClosedQuizzes.bind(this);
         this.showAttendanceGraph = this.showAttendanceGraph.bind(this);
         this.handleExitClass = this.handleExitClass.bind(this);
+        this.handleTakeAttendance = this.handleTakeAttendance.bind(this);
+        this.handleStopAttendance = this.handleStopAttendance.bind(this);
         
         // var closedQuizData = this.makeRecentClosedQuizzesCall();
         // var attendanceData = this.makeAttendanceCall();
@@ -188,6 +189,71 @@ class SpecificInstructorClass extends React.Component {
         )
     }
 
+    handleTakeAttendance(thisClass) {
+        function handleLocationInfo(position) {
+            var lng = position.coords.longitude;
+            var lat = position.coords.latitude;
+            
+            console.log(`longitude: ${ lng } | latitude: ${ lat }`);
+            let today = new Date();
+            let todayString = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+            // TODO get last lecture and check whether last lecture is the same day
+            // if so give warning that earlier lectures on the same day will be nulled
+            // need to send location to backend
+            console.log(todayString);
+            fetch("http://127.0.0.1:8000/api/attendance/start/", { 
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    c_id: thisClass.props.match.params.classid
+                }),
+            })
+            .then(res => res.json())
+            .then((result) => {
+                console.log(result);
+                localStorage.setItem('isClassActive', true);
+                localStorage.setItem('activeLectureID', result.id);
+                thisClass.setState({
+                    isActive: true
+                })
+            })
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(handleLocationInfo);
+        } else {
+            console.log('geolocation disabled');
+            alert('Sorry feature is not supported by your browser');
+        }
+    }
+
+    handleStopAttendance() {
+        fetch("http://127.0.0.1:8000/api/attendance/stop/", { // TODO
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: 1 // localStorage.getItem('activeLectureID')
+            }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+                localStorage.setItem('isClassActive', false);
+                localStorage.setItem('activeLectureID', null);
+                this.setState({
+                    isActive: false
+                })
+            }
+        )
+    }
+
     handleExitClass() {
         localStorage.removeItem('classid');
         let userID = this.props.match.params.userid;
@@ -198,10 +264,26 @@ class SpecificInstructorClass extends React.Component {
         console.log("rendering");
         console.log(this.state);
 
-        var graph, recentQuizzes = null;
+        var graph, recentQuizzes, attendanceButton = null;
 
         graph = this.showAttendanceGraph();
         recentQuizzes = this.showRecentClosedQuizzes();
+
+        if (this.state.isActive === false) {
+            var attendanceButton = (
+                <Row>
+                    <Col><Button className="yellow-button" size="lg" block onClick={() => this.handleTakeAttendance(this)}>Start Lecture</Button></Col>
+                </Row>
+            )
+        }
+        else {
+            var attendanceButton = (
+                <Row>
+                    <Col><Button className="yellow-button" size="lg" block onClick={() => this.handleStopAttendance(this)}>End Lecture</Button></Col>
+                </Row>
+            )
+        }
+        
 
         return (
             <div>
@@ -210,6 +292,7 @@ class SpecificInstructorClass extends React.Component {
                     <Row>
                         <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
                     </Row>
+                    {attendanceButton}
                     {graph}
                     {recentQuizzes}
                     <Button className="yellow-button" size="lg" block onClick={this.handleViewAllClosedQuizzes}>

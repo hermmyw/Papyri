@@ -52,22 +52,10 @@ class InstructorDashboard extends React.Component {
             })
             .then(data => {
                 console.log('fetched data');
-                var classList = data.map(myclass => (
-                    {
-                        classname: `${myclass.name}`,
-                        classid: `${myclass.id}`,
-                        term: `${myclass.term}`,
-                        year: `${myclass.year}`,
-                        reg_code: `${myclass.registration_code}`
-                    }
-                ))
-                console.log(classList);
-                return classList;
+                this.setState({
+                    classes: data
+                })
             })
-            .then(classList => this.setState({
-                classes: classList,
-                isLoading: false
-            }))
             .catch(error => console.log('parsing failed', error));
     }
 
@@ -79,17 +67,17 @@ class InstructorDashboard extends React.Component {
         console.log("start lecture");
         // make api call POST
         fetch("http://127.0.0.1:8000/api/attendance/start/", { // TODO
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            class_id: this.state.classid,
-            date: new Date(),
-            active: true
-        }),
-    })
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                class_id: this.state.classid,
+                date: new Date(),
+                active: true
+            }),
+        })
         .then(res => res.json())
         .then(
             (result) => {
@@ -155,6 +143,7 @@ class InstructorDashboard extends React.Component {
 
     handleEnterClass(classID) {
         localStorage.setItem('classid', classID);
+        localStorage.setItem('isClassActive', false);
         let userID = this.props.match.params.userid;
         this.props.history.push(`/instructor/class/${userID}/${classID}`)
     }
@@ -165,14 +154,14 @@ class InstructorDashboard extends React.Component {
     }
 
     handleRegCode(idx) {
-        alert('Registration Code for ' + this.state.classes[idx].classname + ': ' + this.state.classes[idx].reg_code);
+        alert('Registration Code for ' + this.state.classes[idx].name + ': ' + this.state.classes[idx].registration_code);
     }
 
     /**
      * renders the Instructor Dashboard view
      */
     render() {
-
+        console.log(this.state.classes);
         var obj = null;
         obj = this;
         return(
@@ -195,8 +184,8 @@ class InstructorDashboard extends React.Component {
                             );
                         }*/
                         return (
-                            <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.classid)}>
-                                <Card.Header className="card-header">{item.classname}</Card.Header>
+                            <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id)}>
+                                <Card.Header className="card-header">{item.name}</Card.Header>
                                 <Card.Body className="card-body">
                                 <Card.Title>{item.term.toUpperCase()} {item.year}</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
