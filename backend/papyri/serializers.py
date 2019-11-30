@@ -135,17 +135,16 @@ class ClassSerializer(serializers.Serializer):
 
 class StudentClassSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    class_id = serializers.PrimaryKeyRelatedField(queryset=ClassInfo.objects.all())
+    c_id = serializers.PrimaryKeyRelatedField(queryset=ClassInfo.objects.all())
     student_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    in_session = serializers.BooleanField()
 
     class Meta:
         model = StudentClassRelationship
         fields = ('__all__')
 
     def create(self, validated_data):
-        return StudentClassRelationship.objects.create(class_id=validated_data['class_id'],
-                                                        student_id=validated_data['student_id'])
+        return StudentClassRelationship.objects.create(c_id=validated_data['c_id'].id,
+                                                        student_id=validated_data['student_id'].id)
 
 
 class LectureSerializer(serializers.Serializer):
