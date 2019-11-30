@@ -63,21 +63,30 @@ class InstructorDashboard extends React.Component {
     componentDidMount() {
         console.log("mounting");
         // // make api call GET request
-        // fetch("http://127.0.0.1:8000/api/classes/teacher/")
-        //     .then(res => res.json())
-        //     .then(data => data.classes.map(myclass => (
-        //         {
-        //             classname: `${myclass.name}`,
-        //             classid: `${myclass.class_id}`,
-        //             instructor: `${myclass.instructor}`,
-        //             active: `${myclass.active}`,
-        //         }
-        //     )))
-        //     .then(classes => this.setState({
-        //         classes,
-        //         isLoading: false
-        //     }))
-        //     .catch(error => console.log('parsing failed', error));
+        fetch("http://127.0.0.1:8000/api/classes/teacher/", {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'teacher_id': this.props.match.params.userid
+            }
+        })
+            .then(res => res.json())
+            .then(data => {/*data.classes.map(myclass => (
+                {
+                    classname: `${myclass.name}`,
+                    classid: `${myclass.class_id}`,
+                    instructor: `${myclass.instructor}`,
+                    active: `${myclass.active}`,
+                }
+            ))*/
+                console.log(data);
+            })
+            /*.then(classes => this.setState({
+                classes,
+                isLoading: false
+            }))
+            .catch(error => console.log('parsing failed', error));*/
     }
 
     componentWillUnmount() {

@@ -16,6 +16,7 @@ var authorization = (comp) => {
             },
         })
             .then(res => {
+                console.log('authorizing');
                 console.log(res);
                 if (res.ok) {
                     return (res.json());

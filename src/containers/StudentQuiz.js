@@ -202,9 +202,6 @@ class StudentQuiz extends React.Component {
             )
 
             var answersDisplay = result.answers.map((answer, idx) => {
-                console.log(studentAnswer[0]);
-                console.log('answer index: ' + idx);
-                console.log('student answer: ' + studentAnswer[0].answer);
                 var answerButton = (
                     <Button color="secondary" size="lg" block>
                         {answerLabel[idx]}: {answer}
