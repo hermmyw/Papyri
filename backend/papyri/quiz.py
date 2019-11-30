@@ -1,16 +1,12 @@
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
 
-from .serializers import QuizSerializer, QuestionSerializer
-from .models import Quiz, QuizQuestion
+from .serializers import QuizSerializer, AnswerSerializer
+from .models import Quiz, Answer
 
 class CreateQuizAPI(generics.CreateAPIView):
     serializer_class = QuizSerializer
     queryset = Quiz.objects.all()
-
-class CreateQuestionAPI(generics.CreateAPIView):
-    serializer_class = QuestionSerializer
-    queryset = QuizQuestion.objects.all()
 
 class ActivateQuizAPI(generics.RetrieveUpdateAPIView):
     serializer_class = QuizSerializer
@@ -55,15 +51,31 @@ class ListQuizAPI(generics.ListAPIView):
             queryset = queryset.filter(active=True)
         return queryset
 
-class ListQuestionAPI(generics.ListAPIView):
-    serializer_class = QuestionSerializer
-
-    def get_queryset(self):
-        quiz_id = self.kwargs['quiz_id']
-        queryset = QuizQuestion.objects.filter(quiz_id=quiz_id)
-        return queryset
-
 class DestroyQuizAPI(generics.DestroyAPIView):
     serializer_class = QuizSerializer
     queryset = Quiz.objects.all()
     lookup_field = 'id'
+
+class CreateAnswerAPI(generics.CreateAPIView):
+    serializer_class = AnswerSerializer
+    queryset = Answer.objects.all()
+
+class AnswerByQuizAPI(generics.ListAPIView):
+    serializer_class = AnswerSerializer
+    queryset = Answer.objects.all()
+    lookup_field = 'quiz_id'
+
+    def get_queryset(self):
+        quiz_id = self.kwargs['quiz_id']
+        queryset = Answer.objects.filter(quiz_id=quiz_id)
+        return queryset
+
+class AnswerByStudentAPI(generics.ListAPIView):
+    serializer_class = AnswerSerializer
+    queryset = Answer.objects.all()
+    lookup_field = 'student'
+
+    def get_queryset(self):
+        student = self.kwargs['student']
+        queryset = Answer.objects.filter(student=student)
+        return queryset
