@@ -1,9 +1,10 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import ClassInfo, StudentClassRelationship, UserInfo
+from .models import ClassInfo, StudentClassRelationship, UserInfo, Lecture, User
 from .serializers import ClassSerializer, StudentClassSerializer
 from django.core import serializers
+from django.http import QueryDict
 
 @api_view(['GET', 'POST'])
 def class_list(request):
@@ -48,10 +49,28 @@ def add_student(request):
     Add a student to a class
     """
 
-    serializer = StudentClassSerializer(data=request.data)
+    reg_code = request.data.get('code')
+    class_object = ClassInfo.objects.get(registration_code=reg_code)
+    class_id = class_object.id
+    student_id = request.data.get('student_id')
+    class_name = class_object.name
+    new_request_data = QueryDict(mutable=True)
+    new_request_data.update({
+        'c_id': str(class_id),
+        'student_id': student_id
+    })
+
+    already_enrolled = StudentClassRelationship.objects.filter(c_id=class_id, student_id=student_id)
+    if already_enrolled:
+        return Response({"error": "Student already enrolled in this class"}, status=status.HTTP_400_BAD_REQUEST)
+        
+    print(new_request_data)
+    serializer = StudentClassSerializer(data=new_request_data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        response_data = serializer.data
+        response_data['class_name'] = class_name
+        return Response(response_data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,15 +92,17 @@ def get_classes_by_student(request, student_id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    data = serializers.serialize('json', classes, fields=('name', 'class_id', 'student_id'))
     ret_data = []
     for c in classes:
+        teacher_info = User.objects.get(id=c.teacher.id)
+        lecture_info = Lecture.objects.filter(c_id=c.id).order_by('-date')
         ret_data.append({
             'id': c.id,
             'name': c.name,
             'teacher_id': c.teacher.id,
-            'teacher_name': c.teacher.owner.first_name + " " + c.teacher.owner.last_name
+            'teacher_name': teacher_info.first_name + " " + teacher_info.last_name,
+            'in_session': lecture_info[0].in_session if lecture_info else False,
+            'most_recent_lecture': lecture_info[0].id if lecture_info else None
         })
 
     return Response(ret_data)
-    
