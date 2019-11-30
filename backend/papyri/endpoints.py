@@ -10,7 +10,7 @@ urlpatterns = [
     path('user/login/', LoginAPI.as_view()),
     path('user/', UserAPI.as_view()),
     path('classes/', classes.class_list),
-    path('classes/teacher/', classes.class_by_teacher),
+    path('classes/teacher/<int:teacher_id>', classes.class_by_teacher),
     path('classes/student/', classes.add_student),
     path('classes/student/<int:student_id>', classes.get_classes_by_student),
     path('attendance/start/', attendance.start_lecture),
