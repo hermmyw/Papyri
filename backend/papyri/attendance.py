@@ -9,10 +9,19 @@ import datetime
 
 @api_view(['POST'])
 def start_lecture(request):
-    last_lecture = Lecture.objects.filter(c_id=request.data.get('c_id')).latest(field_name='date')
-    if (last_lecture.in_session):
-        return Response({'error': 'Lecture already in session. End current lecture before starting a new one'}, 
-                        status=status.HTTP_400_BAD_REQUEST)
+    try:
+        last_lecture = Lecture.objects.filter(c_id=request.data.get('c_id')).latest(field_name='date')
+        if (last_lecture.in_session):
+            return Response({'error': 'Lecture already in session. End current lecture before starting a new one'}, 
+                            status=status.HTTP_400_BAD_REQUEST)
+    except Lecture.DoesNotExist:
+        serializer = LectureSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = LectureSerializer(data=request.data)
 
@@ -77,4 +86,43 @@ def get_attendance(request, class_id):
 
     return Response(data)
 
+@api_view(['GET'])
+def get_student_attendance(request, class_id, student_id):
+    try:
+        days_attended = Lecture.objects.raw("""
+            SELECT l.id, l.date
+            FROM papyri_lecture l
+            LEFT join papyri_lectureattendance a
+            ON l.id = a.lecture_id
+            WHERE l.c_id = %s AND a.student_id = %s
+            ORDER BY l.date
+            """, [class_id, student_id])
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    try: 
+        all_lectures = Lecture.objects.filter(c_id=class_id)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    data = {
+        'days_attended': [],
+        'days_absent': [],
+    }
+    for lecture in days_attended:
+        data['days_attended'].append({
+            "lecture_id": lecture.id,
+            'date': lecture.date
+        })
+
+    for lecture in all_lectures:
+        entry = {
+            "lecture_id": lecture.id, 
+            "date": lecture.date
+        }
+        if entry not in data['days_attended']:
+            data['days_absent'].append(entry)
+            
+    return Response(data)    
+        
     
