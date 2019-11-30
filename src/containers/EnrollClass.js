@@ -63,7 +63,8 @@ class EnrollClass extends React.Component {
                     // localStorage.push('classID', result.class_id);
                     // this.props.history.push('/student/class')
                     this.setState({
-                        enrolled: true
+                        enrolled: tru
+                        className: result.class_name
                     })
                 }
             )
@@ -152,15 +153,12 @@ class EnrollClass extends React.Component {
 
         if (this.state.enrolled) {
             display = (
-                <div>
-                    <Sidebar view="enroll class" />
-                    <div className="main-area">
-                        Success! You have enrolled in {this.state.className}
-                        <Row>
-                            <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Enroll in another class</Button></Col>
-                        </Row>
-                    </div>
-                </div>
+                <Container>
+                    Success! You have enrolled in {this.state.className}
+                    <Row>
+                        <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Enroll in another class</Button></Col>
+                    </Row>
+                </Container>
             )
         }
 
