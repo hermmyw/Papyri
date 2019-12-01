@@ -19,14 +19,14 @@ import PendingQuizzes from './containers/PendingQuizzes'
 import Settings from './containers/Settings'
 import StudentQuizzes from './containers/StudentQuizzes'
 import StudentQuiz from './containers/StudentQuiz'
+import InstrListQuizzes from './containers/InstrListQuizzes'
+import InstrSpecificQuiz from './containers/InstrSpecificQuiz'
 
 
 /*
     TODO: Need to link following pages to sidebar
     past quizzes page for instructor (virgil) /instructor/quizzes/:userid/:classid
     specific past quiz page for instructor (virgil) /instructor/quiz/:userid/:classid/:quizid
-
-    specific past quiz page for student (angela) /student/quiz/:userid/:classid/:quizid
 
 */
 
@@ -42,6 +42,8 @@ ReactDOM.render(
             <Route path="/instructor/createclass/:userid" exact={true} component={CreateClass} />
             <Route path="/instructor/createquiz/:userid/:classid" exact={true} component={CreateQuiz} />
             <Route path="/instructor/pendingquizzes/:userid/:classid" exact={true} component={PendingQuizzes} />
+            <Route path="/instructor/quizzes/:userid/:classid" exact={true} component={InstrListQuizzes} />
+            <Route path="/instructor/quiz/:userid/:classid/:quizid" exact={true} component={InstrSpecificQuiz} />
             <Route path="/student/quizzes/:userid/:classid" exact={true} component={StudentQuizzes} />
             <Route path="/student/quiz/:userid/:classid/:quizid" exact={true} component={StudentQuiz} />
             <Route path="/student/enroll/:userid" exact={true} component={EnrollClass} />

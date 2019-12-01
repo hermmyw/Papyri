@@ -24,12 +24,15 @@ class StudentClass extends React.Component {
             submittedQuiz: false,
             active: (localStorage.getItem('isClassActive') === 'true'),
             userPhoto: null,
-            mostRecentLecture: localStorage.getItem('mostRecentLecture')
+            mostRecentLecture: localStorage.getItem('mostRecentLecture'),
+            currentQuiz: [],
+            selectedAnswer: null
         };
         this.handleAttendance = this.handleAttendance.bind(this);
         this.handleModalSubmit = this.handleModalSubmit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.fetchData = this.fetchData.bind(this);
+        this.getCurrentQuiz = this.getCurrentQuiz.bind(this);
         this.postData = this.postData.bind(this);
         //this.setWebcamRef = this.setWebcamRef.bind(this);
         this.handleExitClass = this.handleExitClass.bind(this);
@@ -40,11 +43,32 @@ class StudentClass extends React.Component {
         console.log('local storage: ', localStorage);
         this.postData();
         this.fetchData();
+        this.getCurrentQuiz();
     }
 
     postData() {
         // post student id and class id
     }
+
+    handleSelectAnswer(answer) {
+        this.setState({selectedAnswer: answer});
+    }
+
+    getCurrentQuiz() {
+        console.log('classid: ', this.props.match.params.classid);
+        fetch(`http://127.0.0.1:8000/api/quiz/list/active/${this.props.match.params.classid}`, { 
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(res => res.json())
+        .then((result) => {
+            console.log("current quiz", result);
+            this.setState({currentQuiz: result});
+        })
+}
 
     fetchData() {
         // get attendance dates, missed dates, active state, and current quiz
@@ -73,25 +97,27 @@ class StudentClass extends React.Component {
     }
 
     handleSubmit(e) {
-        this.setState(state => ({
-            submittedQuiz: true
-        }));
-        e.preventDefault();
         console.log('submitted');
-        fetch("http://127.0.0.1:8000/api/quiz/create", { // TODO
+        fetch("http://127.0.0.1:8000/api/answer/create", { // TODO
             method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                // TODO
+                choice: this.state.selectedAnswer,
+                quiz_id: this.state.currentQuiz[0].id,
+                student: this.props.match.params.userid
             }),
             })
                 .then(res => res.json())
                 .then(
                     (result) => {
-                        console.log(result);
+                        alert("Ypu have submitted your answer!");
+                        console.log('answer submitted: ', result);
+                        this.setState({
+                            submittedQuiz: true
+                        });
                     }
                 )
     }
@@ -176,6 +202,7 @@ class StudentClass extends React.Component {
     }
 
     render() {
+        console.log('state: ', this.state);
         const videoConstraints = {
             width: 200,
             height: 200,
@@ -243,6 +270,29 @@ class StudentClass extends React.Component {
             );
         }
 
+        var quizDisplay = null;
+        if (this.state.currentQuiz.length > 0 && !this.state.submittedQuiz) {
+            var currQuiz = this.state.currentQuiz[0];
+            var quizDisplay = (
+                <Card className="quiz">
+                    <Card.Header as="h5">Current Quiz</Card.Header>
+                    <Card.Body>
+                        <Card.Title>{currQuiz.question}</Card.Title>
+                        <Button className="quiz-option" onClick={() => this.handleSelectAnswer(0) } active={this.state.selectedAnswer === 0} variant="outline-dark">{currQuiz.answer_0}</Button><br/>
+                        <Button className="quiz-option" onClick={() => this.handleSelectAnswer(1) } active={this.state.selectedAnswer === 1} variant="outline-dark">{currQuiz.answer_1}</Button><br/>
+                        <Button className="quiz-option" onClick={() => this.handleSelectAnswer(2) } active={this.state.selectedAnswer === 2} variant="outline-dark">{currQuiz.answer_2}</Button><br/>
+                        <Button className="quiz-option" onClick={() => this.handleSelectAnswer(3) } active={this.state.selectedAnswer === 3} variant="outline-dark">{currQuiz.answer_3}</Button><br/>
+                        <Button 
+                            className="quiz-option"
+                            variant="primary"
+                            type="submit"
+                            onClick={ (e) => this.handleSubmit(e) }
+                        >submit</Button>
+                    </Card.Body>
+                </Card>
+            )
+        }
+
         return (
             <Container>
                 <Sidebar view="class home"/>
@@ -271,22 +321,7 @@ class StudentClass extends React.Component {
                                 {cameraModal}
                             </Col>
                         </Row>
-                        <Card className="quiz">
-                        <Card.Header as="h5">Current Quiz</Card.Header>
-                        <Card.Body>
-                            <Card.Title>Question Body</Card.Title>
-                            <Button className="quiz-option" variant="outline-dark">Choice 1</Button><br/>
-                            <Button className="quiz-option" variant="outline-dark">Choice 2</Button><br/>
-                            <Button className="quiz-option" variant="outline-dark">Choice 3</Button><br/>
-                            <Button className="quiz-option" variant="outline-dark">Choice 4</Button><br/>
-                            <Button 
-                                className="quiz-option"
-                                variant="primary"
-                                type="submit"
-                                onClick={ (e) => this.handleSubmit(e) }
-                            >submit</Button>
-                        </Card.Body>
-                        </Card>
+                        {quizDisplay}
                     </div>
                     </Col>
                 </Row>
