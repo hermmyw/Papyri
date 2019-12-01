@@ -16,15 +16,15 @@ class StudentClass extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            class_id: this.props.class_id,
             student_id: this.props.student_id,
             name: this.props.name,
             profilePic: this.props.profilePic,
             attended: this.props.attended,
             missed: this.props.missed,
             submittedQuiz: false,
-            active: false,
+            active: (localStorage.getItem('isClassActive') === 'true'),
             userPhoto: null,
+            mostRecentLecture: localStorage.getItem('mostRecentLecture')
         };
         this.handleAttendance = this.handleAttendance.bind(this);
         this.handleModalSubmit = this.handleModalSubmit.bind(this);
@@ -36,7 +36,8 @@ class StudentClass extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.state.class_id);
+        console.log('state: ', this.state);
+        console.log('local storage: ', localStorage);
         this.postData();
         this.fetchData();
     }
@@ -67,8 +68,7 @@ class StudentClass extends React.Component {
             missed: [
                 new Date(2019, 10, 18),
                 new Date(2019, 10, 20),
-            ],
-            active: true,
+            ]
         }));
     }
 
@@ -107,34 +107,60 @@ class StudentClass extends React.Component {
     }
 
     handleModalSubmit() {
-        const img = this.webcam.getScreenshot();
-        this.setState(state => ({
-            modalShow: false,
-            userPhoto: img
-        }));
-        this.setState({userPhoto: img});
+        const imgSubmit = this.webcam.getScreenshot();
 
-        console.log(this.state.class_id, this.state.student_id, this.state.userPhoto);
+        console.log(this.state.student_id, this.state.userPhoto);
 
+        var thisClass = this;
         //post snapshot and student id 
-        fetch("http://127.0.0.1:8000/api/attendance/attend/", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                lecture_id: this.state.classid,
-                student_id: this.state.studentid,
-                img: this.state.userPhoto
-            }),
-        })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result);
-                }
-            )
+
+            function handleLocationInfo(position) {
+                var lng = position.coords.longitude;
+                var lat = position.coords.latitude;
+                
+                console.log(`longitude: ${ lng } | latitude: ${ lat }`);
+                let today = new Date();
+                let todayString = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+                // TODO get last lecture and check whether last lecture is the same day
+                // if so give warning that earlier lectures on the same day will be nulled
+                // need to send location to backend
+                console.log(todayString);
+                fetch("http://127.0.0.1:8000/api/attendance/attend/", {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        lecture_id: thisClass.state.mostRecentLecture,
+                        student_id: thisClass.props.match.params.userid,
+                        // img: imgSubmit,
+                        // long:
+                        // lat:
+                    }),
+                })
+                    .then(res => res.json())
+                    .then(
+                        (result) => {
+                            console.log(result);
+                            thisClass.setState(state => ({
+                                modalShow: false,
+                                userPhoto: imgSubmit
+                            }));
+                        }
+                    )
+            }
+    
+            function handleLocationError() {
+                alert('You need to give location to access this feature/ Please refresh page to try again.');
+            }
+    
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(handleLocationInfo, handleLocationError);
+            } else {
+                console.log('geolocation disabled');
+                alert('Sorry feature is not supported by your browser');
+            }
     }
 
     setWebcamRef = (webcam) => {
@@ -175,7 +201,7 @@ class StudentClass extends React.Component {
         }
 
         var attendanceButton, cameraModal = null;
-        console.log(this.state.active);
+        console.log('state active', this.state.active);
         if (this.state.active === true) {
             attendanceButton = (
                 // TODO: ButtonToggle
