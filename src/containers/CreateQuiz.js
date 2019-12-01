@@ -3,6 +3,12 @@ import Sidebar from '../components/Sidebar.js';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 
 const createQuizURL = "http://127.0.0.1:8000/api/quiz/create/";
+var answerMap = {
+    'A': 0,
+    'B': 1,
+    'C': 2,
+    'D': 3
+}
 
 /**
  * Container for the Create Quiz page on the Instructor interface 
@@ -18,11 +24,12 @@ class CreateQuiz extends React.Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        //this.handleAddAnswer = this.handleAddAnswer.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.state = {
+            answers: [{ answer: "" }],
             quizName: '',
             quizQuestion: '',
-            nQuestions: 1
+            correctAnswer: null
         }
     }
 
@@ -79,8 +86,11 @@ class CreateQuiz extends React.Component {
     /**
      * Makes an http request to an endpoint to create a quiz.
      */
-    handleSubmit(e) {
-
+    handleSubmit() {
+        var answersSubmit = this.state.answers;
+        for (var i = answersSubmit.length; i < 4; i++) {
+            answersSubmit.push({answer: ""});
+        }
 
         // go back to quiz page after submit
         fetch(createQuizURL, {
@@ -91,8 +101,13 @@ class CreateQuiz extends React.Component {
             },
             body: JSON.stringify({
                 name: this.state.quizName,
-                description: this.state.quizQuestion,
-                class_id: this.props.match.params.classid
+                question: this.state.quizQuestion,
+                class_id: this.props.match.params.classid,
+                answer_0: answersSubmit[0].answer,
+                answer_1: answersSubmit[1].answer,
+                answer_2: answersSubmit[2].answer,
+                answer_3: answersSubmit[3].answer,
+                correct_answer: answerMap[this.state.correctAnswer]
             }),
         })
             .then(res => {
@@ -121,6 +136,7 @@ class CreateQuiz extends React.Component {
 
     render() {
 
+        console.log('state:', this.state);
         return (
             <div>
                 <Sidebar view="create quiz" />
@@ -131,20 +147,30 @@ class CreateQuiz extends React.Component {
                                 <Label>Quiz Question</Label>
                                 <Input 
                                     className="custom-input" 
+                                    type="text" 
+                                    name="quizName" 
+                                    id="quizName" 
+                                    placeholder="Quiz Name"
+                                    value={this.state.quizName}
+                                    onChange={this.handleChange} />
+                                <Input 
+                                    className="custom-input" 
                                     type="textarea" 
                                     name="quizQuestion" 
                                     id="quizQuestion" 
                                     placeholder="Quiz Question"
-                                    value={this.state.quizName} />
-                                <Input 
-                                    className="custom-input" 
-                                    type="textarea" 
-                                    name="quizName" 
-                                    id="quizName" 
-                                    placeholder="Quiz Name"
-                                    value={this.state.quizQuestion} />
+                                    value={this.state.quizQuestion}
+                                    onChange={this.handleChange} />
                             </FormGroup>
-                            <AnswerList />
+                            <AnswerList quizParent={this}/>
+                            <Input 
+                                    className="custom-input" 
+                                    type="text" 
+                                    name="correctAnswer" 
+                                    id="correctAnswer" 
+                                    placeholder="Correct Answer"
+                                    value={this.state.correctAnswer}
+                                    onChange={this.handleChange} />
                             <FormGroup>
                                 <Button className="yellow-button" size="lg" block onClick={this.handleSubmit}>Add Quiz</Button>
                             </FormGroup>
@@ -160,41 +186,41 @@ class AnswerList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            answers: [{ answer: "" }]
+            parent: this.props.quizParent
         };
 
         console.log("constructor: ")
-        console.log(this.state.answers);
+        console.log(this.state.parent.state.answers);
     }
 
     handleUpdateValue = (id, e) => {
         console.log("update value: ");
-        const newAnswers = this.state.answers.map((currAnswer, index) => {
+        const newAnswers = this.state.parent.state.answers.map((currAnswer, index) => {
             if (id !== index) return currAnswer;
             return {...currAnswer, answer: e.target.value };
         });
-        this.setState({ answers: newAnswers })
+        this.state.parent.setState({ answers: newAnswers })
     }
 
     handleAddAnswer = () => {
         console.log("add answer pressed");
-        this.setState({
-            answers: this.state.answers.concat([{answer: ""}])
+        this.state.parent.setState({
+            answers: this.state.parent.state.answers.concat([{answer: ""}])
         });
-        console.log(this.state.answers);
+        console.log(this.state.parent.state.answers);
     }
 
     handleDeleteAnswer = id => {
         console.log("delete answer: " + id);
-        const newAnswers = this.state.answers.filter((currAnswer, index) => id !== index);
-        this.setState({ answers: newAnswers });
+        const newAnswers = this.state.parent.state.answers.filter((currAnswer, index) => id !== index);
+        this.state.parent.setState({ answers: newAnswers });
     }
 
     render() {
-        console.log("rendering: ")
-        console.log(this.state.answers);
+        console.log("rendering answerlist: ")
+        console.log(this.state.parent.state.answers);
         var button = null;
-        if (this.state.answers.length < 5) {
+        if (this.state.parent.state.answers.length < 4) {
             button = (
                 <FormGroup>
                     <Button 
@@ -209,7 +235,7 @@ class AnswerList extends React.Component {
         return (
             <div>
                 <Sidebar view="create quiz" />
-                {this.state.answers.map((currAnswer, id) => 
+                {this.state.parent.state.answers.map((currAnswer, id) => 
                     <FormGroup key={id}>
                         <Input 
                             className="custom-input" 
