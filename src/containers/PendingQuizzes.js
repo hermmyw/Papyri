@@ -1,27 +1,9 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import '../components/UI/UI.css';
-import { Row, Col } from 'reactstrap';
-import PendingQuizModal from '../functions/PendingQuizModal';
+import { Row, Col, Container } from 'reactstrap';
+import PendingQuizModal from './PendingQuizModal';
 import * as docCookies from 'doc-cookies';
-
-var sampleQuizzes = [
-    {
-        question: "What is the definition of strategy design pattern?",
-        date: "2019-09-25",
-        quiz_id: "34523"
-    },
-    {
-        question: "What is the definition of observer design pattern?",
-        date: "2019-10-25",
-        quiz_id: "65456"
-    },
-    {
-        question: "What is the definition of factory method design pattern?",
-        date: "2019-11-25",
-        quiz_id: "78768"
-    },
-]
 
 /**
  * Container for the Pending Quizzes page shown on the Instructor Sidebar
@@ -32,7 +14,7 @@ class PendingQuizzes extends React.Component {
         super(props);
 
         this.state = {
-            clickedQuizID: 34523
+            quizzesDisplay: null
         }
         this.getPendingQuizzes = this.getPendingQuizzes.bind(this);
 
@@ -46,7 +28,7 @@ class PendingQuizzes extends React.Component {
         const classid = this.props.match.params.classid;
         const unreleasedQuizzesURL = `http://127.0.0.1:8000/api/quiz/list/unreleased/${classid}/`;
 
-        /* fetch(unreleasedQuizzesURL, {
+        fetch(unreleasedQuizzesURL, {
             method: "GET",
             headers: {
                 Accept: 'application/json',
@@ -54,20 +36,19 @@ class PendingQuizzes extends React.Component {
             },
         })
             .then(res => {
-                console.log(res);
                 if (res.ok) {
                     return (res.json());
                 }
-                
-                throw Error(res.statusText);
+                else {
+                    console.log('error thrown');
+                    throw Error(res.statusText);
+                }
             })
-            .then(
-                (result) => {
-                    console.log("status:");
-                    console.log(result);
-                    let quizzes = result.quizzes;
+            .then((result) => {
+                    console.log("pending quizzes: ", result);
 
-                    if (quizzes.length === 0) {
+                    if (result.length === 0) {
+                        console.log('no pending quizzes');
                         return (
                             <Container>
                                 Instructor has not released any quizzes yet!
@@ -75,47 +56,38 @@ class PendingQuizzes extends React.Component {
                         )
                     }
 
-                    var quizzesDisplay = quizzes.map((quiz) => {
-                        <Row>
-                            <Col>
-                                <Button className="yellow-button" size="lg" block onClick={() => this.handleQuizClick(quiz.quizID)}>
-                                    <span style={{float: "left"}}>{quiz.question}</span><span style={{float: "right"}}>{convertDate(d.date)}</span>
-                                </Button>
-                            </Col>
-                        </Row>
-                    });
-
-                    return quizzesDisplay;
+                    else {
+                        console.log('calling pending quiz modal');
+                        return(result.map((myquiz) => (
+                            <Row>
+                                <Col>
+                                    <PendingQuizModal quiz={myquiz} />
+                                </Col>
+                            </Row>
+                        )))
+                    }
                 }
             )
-            .catch (error => {
-                
-                docCookies.removeItem('token', '/');
-                localStorage.clear();
-                this.props.history.push('/');
-            })*/
-
-            var quizzesDisplay = sampleQuizzes.map((quiz) => (
-                <Row>
-                    <Col>
-                        <PendingQuizModal quiz={quiz} />
-                    </Col>
-                </Row>
-            ));
-
-            return quizzesDisplay;
-
+            .then( (display) => {
+                this.setState({quizzesDisplay: display});
+            })
+            .catch ((error) => {
+                console.log('error:', error);
+                // docCookies.removeItem('token', '/');
+                // localStorage.clear();
+                // this.props.history.push('/');
+            })
     }
 
     render() {
-        let quizzesDisplay = this.getPendingQuizzes();
+        this.getPendingQuizzes();
 
         return (
             <div>
                 <Sidebar view="pending quizzes" />
                 <div className="main-area">
                     Pending Quizzes
-                    {quizzesDisplay}
+                    {this.state.quizzesDisplay}
                 </div>
             </div>
         )
