@@ -7,8 +7,6 @@ import Chart from 'react-google-charts';
 import handleQuizClick from '../functions/handleQuizClick';
 import convertDate from '../functions/convertDate';
 
-const getAttendanceURL = "";
-const getClosedQuizzesURL = "";
 
 var closedQuizData = {
     data: [
@@ -86,12 +84,8 @@ class SpecificInstructorClass extends React.Component {
     constructor(props) {
         super(props);
 
-        // for sake of testing. instructor classes view should set this variable 
-        // before being directed to this page
-        localStorage.setItem('classID', '12345');
-
         this.state = {
-            isActive: localStorage.getItem('isClassActive')
+            isActive: (localStorage.getItem('isClassActive') === 'true')
         }
 
         this.handleViewAllClosedQuizzes = this.handleViewAllClosedQuizzes.bind(this);
@@ -105,6 +99,13 @@ class SpecificInstructorClass extends React.Component {
         // var attendanceData = this.makeAttendanceCall();
     }
 
+    componentDidMount() {
+        console.log('mounting');
+        console.log('local storage: ', localStorage);
+        console.log('states: ', this.state);
+        this.makeAttendanceCall();
+    }
+
     /**
      * Makes an http request to endpoint to register a new class for the instructor.
      */
@@ -116,8 +117,8 @@ class SpecificInstructorClass extends React.Component {
         this.props.history.push(`/instructor/quizzes/${this.props.match.params.userid}/${this.props.match.params.classid}`);
     }
 
-    /*makeRecentClosedQuizzesCall() {
-        fetch(getClosedQuizzesURL, {
+    makeRecentClosedQuizzesCall() {
+        fetch(`http://127.0.0.1:8000/api/quiz/list/released/${this.props.match.params.classid}`, {
             method: "GET",
             headers: {
                 Accept: 'application/json',
@@ -133,20 +134,20 @@ class SpecificInstructorClass extends React.Component {
     }
 
     makeAttendanceCall() {
-        fetch(getAttendanceURL, {
+        console.log("lectures");
+        fetch(`http://127.0.0.1:8000/api/attendance/${this.props.match.params.classid}`, {
             method: "GET",
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                class_id: this.state.classID,
-                limit: 10,
-                offset: 0
-            }),
+            }
         })
             .then(res => res.json())
-    }*/
+            .then(result => {
+                console.log(result);
+                return result;
+            });
+    }
 
     showRecentClosedQuizzes(e) {
         return (
@@ -213,7 +214,7 @@ class SpecificInstructorClass extends React.Component {
             })
             .then(res => res.json())
             .then((result) => {
-                console.log(result);
+                console.log("attendance started", result);
                 localStorage.setItem('isClassActive', true);
                 localStorage.setItem('activeLectureID', result.id);
                 thisClass.setState({
@@ -222,8 +223,12 @@ class SpecificInstructorClass extends React.Component {
             })
         }
 
+        function handleLocationError() {
+            alert('You need to give location to access this feature/ Please refresh page to try again.');
+        }
+
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(handleLocationInfo);
+            navigator.geolocation.getCurrentPosition(handleLocationInfo, handleLocationError);
         } else {
             console.log('geolocation disabled');
             alert('Sorry feature is not supported by your browser');
@@ -244,7 +249,7 @@ class SpecificInstructorClass extends React.Component {
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result);
+                console.log("attendance ended", result);
                 localStorage.setItem('isClassActive', false);
                 localStorage.setItem('activeLectureID', null);
                 this.setState({
@@ -262,14 +267,13 @@ class SpecificInstructorClass extends React.Component {
 
     render() {
         console.log("rendering");
-        console.log(this.state);
 
         var graph, recentQuizzes, attendanceButton = null;
 
         graph = this.showAttendanceGraph();
         recentQuizzes = this.showRecentClosedQuizzes();
 
-        if (this.state.isActive === false) {
+        if (this.state.isActive == false) {
             var attendanceButton = (
                 <Row>
                     <Col><Button className="yellow-button" size="lg" block onClick={() => this.handleTakeAttendance(this)}>Start Lecture</Button></Col>

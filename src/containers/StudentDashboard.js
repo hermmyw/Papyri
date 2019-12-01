@@ -126,10 +126,12 @@ class StudentDashboard extends React.Component {
         }))
     }
 
-    handleEnterClass(classID) {
+    handleEnterClass(classID, index) {
         localStorage.setItem('classid', classID);
+        localStorage.setItem('isClassActive', this.state.classes[index].in_session);
+        localStorage.setItem('mostRecentLecture', this.state.classes[index].most_recent_lecture);
         let userID = this.props.match.params.userid;
-        this.props.history.push(`/student/class/${userID}/${classID}`)
+        this.props.history.push(`/student/class/${userID}/${classID}`);
     }
 
     handleEnroll() {
@@ -140,7 +142,6 @@ class StudentDashboard extends React.Component {
     
     
     render() {
-        console.log(this.state.classes);
         var main, detail, classView = null;
         var obj = this;
         //if (this.state.detailClass === null) {
@@ -151,7 +152,7 @@ class StudentDashboard extends React.Component {
                         {this.state.classes.map(function(item, index) {
                             console.log("The class is active: ", item.active);
                             return (
-                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id)}>
+                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id, index)}>
                                     <Card.Header className="card-header">{item.name}</Card.Header>
                                     <Card.Body className="card-body">
                                     <Card.Title>Professor {item.teacher_name}</Card.Title>
