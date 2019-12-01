@@ -6,16 +6,12 @@
 import React from 'react';
 import {     
     Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button,
-
-    Collapse,
-
-    Progress,
-    
-    Nav, NavItem, NavLink } from 'reactstrap';
+    CardTitle, CardSubtitle, Button, Row, Col} from 'reactstrap';
 import './Dashboard.css';
 import convertDate from '../functions/convertDate';
 import Sidebar from '../components/Sidebar';
+import InstrSpecificQuiz from './InstrSpecificQuiz';
+import { IoIosArrowBack } from "react-icons/io";
   
 class InstrListQuizzes extends React.Component {
     
@@ -24,9 +20,12 @@ class InstrListQuizzes extends React.Component {
         this.getQuizzes = this.getQuizzes.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.renderQuizzes = this.renderQuizzes.bind(this);
+        this.handleBackClick = this.handleBackClick.bind(this);
         this.state = {
             quizzes: [],
-            classid: this.props.classid
+            classid: this.props.classid,
+            showQuiz: false,
+            quizToShow: null
         }
     }
 
@@ -43,9 +42,10 @@ class InstrListQuizzes extends React.Component {
     // Go to specific quiz page
     // Pass in the specific quiz as a prop to the InstrSpecificQuiz object
     handleClick(quiz) {
-        // TODO: IMPLEMENT STACK NAVIGATION: QUIZZES/SPECIFICQUIZ/SPECIFICQUESTION
-        let params = this.props.match.params;
-        this.props.history.push(`/instructor/quiz/${params.userid}/${params.classid}/${quiz.id}`);
+        this.setState({
+            showQuiz: true,
+            quizToShow: quiz
+        })
     }
 
 
@@ -108,17 +108,38 @@ class InstrListQuizzes extends React.Component {
         }))
     }
 
+    handleBackClick() {
+        this.setState({
+            showQuiz: false,
+            quizToShow: null
+        })
+    }
 
     /**
      * renders the InstrListQuiz page
      */
     render() {
+        var display = null;
+        if (this.state.showQuiz === false) {
+            var display = this.renderQuizzes()
+        }
+        else {
+            var display = (
+                <div>
+                    <InstrSpecificQuiz quiz={this.state.quizToShow} />
+                    <Row>
+                        <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Back</Button></Col>
+                    </Row>
+                </div>
+            )
+        }
+
         console.log('states: ', this.state);
         return (
             <div>
                 <Sidebar view="past quizzes" />
                 <div className="main-area">
-                    {this.renderQuizzes()}
+                    {display}
                 </div>
             </div>
         )
