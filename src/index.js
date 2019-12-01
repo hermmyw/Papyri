@@ -18,7 +18,6 @@ import SpecificInstructorClass from './containers/SpecificInstructorClass'
 import PendingQuizzes from './containers/PendingQuizzes'
 import Settings from './containers/Settings'
 import StudentQuizzes from './containers/StudentQuizzes'
-import StudentQuiz from './containers/StudentQuiz'
 import InstrListQuizzes from './containers/InstrListQuizzes'
 import InstrSpecificQuiz from './containers/InstrSpecificQuiz'
 
@@ -45,7 +44,6 @@ ReactDOM.render(
             <Route path="/instructor/quizzes/:userid/:classid" exact={true} component={InstrListQuizzes} />
             <Route path="/instructor/quiz/:userid/:classid/:quizid" exact={true} component={InstrSpecificQuiz} />
             <Route path="/student/quizzes/:userid/:classid" exact={true} component={StudentQuizzes} />
-            <Route path="/student/quiz/:userid/:classid/:quizid" exact={true} component={StudentQuiz} />
             <Route path="/student/enroll/:userid" exact={true} component={EnrollClass} />
             <Route path="/instructor/settings/:userid" exact={true} component={Settings} />
             <Route path="/student/settings/:userid" exact={true} component={Settings} />
