@@ -195,11 +195,15 @@ class AttendanceTestCase(APITestCase):
     def test_start_lecture(self):
         print("\n\nTesting api/attendance/start/...")
         data = {
-            "c_id": self.class_info.id
+            "c_id": self.class_info.id,
+            "latitude": "34.2341234",
+            "longitude": "33.123123"
         }
 
         data_bad_id = {
-            "c_id": 999
+            "c_id": 999,
+            "latitude": "34.2341234",
+            "longitude": "33.123123"
         }
 
         # test non existent class_id
@@ -223,7 +227,9 @@ class AttendanceTestCase(APITestCase):
     def test_end_lecture(self):
         print("\n\nTesting api/attendance/stop/...")
         data = {
-            "c_id": self.class_info.id
+            "c_id": self.class_info.id,
+            "latitude": "34.2341234",
+            "longitude": "33.123123"
         }
 
         response = self.client.post("/api/attendance/start/", data=data, format="json")
