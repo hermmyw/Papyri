@@ -7,27 +7,140 @@ import {
 
     Progress,
     
-    Nav, NavItem, NavLink } from 'reactstrap';
+    Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
 import './Dashboard.css';
+
+
+const ToggleHook = (props) => {
+    /*
+    * Constants to keep track of state for Collapse menu for list of students who selected a given answer
+    */
+    const [collapse_0, setCollapse_0] = useState(false);
+    const [collapse_1, setCollapse_1] = useState(false);
+    const [collapse_2, setCollapse_2] = useState(false);
+    const [collapse_3, setCollapse_3] = useState(false);
+
+    /*
+    * TOGGLE
+    * Upon clicking "View Responses" for a given answer, show/hide the responses
+    */
+    const toggle = answerChoice => {
+        switch(answerChoice) {
+            case 0:
+                setCollapse_0(!collapse_0);
+                break;
+            case 1:
+                setCollapse_1(!collapse_1);
+                break;
+            case 2:
+                setCollapse_2(!collapse_2);
+                break;
+            case 3:
+                setCollapse_3(!collapse_3);
+                break;
+            default:
+                break;
+        }
+    }
+
+    const getToggle = (idx) => {
+        switch(idx) {
+            case 0:
+                return collapse_0;
+            case 1:
+                return collapse_1;
+            case 2:
+                return collapse_2;
+            case 3:
+                return collapse_3;
+        }
+    }
+    console.log('props: ', props);
+    return(
+        props.answers.map((answer, idx) => {
+            const toggleState = getToggle(idx);
+            const ans = answer;
+            if (idx === props.correct) {
+                return (
+                    <div>
+                        <Button color="success" onClick={() => toggle(idx)} style={{ marginBottom: '1rem' }}>{ans} <b>Total: {props.classifiedAnswers[idx].length}</b></Button>
+                        <Collapse isOpen={toggleState}>
+                            <Card>
+                            <CardBody>
+                                {formatStudentAnswers(props.classifiedAnswers, idx)}
+                            </CardBody>
+                            </Card>
+                        </Collapse>
+                    </div>
+                )
+            }
+            else {
+                return (
+                    <div>
+                        <Button color="primary" onClick={() => toggle(idx)} style={{ marginBottom: '1rem' }}>{ans} <b>Total: {props.classifiedAnswers[idx].length}</b></Button>
+                        <Collapse isOpen={toggleState}>
+                            <Card>
+                            <CardBody>
+                                {formatStudentAnswers(props.classifiedAnswers, idx)}
+                            </CardBody>
+                            </Card>
+                        </Collapse>
+                    </div>
+                )
+            }
+        })
+    )
+}
+
+const formatStudentAnswers = (studentArr, idx) => {
+    console.log('studentArr', studentArr);
+    if (studentArr[idx].length === 0) {
+        return (
+            <Row>
+                <Col>
+                    No students picked this answer!
+                </Col>
+            </Row>
+        )
+    }
+    else {
+        
+        return (
+            studentArr[idx].map((student) => {
+                return (
+                    <Row>
+                        <Col>
+                            <Button className="yellow-button" size="lg" block >
+                                Student {student.student}
+                            </Button>
+                        </Col>
+                    </Row>
+                )
+            })
+        )
+    }
+}
+
   
 class InstrSpecificQuiz extends React.Component {
     
     constructor(props) {
         super(props);
 
-        this.getQuestions = this.getQuestions.bind(this);
+        this.getStudentResponses = this.getStudentResponses.bind(this);
         this.getPercentage = this.getPercentage.bind(this);
-        this.getStudentAnswers = this.getStudentAnswers.bind(this);
-        this.renderQuestions = this.renderQuestions.bind(this);
-        this.toggle = this.toggle.bind(this);
 
         this.state = {
             quiz: this.props.quiz,
+            answersOptions: [this.props.quiz.answer_0, this.props.quiz.answer_1, this.props.quiz.answer_2, this.props.quiz.answer_3],
+            classifiedAnswers: null,
+            score: this.props.quiz.score,
         }
     }
 
     componentDidMount() {
         console.log("mounting");
+        this.getStudentResponses();
     }
 
     componentWillUnmount() {
@@ -48,33 +161,58 @@ class InstrSpecificQuiz extends React.Component {
      * When page renders,
      * Retrieve list of quizzes, store in state
      */
-    getQuestions = () => {
+    getStudentResponses = () => {
         console.log("retrieving questions");
 
-        // TODO: IMPLEMENT FETCH PROPERLY
-        fetch("http://127.0.0.1:8000/api/quiz/list/question/" + this.props.match.params.classid)
-        // .then(res => res.json())
-        //     .then(data => data.classes.map(myclass => (
-        //         {
-        //             classname: `${myclass.name}`,
-        //             classid: `${myclass.class_id}`,
-        //             instructor: `${myclass.instructor}`,
-        //             active: `${myclass.active}`,
-        //         }
-        //     )))
-        //     .then(classes => this.setState({
-        //         classes,
-        //         isLoading: false
-        //     }))
-        //     .catch(error => console.log('parsing failed', error));
-    }
+        const groupByAnswer = (answers) => {
+            var ret = [[], [], [], []];
+            var promise = new Promise(() =>
+                answers.forEach( (answer) => {
+                    ret[answer.choice].push(answer);
+                })
+            )
+            
+            promise.then(
+                this.setState({classifiedAnswers: ret})
+            )
+        }
 
-    /*
-     * TODO: Makes http request to endpoint to retrieve list of student answers from a given question
-     * Return such list as a JSX list of Cards representing student responses
-     */
-    getStudentAnswers = () => {
-        return 0;
+        // TODO: IMPLEMENT FETCH PROPERLY
+        fetch(`http://127.0.0.1:8000/api/answer/quiz/${this.state.quiz.id}`, {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(res => {
+                console.log(res);
+                if (res.ok) {
+                    return (res.json());
+                }
+                
+                throw Error(res.statusText);
+            })
+            .then(
+                (result) => {
+                    console.log("student answers: ", result);
+                    groupByAnswer(result);
+                    /*return(
+                        result.map((answer) => {
+
+                        })
+                    )*/
+                }
+            )
+            /*.then(() => {
+                this.setState({studentAnswers: answerArray});
+            })*/
+            .catch (error => {
+                console.log('get student answers error: ', error);
+                /* docCookies.removeItem('token', '/');
+                localStorage.clear();
+                this.props.history.push('/');*/
+            })
     }
 
 
@@ -93,98 +231,26 @@ class InstrSpecificQuiz extends React.Component {
     }
 
 
-    /*
-    * Constants to keep track of state for Collapse menu for list of students who selected a given answer
-    */
-    // const [collapse_0, setCollapse_0] = useState(false);
-    // const [collapse_1, setCollapse_1] = useState(false);
-    // const [collapse_2, setCollapse_2] = useState(false);
-    // const [collapse_3, setCollapse_3] = useState(false);
-
-    // /*
-    // * TOGGLE
-    // * Upon clicking "View Responses" for a given answer, show/hide the responses
-    // */
-    // const toggle = answerChoice => {
-    //     switch(answerChoice) {
-    //         case 0:
-    //             setCollapse(!collapse_0);
-    //             break;
-    //         case 1:
-    //             setCollapse(!collapse_1);
-    //             break;
-    //         case 2:
-    //             setCollapse(!collapse_2);
-    //             break;
-    //         case 3:
-    //             setCollapse(!collapse_3);
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // }
-
-
-    /**
-     * RENDERQUESTIONS
-     * Render each question
-     * Current implementation of this application only supports one question per quiz,
-     * but this function is adaptable for multiple questions (which is why I left the map function alone)
-     */
-    renderQuestions = () => {
-        this.state.quiz.map(question => {
-            return (
-                /*<Card>
-                    <CardTitle>{question.question}</CardTitle>
-                    <CardBody>
-                        <CardBody inverse color={question.correct_answer == 0 ? "success" : "danger"}>
-                            <CardTitle>A</CardTitle>
-                            <CardText>{question.answer_0}</CardText>
-                            <Progress value={this.getPercentage(question, question.answer_0)} />
-                            <Button onClick={toggle(0)}>View/Hide Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
-                        <CardBody inverse color={question.correct_answer == 1 ? "success" : "danger"}>
-                            <CardTitle>B</CardTitle>
-                            <CardText>{question.answer_1}</CardText>
-                            <Progress value={this.getPercentage(question, question.answer_1)} />
-                            <Button onClick={toggle(1)}>View/Hide Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
-                        <CardBody inverse color={question.correct_answer == 2 ? "success" : "danger"}>
-                            <CardTitle>C</CardTitle>
-                            <CardText>{question.answer_2}</CardText>
-                            <Progress value={this.getPercentage(question, question.answer_2)} />
-                            <Button onClick={toggle(2)}>View/Hide Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
-                        <CardBody inverse color={question.correct_answer == 3 ? "success" : "danger"}>
-                            <CardTitle>D</CardTitle>
-                            <CardText>{question.answer_3}</CardText>
-                            <Progress value={this.getPercentage(question, question.answer_3)} />
-                            <Button onClick={toggle(3)}>View/Hide Responses</Button>
-                            <Collapse>{this.getStudentAnswers}</Collapse>
-                        </CardBody>
-                    </CardBody>
-                </Card>*/
-                true
-            )
-        })
-    }
-
-
     /**
      * renders the Specific Quiz page
      */
     render() {
-
+        console.log('states: ', this.state);
+        var display = null;
+        if (this.state.classifiedAnswers !== null) {
+            var display = (
+                <ToggleHook 
+                    answers={this.state.answersOptions} 
+                    classifiedAnswers={this.state.classifiedAnswers} 
+                    score={this.state.score}
+                    correct={this.state.quiz.correct_answer}/>
+            )
+        }
+        
         return (
             <div>
-                <Card>
-                    <CardBody>
-                        {this.renderQuestions}
-                    </CardBody>
-                </Card>
+                {this.state.quiz.question}
+                {display}
             </div>
         )
     }
