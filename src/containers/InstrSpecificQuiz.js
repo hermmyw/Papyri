@@ -96,33 +96,33 @@ class InstrSpecificQuiz extends React.Component {
     /*
     * Constants to keep track of state for Collapse menu for list of students who selected a given answer
     */
-    const [collapse_0, setCollapse_0] = useState(false);
-    const [collapse_1, setCollapse_1] = useState(false);
-    const [collapse_2, setCollapse_2] = useState(false);
-    const [collapse_3, setCollapse_3] = useState(false);
+    // const [collapse_0, setCollapse_0] = useState(false);
+    // const [collapse_1, setCollapse_1] = useState(false);
+    // const [collapse_2, setCollapse_2] = useState(false);
+    // const [collapse_3, setCollapse_3] = useState(false);
 
-    /*
-    * TOGGLE
-    * Upon clicking "View Responses" for a given answer, show/hide the responses
-    */
-    const toggle = answerChoice => {
-        switch(answerChoice) {
-            case 0:
-                setCollapse(!collapse_0);
-                break;
-            case 1:
-                setCollapse(!collapse_1);
-                break;
-            case 2:
-                setCollapse(!collapse_2);
-                break;
-            case 3:
-                setCollapse(!collapse_3);
-                break;
-            default:
-                break;
-        }
-    }
+    // /*
+    // * TOGGLE
+    // * Upon clicking "View Responses" for a given answer, show/hide the responses
+    // */
+    // const toggle = answerChoice => {
+    //     switch(answerChoice) {
+    //         case 0:
+    //             setCollapse(!collapse_0);
+    //             break;
+    //         case 1:
+    //             setCollapse(!collapse_1);
+    //             break;
+    //         case 2:
+    //             setCollapse(!collapse_2);
+    //             break;
+    //         case 3:
+    //             setCollapse(!collapse_3);
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
 
 
     /**
@@ -134,7 +134,7 @@ class InstrSpecificQuiz extends React.Component {
     renderQuestions = () => {
         this.state.quiz.map(question => {
             return (
-                <Card>
+                /*<Card>
                     <CardTitle>{question.question}</CardTitle>
                     <CardBody>
                         <CardBody inverse color={question.correct_answer == 0 ? "success" : "danger"}>
@@ -166,7 +166,8 @@ class InstrSpecificQuiz extends React.Component {
                             <Collapse>{this.getStudentAnswers}</Collapse>
                         </CardBody>
                     </CardBody>
-                </Card>
+                </Card>*/
+                true
             )
         })
     }

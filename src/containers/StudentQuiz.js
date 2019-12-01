@@ -109,7 +109,7 @@ class StudentQuiz extends React.Component {
         const quizID = this.props.match.params.quizid;
         const pastQuizInfoURL = `http://127.0.0.1:8000/api/quiz/list/question/${quizID}`;
 
-        /*fetch(pastQuizInfoURL, {
+        fetch(pastQuizInfoURL, {
             method: "GET",
             headers: {
                 Accept: 'application/json',
@@ -126,10 +126,9 @@ class StudentQuiz extends React.Component {
             })
             .then(
                 (result) => {
-                    console.log("quiz info:");
-                    console.log(result);
-
-                    let answerLabel = ['A', 'B', 'C', 'D'];
+                    console.log("quiz info: ", result);
+                    
+                    /*let answerLabel = ['A', 'B', 'C', 'D'];
                     let studentUID = localStorage.getItem('uid');
 
                     let studentAnswer = result.student_answers.filter((sAnswer) => {
@@ -173,17 +172,17 @@ class StudentQuiz extends React.Component {
                         </Container>
                     )
 
-                    return quizDisplay;
+                    return quizDisplay;*/
                 }
             )
             .catch (error => {
-                
-                docCookies.removeItem('token', '/');
-                localStorage.clear();
-                this.props.history.push('/');
-            })*/
+                console.log('get quiz error: ', error);
+                // docCookies.removeItem('token', '/');
+                // localStorage.clear();
+                // this.props.history.push('/');
+            })
 
-            console.log(localStorage.getItem('uid'));
+            /*console.log(localStorage.getItem('uid'));
             let result = sampleQuizzesWithAnswers[quizID];
 
             let answerLabel = ['A', 'B', 'C', 'D'];
@@ -247,7 +246,7 @@ class StudentQuiz extends React.Component {
                 </Container>
             )
 
-            return quizDisplay;
+            return quizDisplay;*/
     }
 
     handleBackClick() {
@@ -258,13 +257,13 @@ class StudentQuiz extends React.Component {
 
     render() {
         console.log('student quiz page');
-        let quizDisplay = this.getQuizInfo();
+        //let quizDisplay = this.getQuizInfo();
         return (
             <div>
                 <Sidebar view="student quizzes" />
                 <div className="main-area">
                     Student Quizzes
-                    {quizDisplay}
+                    {/*quizDisplay*/}
                     <Row>
                         <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Back</Button></Col>
                     </Row>
