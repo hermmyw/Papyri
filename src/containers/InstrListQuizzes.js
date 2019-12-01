@@ -14,6 +14,8 @@ import {
     
     Nav, NavItem, NavLink } from 'reactstrap';
 import './Dashboard.css';
+import convertDate from '../functions/convertDate';
+import Sidebar from '../components/Sidebar';
   
 class InstrListQuizzes extends React.Component {
     
@@ -23,13 +25,14 @@ class InstrListQuizzes extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.renderQuizzes = this.renderQuizzes.bind(this);
         this.state = {
-            quizzes: this.getQuizzes(),
+            quizzes: [],
             classid: this.props.classid
         }
     }
 
     componentDidMount() {
         console.log("mounting");
+        this.getQuizzes();
     }
 
     componentWillUnmount() {
@@ -39,9 +42,10 @@ class InstrListQuizzes extends React.Component {
 
     // Go to specific quiz page
     // Pass in the specific quiz as a prop to the InstrSpecificQuiz object
-    handleClick() {
+    handleClick(quiz) {
         // TODO: IMPLEMENT STACK NAVIGATION: QUIZZES/SPECIFICQUIZ/SPECIFICQUESTION
-        return 0;
+        let params = this.props.match.params;
+        this.props.history.push(`/instructor/quiz/${params.userid}/${params.classid}/${quiz.id}`);
     }
 
 
@@ -53,22 +57,33 @@ class InstrListQuizzes extends React.Component {
     getQuizzes() {
         console.log("retrieving quizzes");
 
-        // TODO: IMPLEMENT FETCH
-        fetch("http://127.0.0.1:8000/api/quiz/list/released/" + this.props.match.params.classid)
-        // .then(res => res.json())
-        //     .then(data => data.classes.map(myclass => (
-        //         {
-        //             classname: `${myclass.name}`,
-        //             classid: `${myclass.class_id}`,
-        //             instructor: `${myclass.instructor}`,
-        //             active: `${myclass.active}`,
-        //         }
-        //     )))
-        //     .then(classes => this.setState({
-        //         classes,
-        //         isLoading: false
-        //     }))
-        //     .catch(error => console.log('parsing failed', error));
+        fetch(`http://127.0.0.1:8000/api/quiz/list/released/${this.props.match.params.classid}/`, {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(res => {
+                console.log(res);
+                if (res.ok) {
+                    return (res.json());
+                }
+                
+                throw Error(res.statusText);
+            })
+            .then(
+                (result) => {
+                    console.log("past quizzes: ", result);
+                    this.setState({quizzes: result});
+                }
+            )
+            .catch (error => {
+                console.log('get past quizzes error: ', error);
+                /* docCookies.removeItem('token', '/');
+                localStorage.clear();
+                this.props.history.push('/');*/
+            })
     }
 
 
@@ -78,19 +93,19 @@ class InstrListQuizzes extends React.Component {
      * Click button to view that specific quiz
      */
     renderQuizzes() {
-        this.state.quizzes.map(quiz => {
+        return (this.state.quizzes.map(quiz => {
             return (
                 <Card>
                     <CardTitle>{quiz.name}</CardTitle>
                     <CardBody>
-                        <CardText>{quiz.time_created}</CardText>
-                        <CardText>{quiz.description}</CardText>
-                        <CardText>{quiz.score}</CardText>
-                        <Button onClick={this.handleClick(quiz)}>View Quiz</Button>
+                        <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
+                        <CardText>{quiz.question}</CardText>
+                        <CardText>Class Score: {quiz.score}</CardText>
+                        <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
                     </CardBody>
                 </Card>
             )
-        })
+        }))
     }
 
 
@@ -98,14 +113,13 @@ class InstrListQuizzes extends React.Component {
      * renders the InstrListQuiz page
      */
     render() {
-
+        console.log('states: ', this.state);
         return (
             <div>
-                <Card>
-                    <CardBody>
-                        {this.renderQuizzes}
-                    </CardBody>
-                </Card>
+                <Sidebar view="past quizzes" />
+                <div className="main-area">
+                    {this.renderQuizzes()}
+                </div>
             </div>
         )
     }

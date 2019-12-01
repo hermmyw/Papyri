@@ -27,52 +27,7 @@ var closedQuizData = {
             },
         ]
 };
-var attendanceData = {
-    data: [
-        {
-            date: "2019-11-25",
-            n_students: 145
-        },
-        {
-            date: "2019-11-20",
-            n_students: 135
-        },
-        {
-            date: "2019-11-18",
-            n_students: 126
-        },
-        {
-            date: "2019-11-13",
-            n_students: 139
-        },
-        {
-            date: "2019-11-11",
-            n_students: 120
-        },
-        {
-            date: "2019-11-06",
-            n_students: 156
-        },
-        {
-            date: "2019-11-04",
-            n_students: 134
-        },
-        {
-            date: "2019-10-30",
-            n_students: 119
-        },
-        {
-            date: "2019-10-28",
-            n_students: 129
-        },
-        {
-            date: "2019-10-23",
-            n_students: 156
-        }
-    ]
-}
 
-var attendanceDataG = attendanceData.data.map((d) => [convertDate(d.date), d.n_students]).reverse();
 
 
 /**
@@ -85,7 +40,9 @@ class SpecificInstructorClass extends React.Component {
         super(props);
 
         this.state = {
-            isActive: (localStorage.getItem('isClassActive') === 'true')
+            isActive: (localStorage.getItem('isClassActive') === 'true'),
+            attendanceData: [],
+            quizData: []
         }
 
         this.handleViewAllClosedQuizzes = this.handleViewAllClosedQuizzes.bind(this);
@@ -95,15 +52,16 @@ class SpecificInstructorClass extends React.Component {
         this.handleTakeAttendance = this.handleTakeAttendance.bind(this);
         this.handleStopAttendance = this.handleStopAttendance.bind(this);
         
-        // var closedQuizData = this.makeRecentClosedQuizzesCall();
-        // var attendanceData = this.makeAttendanceCall();
+        // var closedQuizData = this.getClosedQuizzes();
+        // var attendanceData = this.getLectures();
     }
 
     componentDidMount() {
         console.log('mounting');
         console.log('local storage: ', localStorage);
         console.log('states: ', this.state);
-        this.makeAttendanceCall();
+        this.getLectures();
+        this.getClosedQuizzes();
     }
 
     /**
@@ -117,23 +75,22 @@ class SpecificInstructorClass extends React.Component {
         this.props.history.push(`/instructor/quizzes/${this.props.match.params.userid}/${this.props.match.params.classid}`);
     }
 
-    makeRecentClosedQuizzesCall() {
+    getClosedQuizzes() {
         fetch(`http://127.0.0.1:8000/api/quiz/list/released/${this.props.match.params.classid}`, {
             method: "GET",
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                class_id: this.state.classID,
-                limit: 3,
-                offset: 0
-            }),
+            }
         })
             .then(res => res.json())
+            .then(result => {
+                console.log("recent quizzes: ", result);
+                this.setState({quizData: result});
+            })
     }
 
-    makeAttendanceCall() {
+    getLectures() {
         console.log("lectures");
         fetch(`http://127.0.0.1:8000/api/attendance/${this.props.match.params.classid}`, {
             method: "GET",
@@ -144,19 +101,30 @@ class SpecificInstructorClass extends React.Component {
         })
             .then(res => res.json())
             .then(result => {
-                console.log(result);
-                return result;
-            });
+                console.log('lectures: ', result);
+                return (
+                    result.map((lecture) => (
+                        [
+                            convertDate(lecture.date.substring(0, 10)),
+                            lecture.attendance
+                        ]
+                    )).reverse()
+                );
+            })
+            .then(lectures => {
+                console.log('attendance data:', lectures);
+                this.setState({attendanceData: lectures});
+            })
     }
 
     showRecentClosedQuizzes(e) {
         return (
-            closedQuizData.data.map((d) => (
+            this.state.quizData.map((d) => (
                 <div>
                     <Row>
                         <Col>
-                            <Button className="yellow-button" size="lg" block onClick={() => handleQuizClick(this, d.quiz_id)}>
-                                <span style={{float: "left"}}>{d.question}</span><span style={{float: "right"}}>{convertDate(d.date)}</span>
+                            <Button className="yellow-button" size="lg" block onClick={() => handleQuizClick(this, d.id)}>
+                                <span style={{float: "left"}}>{d.question}</span><span style={{float: "right"}}>{convertDate(d.time_created.substring(0, 10))}</span>
                             </Button>
                         </Col>
                     </Row>
@@ -174,12 +142,12 @@ class SpecificInstructorClass extends React.Component {
                         height={'300px'}
                         chartType="Bar"
                         loader={<div>Loading Chart</div>}
-                        data={[['Date', 'Students']].concat(attendanceDataG)}
+                        data={[['Date', 'Students']].concat(this.state.attendanceData)}
                         options={{
                             // Material design options
                             chart: {
                             title: 'Attendance',
-                            subtitle: 'Number of students that showed up for the last 10 lectures',
+                            subtitle: 'Number of students that showed up for up to the past 10 lectures',
                             },
                         }}
                         // For tests
@@ -268,6 +236,7 @@ class SpecificInstructorClass extends React.Component {
 
     render() {
         console.log("rendering");
+        console.log('states: ', this.state);
 
         var graph, recentQuizzes, attendanceButton = null;
 
