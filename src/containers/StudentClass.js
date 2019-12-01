@@ -19,8 +19,8 @@ class StudentClass extends React.Component {
             student_id: this.props.student_id,
             name: this.props.name,
             profilePic: this.props.profilePic,
-            attended: this.props.attended,
-            missed: this.props.missed,
+            attended: null,
+            missed: null,
             submittedQuiz: false,
             active: (localStorage.getItem('isClassActive') === 'true'),
             userPhoto: null,
@@ -31,9 +31,8 @@ class StudentClass extends React.Component {
         this.handleAttendance = this.handleAttendance.bind(this);
         this.handleModalSubmit = this.handleModalSubmit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.fetchData = this.fetchData.bind(this);
+        this.fetchAttendanceData = this.fetchAttendanceData.bind(this);
         this.getCurrentQuiz = this.getCurrentQuiz.bind(this);
-        this.postData = this.postData.bind(this);
         //this.setWebcamRef = this.setWebcamRef.bind(this);
         this.handleExitClass = this.handleExitClass.bind(this);
     }
@@ -41,13 +40,8 @@ class StudentClass extends React.Component {
     componentDidMount() {
         console.log('state: ', this.state);
         console.log('local storage: ', localStorage);
-        this.postData();
-        this.fetchData();
+        this.fetchAttendanceData();
         this.getCurrentQuiz();
-    }
-
-    postData() {
-        // post student id and class id
     }
 
     handleSelectAnswer(answer) {
@@ -68,32 +62,48 @@ class StudentClass extends React.Component {
             console.log("current quiz", result);
             this.setState({currentQuiz: result});
         })
-}
+    }
 
-    fetchData() {
-        // get attendance dates, missed dates, active state, and current quiz
-       // GET request
-    //    fetch("...") //TODO
-    //    .then(res => res.json())
-    //    .then(function(data) {
-    //        this.state.attended = JSON.parse(data.attendedDates);
-    //        this.state.missed = JSON.parse(data.missedDates);
-    //     })
-    //    .catch(error => console.log('parsing failed', error));
 
-        // Dummy data
-        this.setState(state => ({
-            attended: [
-                new Date(2019, 10, 4),
-                new Date(2019, 10, 11),
-                new Date(2019, 10, 6),
-                new Date(2019, 10, 13),
-            ],
-            missed: [
-                new Date(2019, 10, 18),
-                new Date(2019, 10, 20),
-            ]
-        }));
+    fetchAttendanceData() {
+        fetch(`http://127.0.0.1:8000/api/attendance/${this.props.match.params.classid}/${this.props.match.params.userid}`, {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then(result => {
+                console.log('attended data: ', result);
+                return (
+                    [
+                        result.days_attended.map((record) =>{
+                            var y = record.date.substring(0, 4);
+                            var m = record.date.substring(5, 7) - 1;
+                            var d = record.date.substring(8, 10);
+                            return (
+                                new Date(y, m, d)
+                            )
+                        }),
+                        result.days_absent.map((record) => {
+                            var y = record.date.substring(0, 4);
+                            var m = record.date.substring(5, 7) - 1;
+                            var d = record.date.substring(8, 10);
+                            return (
+                                new Date(y, m, d)
+                            )
+                        })
+                    ]
+                )
+            })
+            .then((formattedResult) => {
+                console.log('formattedResult: ', formattedResult);
+                this.setState({
+                    attended: formattedResult[0],
+                    missed: formattedResult[1]
+                })
+            })
     }
 
     handleSubmit(e) {
@@ -211,21 +221,20 @@ class StudentClass extends React.Component {
         };
 
         const modifiers = {
-            attended: this.state.attended,
-            missed: this.state.missed
+            missed: this.state.missed,
+            attended: this.state.attended
             
         };
 
         const modifiersStyles = {
+            missed: {
+                color: 'white',
+                backgroundColor: 'red',
+            },
             attended: {
                 color: 'white',
                 backgroundColor: 'green',
                 
-            },
-
-            missed: {
-                color: 'white',
-                backgroundColor: 'red',
             }
         }
 
@@ -293,39 +302,49 @@ class StudentClass extends React.Component {
             )
         }
 
-        return (
-            <Container>
-                <Sidebar view="class home"/>
-                <Row>
-                <Col>
-                    <div className="main-content">
-                        <Row>
-                            <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
-                        </Row>
-                        <h3 className="subheader">Attendance</h3>
-                        <div className="calendar">
+        var finalDisplay = null
+
+        if (this.state.missed !== null && this.state.attended !== null) {
+            var finalDisplay = (
+                <Container>
+                    <Sidebar view="class home"/>
+                    <Row>
+                    <Col>
+                        <div className="main-content">
+                            <Row>
+                                <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
+                            </Row>
+                            <h3 className="subheader">Attendance</h3>
+                            <div className="calendar">
+                                <Row>
+                                    <Col>
+                                        <DayPicker 
+                                            className="day-picker"
+                                            modifiers={modifiers}
+                                            modifiersStyles={modifiersStyles}
+                                            showOutsideDays
+                                        />
+                                    </Col>
+                                </Row>
+                            </div>
                             <Row>
                                 <Col>
-                                    <DayPicker 
-                                        className="day-picker"
-                                        modifiers={modifiers}
-                                        modifiersStyles={modifiersStyles}
-                                        showOutsideDays
-                                    />
+                                    {attendanceButton}
+                                    {cameraModal}
                                 </Col>
                             </Row>
+                            {quizDisplay}
                         </div>
-                        <Row>
-                            <Col>
-                                {attendanceButton}
-                                {cameraModal}
-                            </Col>
-                        </Row>
-                        {quizDisplay}
-                    </div>
-                    </Col>
-                </Row>
-            </Container>
+                        </Col>
+                    </Row>
+                </Container>
+            )
+        }
+        
+        return (
+            <div>
+                {finalDisplay}
+            </div>
         )
     }
 }
