@@ -261,6 +261,7 @@ class SpecificInstructorClass extends React.Component {
 
     handleExitClass() {
         localStorage.removeItem('classid');
+        localStorage.removeItem('isClassActive');
         let userID = this.props.match.params.userid;
         this.props.history.push(`/instructor/${userID}`);
     }
