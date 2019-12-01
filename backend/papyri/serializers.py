@@ -152,14 +152,18 @@ class LectureSerializer(serializers.Serializer):
     c_id = serializers.PrimaryKeyRelatedField(queryset=ClassInfo.objects.all())
     date = serializers.DateTimeField(read_only=True, format='iso-8601')
     in_session = serializers.BooleanField(required=False)
+    latitude = serializers.CharField(max_length=200)
+    longitude = serializers.CharField(max_length=200)
 
     class Meta:
         model = Lecture
-        fields = ['id', 'c_id', 'date', 'in_session']
+        fields = ['id', 'c_id', 'date', 'in_session', 'latitude', 'longitude']
 
     def create(self, validated_data):
         return Lecture.objects.create(c=validated_data['c_id'],
-                                        in_session=True)
+                                        in_session=True,
+                                        latitude=validated_data['latitude'],
+                                        longitude=validated_data['longitude'])
 
 
 class LectureAttendanceSerializer(serializers.Serializer):
