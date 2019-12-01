@@ -14,10 +14,15 @@ class PendingQuizzes extends React.Component {
         super(props);
 
         this.state = {
-            quizzesDisplay: null
+            quizzesDisplay: null,
+            trigger: false
         }
         this.getPendingQuizzes = this.getPendingQuizzes.bind(this);
 
+    }
+
+    componentDidMount() {
+        this.getPendingQuizzes();
     }
 
     /**
@@ -61,7 +66,7 @@ class PendingQuizzes extends React.Component {
                         return(result.map((myquiz) => (
                             <Row>
                                 <Col>
-                                    <PendingQuizModal quiz={myquiz} />
+                                    <PendingQuizModal quiz={myquiz} this={this} />
                                 </Col>
                             </Row>
                         )))
@@ -80,8 +85,6 @@ class PendingQuizzes extends React.Component {
     }
 
     render() {
-        this.getPendingQuizzes();
-
         return (
             <div>
                 <Sidebar view="pending quizzes" />

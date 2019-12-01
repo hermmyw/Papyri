@@ -33,7 +33,7 @@ class PendingQuizModal extends React.Component {
     }
 
     handleReleaseQuiz() {
-        const releaseQuizURL = `http://127.0.0.1:8000/api/quiz/activate/${this.props.id}`;
+        const releaseQuizURL = `http://127.0.0.1:8000/api/quiz/activate/${this.props.quiz.id}/`;
 
         fetch(releaseQuizURL, {
             method: "PUT",
@@ -43,28 +43,30 @@ class PendingQuizModal extends React.Component {
             },
         })
             .then(res => {
-                console.log(res);
+                console.log('released quiz: ', res);
                 if (res.ok) {
-                    console.log(res.json())
+                    var resjson = res.json();
+                    alert(resjson);
+                    console.log(resjson);
+                    this.setState({
+                        active: true
+                    });
                 }
                 
                 throw Error(res.statusText);
             })
             .catch (error => {
+                alert(error);
                 console.log('activate quiz error: ', error)
                 // docCookies.removeItem('token', '/');
                 // localStorage.clear();
                 // this.props.history.push('/');
             });
 
-        this.setState({
-            active: true
-        });
     }
 
     handleCloseQuiz() {
-        const closeQuizURL = `http://127.0.0.1:8000/api/quiz/release/${this.props.quiz.id}`;
-
+        const closeQuizURL = `http://127.0.0.1:8000/api/quiz/release/${this.props.quiz.id}/`;
         fetch(closeQuizURL, {
             method: "PUT",
             headers: {
@@ -75,7 +77,10 @@ class PendingQuizModal extends React.Component {
             .then(res => {
                 console.log(res);
                 if (res.ok) {
-                    console.log(res.json());
+                    console.log('closed quiz: ', res.json());
+                    this.props.this.setState({
+                        trigger: true
+                    })
                 }
                 
                 throw Error(res.statusText);
@@ -87,10 +92,6 @@ class PendingQuizModal extends React.Component {
                 // this.props.history.push('/');
             });
 
-        this.setState({
-            active: false,
-            closed: true
-        })
     }
   
     render() {

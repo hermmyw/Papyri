@@ -24,7 +24,7 @@ class InstrListQuizzes extends React.Component {
         this.renderQuizzes = this.renderQuizzes.bind(this);
         this.state = {
             quizzes: this.getQuizzes(),
-            classid = this.props.classid
+            classid: this.props.classid
         }
     }
 
