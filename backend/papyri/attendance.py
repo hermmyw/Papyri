@@ -139,7 +139,10 @@ def get_attendance(request, class_id):
         data.append({
             'lecture_id': lecture.id,
             'date': lecture.date,
-            'attendance': lecture.attendance
+            'attendance': lecture.attendance,
+            'in_session': lecture.in_session,
+            'latitude': lecture.latitude,
+            'longitude': lecture.longitude
         })
 
     return Response(data)
@@ -190,7 +193,7 @@ def get_student_attendance(request, class_id, student_id):
     for lecture in days_attended:
         data['days_attended'].append({
             "lecture_id": lecture.id,
-            'date': lecture.date
+            'date': lecture.date,
         })
 
     for lecture in all_lectures:

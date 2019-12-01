@@ -49,6 +49,8 @@ class Lecture(models.Model):
     c = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     in_session = models.BooleanField(default=True)
+    latitude = models.CharField(max_length=200)
+    longitude = models.CharField(max_length=200)
 
 
 class LectureAttendance(models.Model):
