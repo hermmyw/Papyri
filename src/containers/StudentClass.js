@@ -169,6 +169,8 @@ class StudentClass extends React.Component {
 
     handleExitClass() {
         localStorage.removeItem('classid');
+        localStorage.removeItem('isClassActive');
+        localStorage.removeItem('mostRecentLecture');
         let userID = this.props.match.params.userid;
         this.props.history.push(`/student/${userID}`);
     }
@@ -237,7 +239,7 @@ class StudentClass extends React.Component {
             );
         } else if (this.state.active === false) {
             attendanceButton = (
-                <Button variant="secondary" onClick={() => this.handleAttendance(this.state.classid)} disabled>Take Attendance</Button>
+                <Button variant="secondary" title="Lecture has not started" onClick={() => this.handleAttendance(this.state.classid)} disabled>Take Attendance</Button>
             );
         }
 
