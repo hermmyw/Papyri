@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {     
-    Card, CardImg, CardText, CardBody,
+    Card, CardImg, CardText, CardBody, CardDeck,
     CardTitle, CardSubtitle, Button, Row, Col, Container} from 'reactstrap';
 import './Dashboard.css';
 import convertDate from '../functions/convertDate';
@@ -112,18 +112,24 @@ class InstrListQuizzes extends React.Component {
                 )
         }
         else {
-            return (this.state.quizzes.map(quiz => {
-                return (
-                    <Card>
-                        <CardTitle>{quiz.name}</CardTitle>
-                        <CardBody>
-                            <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
-                            <CardText>{quiz.question}</CardText>
-                            <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
-                        </CardBody>
-                    </Card>
-                )
-            }))
+            return (
+                <CardDeck className="class-list">
+                {
+                    this.state.quizzes.map(quiz => {
+                        return (
+                            <Card style={{ width: '14rem' }}>
+                                <CardTitle>{quiz.name}</CardTitle>
+                                <CardBody>
+                                    <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
+                                    <CardText>{quiz.question}</CardText>
+                                    <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
+                                </CardBody>
+                            </Card>
+                        )
+                    })
+                }
+                </CardDeck>
+            )
         }
         
     }
