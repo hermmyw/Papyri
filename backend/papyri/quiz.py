@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
 
-from .serializers import QuizSerializer, AnswerSerializer
-from .models import Quiz, Answer
+from .serializers import QuizSerializer, AnswerSerializer, ResultSerializer
+from .models import Quiz, Answer, Result
 
 class CreateQuizAPI(generics.CreateAPIView):
     serializer_class = QuizSerializer
@@ -29,6 +29,35 @@ class ReleaseQuizAPI(generics.RetrieveUpdateAPIView):
         instance.active = False
         instance.released = True
         instance.save()
+
+        # generate quiz result
+        quiz_id = self.kwargs['id']
+        answers = Answer.objects.filter(quiz_id=quiz_id)
+        num_students = len(answers)
+
+        # calculate percentage
+        num_0 = 0
+        num_1 = 0
+        num_2 = 0
+        num_3 = 0
+        for a in answers:
+            if a.choice == 0:
+                num_0 += 1
+            elif a.choice == 1:
+                num_1 += 1
+            elif a.choice == 2:
+                num_2 += 1
+            elif a.choice == 3:
+                num_3 += 1
+
+        result = Result.objects.create(quiz_id=instance, 
+                        correct_answer=instance.correct_answer,
+                        num_students=num_students,
+                        choice_0_percent=round(num_0/num_students,2),
+                        choice_1_percent=round(num_1/num_students,2),
+                        choice_2_percent=round(num_2/num_students,2),
+                        choice_3_percent=round(num_3/num_students,2))
+
         return Response(QuizSerializer(instance).data)
 
 class ListQuizAPI(generics.ListAPIView):
@@ -79,3 +108,8 @@ class AnswerByStudentAPI(generics.ListAPIView):
         student = self.kwargs['student']
         queryset = Answer.objects.filter(student=student)
         return queryset
+
+class RetrieveResultAPI(generics.RetrieveAPIView):
+    serializer_class = ResultSerializer
+    queryset = Result.objects.all()
+    lookup_field = 'quiz_id'
