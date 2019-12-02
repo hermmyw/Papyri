@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
 
-from .serializers import QuizSerializer, QuestionSerializer
-from .models import Quiz, QuizQuestion
+from .serializers import QuizSerializer, QuestionSerializer, AnswerSerializer, ResultSerializer
+from .models import Quiz, QuizQuestion, Answer, Result
 
 class CreateQuizAPI(generics.CreateAPIView):
     """
