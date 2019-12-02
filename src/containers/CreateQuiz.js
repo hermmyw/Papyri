@@ -29,7 +29,11 @@ class CreateQuiz extends React.Component {
             answers: [{ answer: "" }],
             quizName: '',
             quizQuestion: '',
-            correctAnswer: null
+            correctAnswer: null,
+            quizAnswerA: '',
+            quizAnswerB: '',
+            quizAnswerC: '',
+            quizAnswerD: ''
         }
     }
 
@@ -103,10 +107,14 @@ class CreateQuiz extends React.Component {
                 name: this.state.quizName,
                 question: this.state.quizQuestion,
                 class_id: this.props.match.params.classid,
-                answer_0: answersSubmit[0].answer,
-                answer_1: answersSubmit[1].answer,
-                answer_2: answersSubmit[2].answer,
-                answer_3: answersSubmit[3].answer,
+                // answer_0: answersSubmit[0].answer,
+                // answer_1: answersSubmit[1].answer,
+                // answer_2: answersSubmit[2].answer,
+                // answer_3: answersSubmit[3].answer,
+                answer_0: this.state.quizAnswerA,
+                answer_1: this.state.quizAnswerB,
+                answer_2: this.state.quizAnswerC,
+                answer_3: this.state.quizAnswerD,
                 correct_answer: answerMap[this.state.correctAnswer]
             }),
         })
@@ -162,15 +170,47 @@ class CreateQuiz extends React.Component {
                                     value={this.state.quizQuestion}
                                     onChange={this.handleChange} />
                             </FormGroup>
-                            <AnswerList quizParent={this}/>
+                            {/*<AnswerList quizParent={this}/>*/}
                             <Input 
-                                    className="custom-input" 
-                                    type="text" 
-                                    name="correctAnswer" 
-                                    id="correctAnswer" 
-                                    placeholder="Correct Answer"
-                                    value={this.state.correctAnswer}
-                                    onChange={this.handleChange} />
+                                className="custom-input" 
+                                type="text"
+                                name="quizAnswerA" 
+                                placeholder="Quiz Answer A" 
+                                onChange={this.handleChange}
+                                value={this.quizAnswerA}
+                            />
+                            <Input 
+                                className="custom-input" 
+                                type="text"
+                                name="quizAnswerB" 
+                                placeholder="Quiz Answer B" 
+                                onChange={this.handleChange}
+                                value={this.quizAnswerB}
+                            />
+                            <Input 
+                                className="custom-input" 
+                                type="text"
+                                name="quizAnswerC" 
+                                placeholder="Quiz Answer C" 
+                                onChange={this.handleChange}
+                                value={this.quizAnswerC}
+                            />
+                            <Input 
+                                className="custom-input" 
+                                type="text"
+                                name="quizAnswerD" 
+                                placeholder="Quiz Answer D" 
+                                onChange={this.handleChange}
+                                value={this.quizAnswerD}
+                            />
+                            <Input 
+                                className="custom-input" 
+                                type="text" 
+                                name="correctAnswer" 
+                                id="correctAnswer" 
+                                placeholder="Correct Answer"
+                                value={this.state.correctAnswer}
+                                onChange={this.handleChange} />
                             <FormGroup>
                                 <Button className="yellow-button" size="lg" block onClick={this.handleSubmit}>Add Quiz</Button>
                             </FormGroup>
