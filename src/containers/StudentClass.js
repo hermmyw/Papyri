@@ -143,7 +143,7 @@ class StudentClass extends React.Component {
 
     handleSubmit(e) {
         console.log('submitted');
-        fetch("http://127.0.0.1:8000/api/answer/create", { // TODO
+        fetch("http://127.0.0.1:8000/api/answer/create/", { // TODO
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -179,6 +179,7 @@ class StudentClass extends React.Component {
 
     handleModalSubmit() {
         const imgSubmit = this.webcam.getScreenshot();
+        console.log('imgSubmit: ', imgSubmit);
 
         console.log(this.state.student_id, this.state.userPhoto);
 
@@ -368,6 +369,7 @@ class StudentClass extends React.Component {
         }
         
         return (
+            <div className="regular-container">
             <Container>
                     <Sidebar view="class home"/>
                     <Row>
@@ -395,6 +397,7 @@ class StudentClass extends React.Component {
                         </Col>
                     </Row>
                 </Container>
+                </div>
         )
     }
 }

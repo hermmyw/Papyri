@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import '../components/UI/UI.css';
+import './Dashboard.css';
 import { Row, Col, Container, Button } from 'reactstrap';
 import PendingQuizModal from './PendingQuizModal';
 import * as docCookies from 'doc-cookies';
@@ -61,10 +62,10 @@ class PendingQuizzes extends React.Component {
                         console.log('no pending quizzes');
                         return (
                             <Container>
+                                You have not created any quizzes for this class
                                 <Button className="yellow-button" size="lg" block onClick={this.handleCreateQuizClick}>
                                     Create a quiz here
                                 </Button>
-                                You have not created any quizzes for this class
                             </Container>
                         )
                     }
@@ -94,10 +95,10 @@ class PendingQuizzes extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="regular-container">
                 <Sidebar view="pending quizzes" />
                 <div className="main-area">
-                    Pending Quizzes
+                    <h3>Pending Quizzes</h3>
                     {this.state.quizzesDisplay}
                 </div>
             </div>

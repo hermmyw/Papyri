@@ -165,6 +165,7 @@ class InstructorDashboard extends React.Component {
         var obj = null;
         obj = this;
         return(
+            <div className="regular-container">
             <Container>
                 <div className="subheader">
                     Hello, Professor {localStorage.getItem('lastName')}!
@@ -206,7 +207,7 @@ class InstructorDashboard extends React.Component {
                 </Row>
 
             </Container>
-            
+            </div>
         )
     }
 }
