@@ -204,7 +204,15 @@ class StudentQuizzes extends React.Component {
                     )
                 }
 
-                else if (idx === studentAnswer) {
+                else if (studentAnswer === undefined) {
+                    correctMessage = (
+                        <Row>
+                            You did not pick an answer!
+                        </Row>
+                    )
+                }
+
+                else if (idx === studentAnswer.choice) {
                     console.log("wrong answer");
                     correctMessage = (
                         <Row>
