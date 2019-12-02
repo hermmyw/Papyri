@@ -4,8 +4,10 @@ from rest_framework.response import Response
 from .models import Lecture, LectureAttendance
 from django.contrib.auth.models import User
 from .serializers import LectureSerializer, LectureAttendanceSerializer
+from .facenet.src.papyri import classify
 
 import datetime
+import os
 
 
 @api_view(['POST'])
@@ -99,6 +101,25 @@ def attend(request):
     @apiSuccess {String} student_id User ID of the student who attended the lecture
     """
     serializer = LectureAttendanceSerializer(data=request.data)
+
+    starting_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    
+    photo_string = request.data.get("photo_string")
+    temp_path = starting_dir + "/media/decoded"
+    model_path = starting_dir + "/papyri/facenet/models/20180402-114759/20180402-114759.pb"
+    classifier_filename = starting_dir + '/papyri/facenet/models/my_classifier.pkl'
+
+    username, confidence = classify(photo_string[23:], temp_path, model_path, classifier_filename)
+    if confidence < 0.5:
+        return Response({"error": "student did not match any known user"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        student = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({"error": "student did did not match any known user"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if str(student.id) != str(request.data.get("student_id")):
+        return Response({"error": "student is not the user who tried to attend"}, status=status.HTTP_400_BAD_REQUEST)
 
     if serializer.is_valid():
         serializer.save()
