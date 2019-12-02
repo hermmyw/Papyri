@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import ClassInfo, UserInfo, Lecture, LectureAttendance
 from rest_framework.test import APITestCase, force_authenticate
 from django.utils.crypto import get_random_string
+from .models import Quiz, Answer, Result
 
 import requests
 
@@ -325,3 +326,85 @@ class AttendanceTestCase(APITestCase):
         self.assertEqual(len(response.data['days_absent']), 0)
 
         print("..OK\n")
+
+class QuizTestCase(APITestCase):
+    def setUp(self):
+        print('\nSetting up quiz test case\n')
+        self.teacher =  User.objects.create(username="teacher_test",
+                                                password="12345",
+                                                email="teacher_test@gmail.com")
+        self.teacher_info = UserInfo.objects.create(owner=self.teacher,
+                                                    uid="123456789",
+                                                    is_student=False)
+        
+        self.student = User.objects.create(username="student_test",
+                                            password="12345",
+                                            email="student_test@gmail.com")
+        self.student_info = UserInfo.objects.create(owner=self.student,
+                                                    uid="204748664",
+                                                    is_student=True)
+
+        code = get_random_string(length=5).upper()
+        while ClassInfo.objects.filter(registration_code=code).exists():
+            code = get_random_string(length=5).upper()
+
+        self.class_info = ClassInfo.objects.create(name="Test Class",
+                                teacher_id=self.teacher.id,
+                                term="Fall",
+                                year="2019",
+                                registration_code=code)
+    def test_quiz(self):
+        print('testing create quiz')
+        good_data = {
+            "class_id": self.class_info.id,
+            "name": "Test Quiz", 
+            "question": "Test Question", 
+            "answer_0": "a",
+            "answer_1": "b",
+            "answer_2": "c", 
+            "answer_3": "d",
+            "correct_answer": 1
+        }
+        response = self.client.post("/api/quiz/create/", data=good_data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Quiz.objects.all()), 1)
+        self.assertEqual(response.data['correct_answer'], 1)
+        print('..OK\n')
+
+        print('testing activate quiz')
+        response = self.client.put("/api/quiz/activate/1/")
+        self.assertEqual(response.status_code, 200)
+        quiz = Quiz.objects.get(id=1)
+        self.assertEqual(quiz.active, True)
+        self.assertEqual(quiz.released, False)
+        print('..OK\n')
+
+        print('testing create answer')
+        good_data = {
+            "quiz_id": quiz.id,
+            "student": self.student.id,
+            "choice": 1
+        }
+        response = self.client.post("/api/answer/create/", data=good_data)
+        self.assertEqual(response.status_code, 201)
+        print('..OK\n')
+        
+        print('testing release quiz')
+        response = self.client.put("/api/quiz/release/1/")
+        self.assertEqual(response.status_code, 200)
+        quiz = Quiz.objects.get(id=1)
+        self.assertEqual(quiz.active, False)
+        self.assertEqual(quiz.released, True)
+        print('..OK\n')
+
+        print('testing get result')
+        response = self.client.get("/api/quiz/result/1/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['choice_0_percent'], 0)
+        self.assertEqual(response.data['choice_1_percent'], 1)
+        print('..OK\n')
+
+        print('testing delete quiz')
+        response = self.client.delete("/api/quiz/destroy/1/")
+        self.assertEqual(len(Quiz.objects.all()), 0)
+        print('..OK\n')
