@@ -40,9 +40,10 @@ class SpecificInstructorClass extends React.Component {
         super(props);
 
         this.state = {
-            isActive: (localStorage.getItem('isClassActive') === 'true'),
+            isActive: false,
             attendanceData: [],
-            quizData: []
+            quizData: [],
+            activeLectureId: null
         }
 
         this.handleViewAllClosedQuizzes = this.handleViewAllClosedQuizzes.bind(this);
@@ -103,17 +104,21 @@ class SpecificInstructorClass extends React.Component {
             .then(result => {
                 console.log('lectures: ', result);
                 return (
-                    result.map((lecture) => (
+                    [result.map((lecture) => (
                         [
                             convertDate(lecture.date.substring(0, 10)),
                             lecture.attendance
                         ]
-                    )).reverse()
+                    )).reverse(), result[0].lecture_id, result[0].in_session]
                 );
             })
-            .then(lectures => {
+            .then(([lectures, lectureID, active]) => {
                 console.log('attendance data:', lectures);
-                this.setState({attendanceData: lectures});
+                this.setState({
+                    attendanceData: lectures,
+                    isActive: active,
+                    activeLectureId: lectureID,
+                });
             })
     }
 
@@ -177,7 +182,9 @@ class SpecificInstructorClass extends React.Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    c_id: thisClass.props.match.params.classid
+                    c_id: thisClass.props.match.params.classid,
+                    latitude: lat,
+                    longitude: lng
                 }),
             })
             .then(res => res.json())
@@ -204,14 +211,15 @@ class SpecificInstructorClass extends React.Component {
     }
 
     handleStopAttendance() {
-        fetch("http://127.0.0.1:8000/api/attendance/stop/", { // TODO
+        console.log('lecture id: ', this.state.activeLectureId);
+        fetch(`http://127.0.0.1:8000/api/attendance/stop/`, { // TODO
             method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id: localStorage.getItem('activeLectureID')
+                id: this.state.activeLectureId
             }),
         })
         .then(res => res.json())
@@ -243,7 +251,7 @@ class SpecificInstructorClass extends React.Component {
         graph = this.showAttendanceGraph();
         recentQuizzes = this.showRecentClosedQuizzes();
 
-        if (this.state.isActive == false) {
+        if (this.state.isActive === false) {
             var attendanceButton = (
                 <Row>
                     <Col><Button className="yellow-button" size="lg" block onClick={() => this.handleTakeAttendance(this)}>Start Lecture</Button></Col>
