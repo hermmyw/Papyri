@@ -60,11 +60,21 @@ class StudentClass extends React.Component {
             .then(res => res.json())
             .then(result => {
                 console.log('lectures: ', result);
-                this.setState({
-                    lat: result[0].latitude,
-                    long: result[0].longitude,
-                    active: result[0].in_session
-                });
+                if (result.length > 0) {
+                    this.setState({
+                        lat: result[0].latitude,
+                        long: result[0].longitude,
+                        active: result[0].in_session
+                    });
+                }
+                else {
+                    this.setState({
+                        lat: null,
+                        long: null,
+                        active: false
+                    });
+                }
+                
             })
     }
 
