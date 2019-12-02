@@ -164,7 +164,7 @@ class CreateClass extends React.Component {
                             id="classID" 
                             onChange={this.handleNameChange}
                             value={this.state.name} 
-                            placeholder="Class ID" />
+                            placeholder="Class Name" />
                     </FormGroup>
                     <FormGroup>
                         <Input type="select" bsSize="lg" name="term" onChange={ (e) => this.handleSelectTerm(e) }>
