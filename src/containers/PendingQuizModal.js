@@ -46,14 +46,17 @@ class PendingQuizModal extends React.Component {
                 console.log('released quiz: ', res);
                 if (res.ok) {
                     var resjson = res.json();
-                    alert(resjson);
                     console.log(resjson);
                     this.setState({
                         active: true
                     });
                 }
+
+                else {
+                    throw Error(res.statusText);
+                }
                 
-                throw Error(res.statusText);
+                
             })
             .catch (error => {
                 alert(error);
@@ -79,11 +82,14 @@ class PendingQuizModal extends React.Component {
                 if (res.ok) {
                     console.log('closed quiz: ', res.json());
                     this.props.this.setState({
-                        trigger: true
+                        released: true,
+                        active: false
                     })
                 }
+                else {
+                    throw Error(res.statusText);
+                }
                 
-                throw Error(res.statusText);
             })
             .catch (error => {
                 console.log('close quiz error: ', error);
@@ -96,6 +102,7 @@ class PendingQuizModal extends React.Component {
   
     render() {
         console.log('rendering modals');
+        console.log('states: ', this.state);
         const thisQuiz = this.props.quiz;
         var activateButton = null;
         if (this.state.active) {
@@ -104,7 +111,7 @@ class PendingQuizModal extends React.Component {
             )
         }
 
-        else if (!this.state.active && !this.state.closed) {
+        else if (!this.state.active && !this.state.released) {
             activateButton = (
                 <Button color="success" onClick={this.handleReleaseQuiz}>Open Quiz</Button>
             )

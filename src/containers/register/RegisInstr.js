@@ -5,6 +5,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import './Register.css';
 import authorization from '../../functions/authorization'
 import * as docCookies from 'doc-cookies';
+import '../Dashboard.css';
 
 const userInfoURL = "http://127.0.0.1:8000/api/user/";
 const registerURL = "http://127.0.0.1:8000/api/user/register/";
@@ -238,6 +239,7 @@ class RegisInstr extends React.Component {
         }
 
         return (
+            <div className="regular-container">
             <Container className="wide-container">
                 <Row>
                     <Col><p className="register-heading">Become an Instructor</p></Col>
@@ -247,6 +249,7 @@ class RegisInstr extends React.Component {
                     {backButton}
                 </div>
             </Container>
+            </div>
         )
     }
 } 

@@ -62,3 +62,13 @@
     margin: 5px;
     width: 70%;
 }
+
+.one-hundred-width {
+    width: 100%;
+}
+
+.regular-container {
+    padding-top: 5%;
+    height: 100%;
+    background-color: white;
+}

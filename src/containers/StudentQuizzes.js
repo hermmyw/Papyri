@@ -241,7 +241,7 @@ class StudentQuizzes extends React.Component {
         }
 
         return (
-            <div>
+            <div className="regular-container">
                 <Sidebar view="student quizzes" />
                 <div className="main-area">
                     Student Quizzes

@@ -263,6 +263,7 @@ class Landing extends React.Component {
         }
 
         return (
+            <div className="landing-container">
             <Container className="narrow-container">
                 <Row>
                     <Col><p className="papyri-heading">Papyri</p></Col>
@@ -270,6 +271,7 @@ class Landing extends React.Component {
                 {display}
                 {backButton}
             </Container>
+            </div>
         )
     }
 
