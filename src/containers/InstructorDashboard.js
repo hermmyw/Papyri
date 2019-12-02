@@ -51,7 +51,7 @@ class InstructorDashboard extends React.Component {
                 return(res.json());
             })
             .then(data => {
-                console.log('fetched data');
+                console.log('fetched data: ', data);
                 this.setState({
                     classes: data
                 })

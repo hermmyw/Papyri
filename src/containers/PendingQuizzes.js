@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import '../components/UI/UI.css';
-import { Row, Col, Container } from 'reactstrap';
+import { Row, Col, Container, Button } from 'reactstrap';
 import PendingQuizModal from './PendingQuizModal';
 import * as docCookies from 'doc-cookies';
 
@@ -18,11 +18,16 @@ class PendingQuizzes extends React.Component {
             trigger: false
         }
         this.getPendingQuizzes = this.getPendingQuizzes.bind(this);
+        this.handleCreateQuizClick = this.handleCreateQuizClick.bind(this);
 
     }
 
     componentDidMount() {
         this.getPendingQuizzes();
+    }
+
+    handleCreateQuizClick() {
+        this.props.history.push(`/instructor/createquiz/${this.props.match.params.userid}/${this.props.match.params.classid}`);
     }
 
     /**
@@ -56,7 +61,10 @@ class PendingQuizzes extends React.Component {
                         console.log('no pending quizzes');
                         return (
                             <Container>
-                                Instructor has not released any quizzes yet!
+                                <Button className="yellow-button" size="lg" block onClick={this.handleCreateQuizClick}>
+                                    Create a quiz here
+                                </Button>
+                                You have not created any quizzes for this class
                             </Container>
                         )
                     }

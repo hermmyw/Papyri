@@ -10,6 +10,7 @@ import Sidebar from '../components/Sidebar.js';
 import Modal from 'react-bootstrap/Modal';
 import Webcam from 'react-webcam';
 import headshot from './images/headshot.png';
+import { getDistance } from 'geolib';
 
 class StudentClass extends React.Component {
 
@@ -23,6 +24,8 @@ class StudentClass extends React.Component {
             missed: null,
             submittedQuiz: false,
             active: (localStorage.getItem('isClassActive') === 'true'),
+            lat: null,
+            long: null,
             userPhoto: null,
             mostRecentLecture: localStorage.getItem('mostRecentLecture'),
             currentQuiz: [],
@@ -42,7 +45,29 @@ class StudentClass extends React.Component {
         console.log('local storage: ', localStorage);
         this.fetchAttendanceData();
         this.getCurrentQuiz();
+        this.getLectures();
     }
+
+    getLectures() {
+        console.log("lectures");
+        fetch(`http://127.0.0.1:8000/api/attendance/${this.props.match.params.classid}`, {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then(result => {
+                console.log('lectures: ', result);
+                this.setState({
+                    lat: result[0].latitude,
+                    long: result[0].longitude,
+                    active: result[0].in_session
+                });
+            })
+    }
+
 
     handleSelectAnswer(answer) {
         this.setState({selectedAnswer: answer});
@@ -153,38 +178,55 @@ class StudentClass extends React.Component {
             function handleLocationInfo(position) {
                 var lng = position.coords.longitude;
                 var lat = position.coords.latitude;
+
+                let dist = getDistance(
+                    {
+                        latitude: thisClass.state.lat,
+                        longitude: thisClass.state.long
+                    }, 
+                    {
+                        latitude: lat,
+                        longitude: lng
+                    }
+                );
                 
                 console.log(`longitude: ${ lng } | latitude: ${ lat }`);
+                console.log('distance: ', dist, ' meters');
                 let today = new Date();
                 let todayString = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
                 // TODO get last lecture and check whether last lecture is the same day
                 // if so give warning that earlier lectures on the same day will be nulled
                 // need to send location to backend
                 console.log(todayString);
-                fetch("http://127.0.0.1:8000/api/attendance/attend/", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        lecture_id: thisClass.state.mostRecentLecture,
-                        student_id: thisClass.props.match.params.userid,
-                        // img: imgSubmit,
-                        // long:
-                        // lat:
-                    }),
-                })
-                    .then(res => res.json())
-                    .then(
-                        (result) => {
-                            console.log(result);
-                            thisClass.setState(state => ({
-                                modalShow: false,
-                                userPhoto: imgSubmit
-                            }));
-                        }
-                    )
+                if (dist > 50) {
+                    alert('Attendance not taken because you are not in the same location as the instructor');
+                }
+                else {
+                    fetch("http://127.0.0.1:8000/api/attendance/attend/", {
+                        method: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            lecture_id: thisClass.state.mostRecentLecture,
+                            student_id: thisClass.props.match.params.userid,
+                            // img: imgSubmit
+                        }),
+                    })
+                        .then(res => res.json())
+                        .then(
+                            (result) => {
+                                console.log(result);
+                                alert('Attendance taken!')
+                                thisClass.setState(state => ({
+                                    modalShow: false,
+                                    userPhoto: imgSubmit
+                                }));
+                            }
+                        )
+                }
+                
             }
     
             function handleLocationError() {
@@ -306,7 +348,17 @@ class StudentClass extends React.Component {
 
         if (this.state.missed !== null && this.state.attended !== null) {
             var finalDisplay = (
-                <Container>
+                <DayPicker 
+                    className="day-picker"
+                    modifiers={modifiers}
+                    modifiersStyles={modifiersStyles}
+                    showOutsideDays
+                />
+            )
+        }
+        
+        return (
+            <Container>
                     <Sidebar view="class home"/>
                     <Row>
                     <Col>
@@ -318,12 +370,7 @@ class StudentClass extends React.Component {
                             <div className="calendar">
                                 <Row>
                                     <Col>
-                                        <DayPicker 
-                                            className="day-picker"
-                                            modifiers={modifiers}
-                                            modifiersStyles={modifiersStyles}
-                                            showOutsideDays
-                                        />
+                                    {finalDisplay}
                                     </Col>
                                 </Row>
                             </div>
@@ -338,13 +385,6 @@ class StudentClass extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-            )
-        }
-        
-        return (
-            <div>
-                {finalDisplay}
-            </div>
         )
     }
 }

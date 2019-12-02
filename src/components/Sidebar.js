@@ -28,10 +28,8 @@ class Sidebar extends React.Component {
         this.handlePendingQuizzes = this.handlePendingQuizzes.bind(this);
         this.handlePastQuizzes = this.handlePastQuizzes.bind(this);
         this.handleCreateQuiz = this.handleCreateQuiz.bind(this);
-        this.handleSettingsInstructor = this.handleSettingsInstructor.bind(this);
         this.handleClassHomeStudent = this.handleClassHomeStudent.bind(this);
         this.handleQuizzesStudent = this.handleQuizzesStudent.bind(this);
-        this.handleSettingsStudent = this.handleSettingsStudent.bind(this);
         this.getNavButtonsInstructor = this.getNavButtonsInstructor.bind(this);
         this.getNavButtonsStudent = this.getNavButtonsStudent.bind(this);
 
@@ -86,15 +84,6 @@ class Sidebar extends React.Component {
         this.props.history.push(path);
     }
 
-    /**
-     * Event handler for when user clicks on setting button.
-     * Changes button selection on sidebar and redirects to account setting page.
-     */
-    handleSettingsInstructor() {
-        let path = `/instructor/settings/${localStorage.getItem('userid')}`;
-        this.props.history.push(path);
-    }
-
     
     /**
      * Event handler for when user clicks on 'Class Home' button.
@@ -111,15 +100,6 @@ class Sidebar extends React.Component {
      */
     handleQuizzesStudent() {
         let path = `/student/quizzes/${localStorage.getItem('userid')}/${localStorage.getItem('classid')}`;
-        this.props.history.push(path);
-    }
-
-    /**
-     * Event handler for when user clicks on setting button.
-     * Changes button selection on sidebar and redirects to account setting page.
-     */
-    handleSettingsStudent() {
-        let path = `/student/settings/${localStorage.getItem('userid')}`;
         this.props.history.push(path);
     }
 
@@ -141,7 +121,6 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handlePendingQuizzes}>Pending Quizzes</NonselectedButton>
                         <NonselectedButton onClick={this.handlePastQuizzes}>Past Quizzes</NonselectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleSettingsInstructor}>Settings</NonselectedButton>
                         <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
                     </div>
                 ) 
@@ -153,7 +132,6 @@ class Sidebar extends React.Component {
                         <SelectedButton>Pending Quizzes</SelectedButton>
                         <NonselectedButton onClick={this.handlePastQuizzes}>Past Quizzes</NonselectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleSettingsInstructor}>Settings</NonselectedButton>
                         <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
                     </div>
                 ) 
@@ -165,7 +143,6 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handlePendingQuizzes}>Pending Quizzes</NonselectedButton>
                         <SelectedButton>Past Quizzes</SelectedButton>
                         <NonselectedButton onClick={this.handleCreateQuiz}>Create Quiz</NonselectedButton>
-                        <NonselectedButton onClick={this.handleSettingsInstructor}>Settings</NonselectedButton>
                         <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
                     </div>
                 )
@@ -177,19 +154,6 @@ class Sidebar extends React.Component {
                         <NonselectedButton onClick={this.handlePendingQuizzes}>Pending Quizzes</NonselectedButton>
                         <NonselectedButton onClick={this.handlePastQuizzes}>Past Quizzes</NonselectedButton>
                         <SelectedButton>Create Quiz</SelectedButton>
-                        <NonselectedButton onClick={this.handleSettingsInstructor}>Settings</NonselectedButton>
-                        <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
-                    </div>
-                )
-        
-            case "settings":
-                return (
-                    <div>
-                        <NonselectedButton onClick={this.handleClassHomeInstructor}>Class Home</NonselectedButton>
-                        <NonselectedButton onClick={this.handlePendingQuizzes}>Pending Quizzes</NonselectedButton>
-                        <NonselectedButton onClick={this.handlePastQuizzes}>Past Quizzes</NonselectedButton>
-                        <NonselectedButton onClick={this.handleCreateQuiz.bind(this)}>Create Quiz</NonselectedButton>
-                        <SelectedButton>Settings</SelectedButton>
                         <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
                     </div>
                 )
@@ -210,7 +174,6 @@ class Sidebar extends React.Component {
                     <div>
                         <SelectedButton>Class Home</SelectedButton>
                         <NonselectedButton onClick={this.handleQuizzesStudent}>Quizzes</NonselectedButton>
-                        <NonselectedButton onClick={this.handleSettingsStudent}>Settings</NonselectedButton>
                         <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
                     </div>
                 )  
@@ -220,17 +183,6 @@ class Sidebar extends React.Component {
                     <div>
                         <NonselectedButton onClick={this.handleClassHomeStudent}>Class Home</NonselectedButton>
                         <SelectedButton>Quizzes</SelectedButton>
-                        <NonselectedButton onClick={this.handleSettingsStudent}>Settings</NonselectedButton>
-                        <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
-                    </div>
-                )
-            
-            case "settings":
-                return (
-                    <div>
-                        <NonselectedButton onClick={this.handleClassHomeStudent}>Class Home</NonselectedButton>
-                        <NonselectedButton onClick={this.handleQuizzesStudent}>Quizzes</NonselectedButton>
-                        <SelectedButton>Settings</SelectedButton>
                         <NonselectedButton onClick={() => handleLogout(this)}>Log Out</NonselectedButton>
                     </div>
                 )
