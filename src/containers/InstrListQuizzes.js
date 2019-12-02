@@ -93,6 +93,7 @@ class InstrListQuizzes extends React.Component {
     }
 
 
+
     /**
      * RENDERQUIZZES
      * Shows list of quizzes (with title, date, id, score)
@@ -118,7 +119,6 @@ class InstrListQuizzes extends React.Component {
                         <CardBody>
                             <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
                             <CardText>{quiz.question}</CardText>
-                            <CardText>Class Score: {quiz.score}</CardText>
                             <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
                         </CardBody>
                     </Card>
