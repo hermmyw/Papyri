@@ -204,7 +204,15 @@ class StudentQuizzes extends React.Component {
                     )
                 }
 
-                else if (idx === studentAnswer) {
+                else if (studentAnswer === undefined) {
+                    correctMessage = (
+                        <Row>
+                            You did not pick an answer!
+                        </Row>
+                    )
+                }
+
+                else if (idx === studentAnswer.choice) {
                     console.log("wrong answer");
                     correctMessage = (
                         <Row>
@@ -241,7 +249,7 @@ class StudentQuizzes extends React.Component {
         }
 
         return (
-            <div>
+            <div className="regular-container">
                 <Sidebar view="student quizzes" />
                 <div className="main-area">
                     Student Quizzes

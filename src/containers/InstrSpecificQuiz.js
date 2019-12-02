@@ -129,22 +129,62 @@ class InstrSpecificQuiz extends React.Component {
 
         this.getStudentResponses = this.getStudentResponses.bind(this);
         this.getPercentage = this.getPercentage.bind(this);
+        this.getQuizScore = this.getQuizScore.bind(this);
 
         this.state = {
             quiz: this.props.quiz,
             answersOptions: [this.props.quiz.answer_0, this.props.quiz.answer_1, this.props.quiz.answer_2, this.props.quiz.answer_3],
             classifiedAnswers: null,
             score: this.props.quiz.score,
+            scoreInfo: null,
+            studentResponseArray: [],
+            correctAnswer: null,
+            num_students: null
         }
     }
 
     componentDidMount() {
         console.log("mounting");
         this.getStudentResponses();
+        this.getQuizScore();
     }
 
     componentWillUnmount() {
         console.log("unmounting");
+    }
+
+    getQuizScore() {
+        fetch(`http://127.0.0.1:8000/api/quiz/result/${this.props.quiz.id}/`, {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(res => {
+                console.log(res);
+                if (res.ok) {
+                    return (res.json());
+                }
+                else {
+                    throw Error(res.statusText);
+                }
+            })
+            .then((result) => {
+                console.log('quiz score: ', result);
+                this.setState({
+                    scoreInfo: result,
+                    correctAnswer: result.correct_answer,
+                    studentResponseArray: [result.choice_0_percent, result.choice_1_percent, result.choice_2_percent, result.choice_3_percent],
+                    numStudents: result.num_students
+                });
+            })
+            .catch (error => {
+                console.log('get quiz score error: ', error);
+                /* docCookies.removeItem('token', '/');
+                localStorage.clear();
+                this.props.history.push('/');*/
+            })
     }
 
 
@@ -190,8 +230,9 @@ class InstrSpecificQuiz extends React.Component {
                 if (res.ok) {
                     return (res.json());
                 }
-                
-                throw Error(res.statusText);
+                else {
+                    throw Error(res.statusText);
+                }
             })
             .then(
                 (result) => {
@@ -247,12 +288,23 @@ class InstrSpecificQuiz extends React.Component {
             )
         }
         
-        return (
-            <div>
-                {this.state.quiz.question}
-                {display}
-            </div>
-        )
+        if (this.state.studentResponseArray !== []) {
+            return (
+                <div>
+                    {this.state.quiz.question}
+                    {display}
+                    <Row>
+                        Class Score: {this.state.studentResponseArray[this.state.correctAnswer]} out of {this.state.numStudents} responses correct.
+                    </Row>
+                </div>
+            )
+        }
+        else {
+            return (
+                <div></div>
+            )
+        }
+        
     }
 }
 

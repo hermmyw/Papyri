@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {     
-    Card, CardImg, CardText, CardBody,
+    Card, CardImg, CardText, CardBody, CardDeck,
     CardTitle, CardSubtitle, Button, Row, Col, Container} from 'reactstrap';
 import './Dashboard.css';
 import convertDate from '../functions/convertDate';
@@ -21,7 +21,7 @@ class InstrListQuizzes extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.renderQuizzes = this.renderQuizzes.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
-        this.handleCreateQuizClick = this.handleCreateQuizClick.bind(this);
+        this.handlePendingQuizClick = this.handlePendingQuizClick.bind(this);
         this.state = {
             quizzes: [],
             classid: this.props.classid,
@@ -49,8 +49,8 @@ class InstrListQuizzes extends React.Component {
         })
     }
 
-    handleCreateQuizClick() {
-        this.props.history.push(`/instructor/createquiz/${this.props.match.params.userid}/${this.props.match.params.classid}`);
+    handlePendingQuizClick() {
+        this.props.history.push(`/instructor/pendingquizzes/${this.props.match.params.userid}/${this.props.match.params.classid}`);
     }
 
 
@@ -93,6 +93,7 @@ class InstrListQuizzes extends React.Component {
     }
 
 
+
     /**
      * RENDERQUIZZES
      * Shows list of quizzes (with title, date, id, score)
@@ -103,27 +104,32 @@ class InstrListQuizzes extends React.Component {
             console.log('no pending quizzes');
                 return (
                     <Container>
-                        <Button className="yellow-button" size="lg" block onClick={this.handleCreateQuizClick}>
-                            Create a quiz here
+                        <Button className="yellow-button" size="lg" block onClick={this.handlePendingQuizClick}>
+                            See Pending Quizzes Here
                         </Button>
-                        You have not created any quizzes for this class
+                        You have not released any quizzes for this class
                     </Container>
                 )
         }
         else {
-            return (this.state.quizzes.map(quiz => {
-                return (
-                    <Card>
-                        <CardTitle>{quiz.name}</CardTitle>
-                        <CardBody>
-                            <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
-                            <CardText>{quiz.question}</CardText>
-                            <CardText>Class Score: {quiz.score}</CardText>
-                            <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
-                        </CardBody>
-                    </Card>
-                )
-            }))
+            return (
+                <CardDeck className="class-list">
+                {
+                    this.state.quizzes.map(quiz => {
+                        return (
+                            <Card style={{ width: '14rem' }}>
+                                <CardTitle>{quiz.name}</CardTitle>
+                                <CardBody>
+                                    <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
+                                    <CardText>{quiz.question}</CardText>
+                                    <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
+                                </CardBody>
+                            </Card>
+                        )
+                    })
+                }
+                </CardDeck>
+            )
         }
         
     }
@@ -156,7 +162,7 @@ class InstrListQuizzes extends React.Component {
 
         console.log('states: ', this.state);
         return (
-            <div>
+            <div className="regular-container">
                 <Sidebar view="past quizzes" />
                 <div className="main-area">
                     {display}

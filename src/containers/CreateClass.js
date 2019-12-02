@@ -154,6 +154,7 @@ class CreateClass extends React.Component {
         }
 
         return (
+            <div className="regular-container">
             <Container>
                 <Form  onSubmit={ (e) => this.createClass(e) }>
                     <FormGroup>
@@ -203,6 +204,7 @@ class CreateClass extends React.Component {
                     </Row>
                 </Form>
             </Container>
+            </div>
         )
     }
 }

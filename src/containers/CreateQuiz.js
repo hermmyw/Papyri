@@ -1,6 +1,10 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar.js';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import './Dashboard.css';
+import '../styles/index.css';
+import './Landing.css';
+import '../components/UI/UI.css';
 
 const createQuizURL = "http://127.0.0.1:8000/api/quiz/create/";
 var answerMap = {
@@ -146,11 +150,11 @@ class CreateQuiz extends React.Component {
 
         console.log('state:', this.state);
         return (
-            <div>
+            <div className="regular-container">
                 <Sidebar view="create quiz" />
-                <div className="main-area">
-                    <div>
-                        <Form  onSubmit={ e => this.handleSubmit(e) }>
+                <div className="main-area-create-quiz">
+                    <div className='one-hundred-width'>
+                        <Form onSubmit={ e => this.handleSubmit(e) } className='one-hundred-width'>
                             <FormGroup>
                                 <Label>Quiz Question</Label>
                                 <Input 
@@ -208,7 +212,7 @@ class CreateQuiz extends React.Component {
                                 type="text" 
                                 name="correctAnswer" 
                                 id="correctAnswer" 
-                                placeholder="Correct Answer"
+                                placeholder="Correct Answer: A, B, C, or D"
                                 value={this.state.correctAnswer}
                                 onChange={this.handleChange} />
                             <FormGroup>

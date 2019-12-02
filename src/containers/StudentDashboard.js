@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/index.css';
 import '../index.js';
 import './Landing.css';
+import './Dashboard.css';
 import '../components/UI/UI.css';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -186,7 +187,7 @@ class StudentDashboard extends React.Component {
 
         
         return( 
-            <div>
+            <div className="regular-container">
                 <Container>
                     <div className="subheader">
                         Hello,  {localStorage.getItem('firstName')}!
