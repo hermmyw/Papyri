@@ -6,7 +6,7 @@
 import React from 'react';
 import {     
     Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button, Row, Col} from 'reactstrap';
+    CardTitle, CardSubtitle, Button, Row, Col, Container} from 'reactstrap';
 import './Dashboard.css';
 import convertDate from '../functions/convertDate';
 import Sidebar from '../components/Sidebar';
@@ -21,6 +21,7 @@ class InstrListQuizzes extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.renderQuizzes = this.renderQuizzes.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
+        this.handleCreateQuizClick = this.handleCreateQuizClick.bind(this);
         this.state = {
             quizzes: [],
             classid: this.props.classid,
@@ -47,6 +48,11 @@ class InstrListQuizzes extends React.Component {
             quizToShow: quiz
         })
     }
+
+    handleCreateQuizClick() {
+        this.props.history.push(`/instructor/createquiz/${this.props.match.params.userid}/${this.props.match.params.classid}`);
+    }
+
 
 
     /**
@@ -93,19 +99,33 @@ class InstrListQuizzes extends React.Component {
      * Click button to view that specific quiz
      */
     renderQuizzes() {
-        return (this.state.quizzes.map(quiz => {
-            return (
-                <Card>
-                    <CardTitle>{quiz.name}</CardTitle>
-                    <CardBody>
-                        <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
-                        <CardText>{quiz.question}</CardText>
-                        <CardText>Class Score: {quiz.score}</CardText>
-                        <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
-                    </CardBody>
-                </Card>
-            )
-        }))
+        if (this.state.quizzes.length === 0) {
+            console.log('no pending quizzes');
+                return (
+                    <Container>
+                        <Button className="yellow-button" size="lg" block onClick={this.handleCreateQuizClick}>
+                            Create a quiz here
+                        </Button>
+                        You have not created any quizzes for this class
+                    </Container>
+                )
+        }
+        else {
+            return (this.state.quizzes.map(quiz => {
+                return (
+                    <Card>
+                        <CardTitle>{quiz.name}</CardTitle>
+                        <CardBody>
+                            <CardText>{convertDate(quiz.time_created.substring(0, 10))}</CardText>
+                            <CardText>{quiz.question}</CardText>
+                            <CardText>Class Score: {quiz.score}</CardText>
+                            <Button onClick={() => this.handleClick(quiz)}>View Quiz</Button>
+                        </CardBody>
+                    </Card>
+                )
+            }))
+        }
+        
     }
 
     handleBackClick() {

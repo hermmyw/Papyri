@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar.js';
-import { Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText} from 'reactstrap';
+import { Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText, Container } from 'reactstrap';
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 import Chart from 'react-google-charts';
@@ -8,28 +8,7 @@ import handleQuizClick from '../functions/handleQuizClick';
 import convertDate from '../functions/convertDate';
 
 
-var closedQuizData = {
-    data: [
-            {
-                question: "What is the definition of strategy design pattern?",
-                date: "2019-09-25",
-                quiz_id: "34523"
-            },
-            {
-                question: "What is the definition of observer design pattern?",
-                date: "2019-10-25",
-                quiz_id: "65456"
-            },
-            {
-                question: "What is the definition of factory method design pattern?",
-                date: "2019-11-25",
-                quiz_id: "78768"
-            },
-        ]
-};
-
-
-
+const emptyLectures = [["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0],];
 /**
  * Container for the Create Class page on the Instructor interface.
  * Renders a form to register a new class
@@ -52,9 +31,6 @@ class SpecificInstructorClass extends React.Component {
         this.handleExitClass = this.handleExitClass.bind(this);
         this.handleTakeAttendance = this.handleTakeAttendance.bind(this);
         this.handleStopAttendance = this.handleStopAttendance.bind(this);
-        
-        // var closedQuizData = this.getClosedQuizzes();
-        // var attendanceData = this.getLectures();
     }
 
     componentDidMount() {
@@ -93,6 +69,20 @@ class SpecificInstructorClass extends React.Component {
 
     getLectures() {
         console.log("lectures");
+
+        const fillLecture = (lecs => {
+            const promise = new Promise(() => {
+                while (lecs.length < 10) {
+                    lecs.push(["", 0])
+                }
+            })
+
+            promise.then(() => {
+                console.log('filled lectures: ', lecs);
+                return lecs;
+            })
+        })
+
         fetch(`http://127.0.0.1:8000/api/attendance/${this.props.match.params.classid}`, {
             method: "GET",
             headers: {
@@ -103,19 +93,28 @@ class SpecificInstructorClass extends React.Component {
             .then(res => res.json())
             .then(result => {
                 console.log('lectures: ', result);
+                var lecID = null;
+                var insess = false;
+                if (result.length > 0 && result[0].in_session) {
+                    var lecID = result[0].lecture_id;
+                    var insess = result[0].in_session;
+                }
                 return (
                     [result.map((lecture) => (
                         [
                             convertDate(lecture.date.substring(0, 10)),
                             lecture.attendance
                         ]
-                    )).reverse(), result[0].lecture_id, result[0].in_session]
+                    )).reverse(), lecID, insess]
                 );
             })
+            /*.then(([lectures, lectureID, active]) => {
+                return([fillLecture(lectures.slice(0, 10)), lectureID, active]);
+            })*/
             .then(([lectures, lectureID, active]) => {
                 console.log('attendance data:', lectures);
                 this.setState({
-                    attendanceData: lectures,
+                    attendanceData: lectures.slice(0, 10),
                     isActive: active,
                     activeLectureId: lectureID,
                 });
@@ -139,28 +138,40 @@ class SpecificInstructorClass extends React.Component {
     }
 
     showAttendanceGraph() {
-        return (
-            <Row>
-                <Col>
-                    <Chart
-                        width={'500px'}
-                        height={'300px'}
-                        chartType="Bar"
-                        loader={<div>Loading Chart</div>}
-                        data={[['Date', 'Students']].concat(this.state.attendanceData)}
-                        options={{
-                            // Material design options
-                            chart: {
-                            title: 'Attendance',
-                            subtitle: 'Number of students that showed up for up to the past 10 lectures',
-                            },
-                        }}
-                        // For tests
-                        rootProps={{ 'data-testid': '2' }}
-                    />
-                </Col>
-            </Row>
-        )
+        if (this.state.attendanceData.length > 0) {
+            return (
+                <Row>
+                    <Col>
+                        <Chart
+                            width={'500px'}
+                            height={'300px'}
+                            chartType="Bar"
+                            loader={<div>Loading Chart</div>}
+                            data={[['Date', 'Students']].concat(this.state.attendanceData).concat(emptyLectures).splice(0, 11)}
+                            options={{
+                                // Material design options
+                                chart: {
+                                    title: 'Attendance',
+                                    subtitle: 'Number of students that showed up for up to the past 10 lectures',
+                                    chartArea: {width: '90%', height: '90%'},
+                                    vAxis: { gridlines: { count: 4 }}
+                                },
+                            }}
+                            // For tests
+                            rootProps={{ 'data-testid': '2' }}
+                        />
+                    </Col>
+                </Row>
+            )
+        }
+        else {
+            return (
+                <Container>
+                    No attendance data to show. Please start a lecture to get attendance data.
+                </Container>
+
+            )
+        }
     }
 
     handleTakeAttendance(thisClass) {
