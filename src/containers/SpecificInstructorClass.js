@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import Chart from 'react-google-charts';
 import handleQuizClick from '../functions/handleQuizClick';
 import convertDate from '../functions/convertDate';
-
+import './Dashboard.css'
 
 const emptyLectures = [["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0],];
 /**
@@ -123,7 +123,7 @@ class SpecificInstructorClass extends React.Component {
 
     showRecentClosedQuizzes(e) {
         return (
-            this.state.quizData.map((d) => (
+            this.state.quizData.reverse().slice(0, 3).map((d) => (
                 <div>
                     <Row>
                         <Col>
@@ -279,7 +279,7 @@ class SpecificInstructorClass extends React.Component {
         
 
         return (
-            <div>
+            <div className="regular-container">
                 <Sidebar view="class home" />
                 <div className="main-area">
                     <Row>
@@ -287,6 +287,9 @@ class SpecificInstructorClass extends React.Component {
                     </Row>
                     {attendanceButton}
                     {graph}
+                    <Container>
+                        <h3>Recently Closed Quizzes</h3>
+                    </Container>
                     {recentQuizzes}
                     <Button className="yellow-button" size="lg" block onClick={this.handleViewAllClosedQuizzes}>
                         View All Past Quizzes

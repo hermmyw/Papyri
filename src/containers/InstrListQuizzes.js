@@ -21,7 +21,7 @@ class InstrListQuizzes extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.renderQuizzes = this.renderQuizzes.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
-        this.handleCreateQuizClick = this.handleCreateQuizClick.bind(this);
+        this.handlePendingQuizClick = this.handlePendingQuizClick.bind(this);
         this.state = {
             quizzes: [],
             classid: this.props.classid,
@@ -49,8 +49,8 @@ class InstrListQuizzes extends React.Component {
         })
     }
 
-    handleCreateQuizClick() {
-        this.props.history.push(`/instructor/createquiz/${this.props.match.params.userid}/${this.props.match.params.classid}`);
+    handlePendingQuizClick() {
+        this.props.history.push(`/instructor/pendingquizzes/${this.props.match.params.userid}/${this.props.match.params.classid}`);
     }
 
 
@@ -103,10 +103,10 @@ class InstrListQuizzes extends React.Component {
             console.log('no pending quizzes');
                 return (
                     <Container>
-                        <Button className="yellow-button" size="lg" block onClick={this.handleCreateQuizClick}>
-                            Create a quiz here
+                        <Button className="yellow-button" size="lg" block onClick={this.handlePendingQuizClick}>
+                            See Pending Quizzes Here
                         </Button>
-                        You have not created any quizzes for this class
+                        You have not released any quizzes for this class
                     </Container>
                 )
         }
@@ -156,7 +156,7 @@ class InstrListQuizzes extends React.Component {
 
         console.log('states: ', this.state);
         return (
-            <div>
+            <div className="regular-container">
                 <Sidebar view="past quizzes" />
                 <div className="main-area">
                     {display}

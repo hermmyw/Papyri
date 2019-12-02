@@ -82,3 +82,9 @@
     height: 100%;
     padding: 4%;
 }
+
+.main-area-create-quiz {
+    margin-left: 250px;
+    padding-left: 4%;
+    padding-right: 4%;
+}

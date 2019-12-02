@@ -368,6 +368,7 @@ class StudentClass extends React.Component {
         }
         
         return (
+            <div className="regular-container">
             <Container>
                     <Sidebar view="class home"/>
                     <Row>
@@ -395,6 +396,7 @@ class StudentClass extends React.Component {
                         </Col>
                     </Row>
                 </Container>
+                </div>
         )
     }
 }
