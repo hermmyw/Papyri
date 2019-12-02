@@ -408,3 +408,41 @@ class QuizTestCase(APITestCase):
         response = self.client.delete("/api/quiz/destroy/1/")
         self.assertEqual(len(Quiz.objects.all()), 0)
         print('..OK\n')
+
+class AccountTestCase(APITestCase):
+    def setUp(self):
+        print('\nSetting up quiz test case\n')
+
+    def test_user_register(self):
+        print('testing user registration')
+        data = {
+            "username": "test@outlook.com",
+            "password": "testpassword",
+            "email": "test@outlook.com",
+            "first_name": "First",
+            "last_name": "Last",
+            "uid": "123456789",
+            "is_student": True,
+            "pic1": "",
+            "pic2": "",
+            "pic3": "",
+            "pic4": "",
+            "pic5": "",
+        }
+        response = self.client.post("/api/user/register/", data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(User.objects.all()), 1)
+        print('..OK\n')
+
+    def test_user_login(self):
+        print('testing user login')
+        self.student = User.objects.create(username="test@outlook.com",
+                                            password="testpassword",
+                                            email="student_test@gmail.com")
+        data = {
+            "username": "test@outlook.com",
+            "password": "testpassword"
+        }
+        response = self.client.post("/api/user/login/", data=data)
+        self.assertEqual(response.status_code, 200)
+        print('..OK\n')
