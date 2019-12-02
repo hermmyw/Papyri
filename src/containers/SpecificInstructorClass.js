@@ -4,9 +4,10 @@ import { Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 import Chart from 'react-google-charts';
-import handleQuizClick from '../functions/handleQuizClick';
+//import handleQuizClick from '../functions/handleQuizClick';
 import convertDate from '../functions/convertDate';
 import './Dashboard.css'
+import InstrSpecificQuiz from './InstrSpecificQuiz';
 
 const emptyLectures = [["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0], ["-", 0],];
 /**
@@ -22,7 +23,9 @@ class SpecificInstructorClass extends React.Component {
             isActive: false,
             attendanceData: [],
             quizData: [],
-            activeLectureId: null
+            activeLectureId: null,
+            showQuiz: false,
+            quizToShow: null
         }
 
         this.handleViewAllClosedQuizzes = this.handleViewAllClosedQuizzes.bind(this);
@@ -31,6 +34,8 @@ class SpecificInstructorClass extends React.Component {
         this.handleExitClass = this.handleExitClass.bind(this);
         this.handleTakeAttendance = this.handleTakeAttendance.bind(this);
         this.handleStopAttendance = this.handleStopAttendance.bind(this);
+        this.handleQuizClick = this.handleQuizClick.bind(this);
+        this.handleBackClick = this.handleBackClick.bind(this);
     }
 
     componentDidMount() {
@@ -127,7 +132,7 @@ class SpecificInstructorClass extends React.Component {
                 <div>
                     <Row>
                         <Col>
-                            <Button className="yellow-button" size="lg" block onClick={() => handleQuizClick(this, d.id)}>
+                            <Button className="yellow-button" size="lg" block onClick={() => this.handleQuizClick(d)}>
                                 <span style={{float: "left"}}>{d.question}</span><span style={{float: "right"}}>{convertDate(d.time_created.substring(0, 10))}</span>
                             </Button>
                         </Col>
@@ -135,6 +140,20 @@ class SpecificInstructorClass extends React.Component {
                 </div>
             ))
         )
+    }
+
+    handleQuizClick(quiz) {
+        this.setState({
+            showQuiz: true,
+            quizToShow: quiz
+        })
+    }
+
+    handleBackClick() {
+        this.setState({
+            showQuiz: false,
+            quizToShow: null
+        })
     }
 
     showAttendanceGraph() {
@@ -278,26 +297,43 @@ class SpecificInstructorClass extends React.Component {
         }
         
 
-        return (
-            <div className="regular-container">
-                <Sidebar view="class home" />
-                <div className="main-area">
-                    <Row>
-                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
-                    </Row>
-                    {attendanceButton}
-                    {graph}
-                    <Container>
-                        <h3>Recently Closed Quizzes</h3>
-                    </Container>
-                    {recentQuizzes}
-                    <Button className="yellow-button" size="lg" block onClick={this.handleViewAllClosedQuizzes}>
-                        View All Past Quizzes
-                    </Button>
-                </div>
-                
-            </div>
-        )
+            if (this.state.showQuiz === false) {
+                return (
+                    <div className="regular-container">
+                        <Sidebar view="class home" />
+                        <div className="main-area">
+                            <Row>
+                                <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
+                            </Row>
+                            {attendanceButton}
+                            {graph}
+                            <Container>
+                                <h3>Recently Closed Quizzes</h3>
+                            </Container>
+                            {recentQuizzes}
+                            <Button className="yellow-button" size="lg" block onClick={this.handleViewAllClosedQuizzes}>
+                                View All Past Quizzes
+                            </Button>
+                        </div>
+                        
+                    </div>
+                )
+            }
+            else {
+                return (
+                    <div className="regular-container">
+                        <Sidebar view="class home" />
+                            <div className="main-area">
+                            <InstrSpecificQuiz quiz={this.state.quizToShow} />
+                            <Row>
+                                <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Back</Button></Col>
+                            </Row>
+                        </div>
+                    </div>
+                )
+            }
+
+            
     }
 }
 
