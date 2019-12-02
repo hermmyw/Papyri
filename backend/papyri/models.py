@@ -15,13 +15,16 @@ class UserInfo(models.Model):
     def __str__(self):
         return self.owner.username
 
+def upload_path_handler(instance, filename):
+    return 'profile_pics/{uid}/{filename}'.format(uid=instance.owner, filename=filename)
+
 class ProfilePic(models.Model):
     owner = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name='profile_pic')
-    pic1 = models.ImageField(upload_to='profile_pics', blank=True)
-    pic2 = models.ImageField(upload_to='profile_pics', blank=True)
-    pic3 = models.ImageField(upload_to='profile_pics', blank=True)
-    pic4 = models.ImageField(upload_to='profile_pics', blank=True)
-    pic5 = models.ImageField(upload_to='profile_pics', blank=True)
+    pic1 = models.ImageField(upload_to=upload_path_handler, blank=True)
+    pic2 = models.ImageField(upload_to=upload_path_handler, blank=True)
+    pic3 = models.ImageField(upload_to=upload_path_handler, blank=True)
+    pic4 = models.ImageField(upload_to=upload_path_handler, blank=True)
+    pic5 = models.ImageField(upload_to=upload_path_handler, blank=True)
     
     def __str__(self):
         return self.owner.owner.username
@@ -65,7 +68,6 @@ class Quiz(models.Model):
     class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
     released = models.BooleanField(default=False)
-    score = models.PositiveIntegerField(default=0)
 
     answer_0 = models.CharField(max_length=200)
     answer_1 = models.CharField(max_length=200)
@@ -83,3 +85,17 @@ class Answer(models.Model):
 
     def __str__(self):
         return str(self.quiz_id) + ": " + str(self.student)
+
+class Result(models.Model):
+    quiz_id = models.OneToOneField(Quiz, on_delete=models.CASCADE)
+
+    correct_answer = models.PositiveIntegerField(validators=[MaxValueValidator(3, message="Only accepts values from 0 to 3")])
+    num_students = models.PositiveIntegerField()
+
+    choice_0_percent = models.FloatField()
+    choice_1_percent = models.FloatField()
+    choice_2_percent = models.FloatField()
+    choice_3_percent = models.FloatField()
+
+    def __str__(self):
+        return str(self.quiz_id) + " Result"

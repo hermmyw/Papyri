@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 from .account import RegistrationAPI, LoginAPI, UserAPI
 from .quiz import (CreateQuizAPI, ActivateQuizAPI, ReleaseQuizAPI, ListQuizAPI, DestroyQuizAPI, 
-                    CreateAnswerAPI, AnswerByQuizAPI, AnswerByStudentAPI)
+                    CreateAnswerAPI, AnswerByQuizAPI, AnswerByStudentAPI, RetrieveResultAPI)
 from . import classes
 from . import attendance
 
@@ -29,4 +29,5 @@ urlpatterns = [
     path('answer/create', CreateAnswerAPI.as_view()),
     path('answer/quiz/<int:quiz_id>', AnswerByQuizAPI.as_view()),
     path('answer/student/<int:student>', AnswerByStudentAPI.as_view()),
+    path('quiz/result/<int:quiz_id>', RetrieveResultAPI.as_view()),
 ] 
