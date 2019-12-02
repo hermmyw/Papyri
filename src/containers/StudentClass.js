@@ -179,6 +179,7 @@ class StudentClass extends React.Component {
 
     handleModalSubmit() {
         const imgSubmit = this.webcam.getScreenshot();
+        console.log('imgSubmit: ', imgSubmit);
 
         console.log(this.state.student_id, this.state.userPhoto);
 
