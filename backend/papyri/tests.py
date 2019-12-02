@@ -37,6 +37,15 @@ class ClassTestCase(APITestCase):
                                 registration_code=code)
 
     def test_class_list_get(self):
+        """
+        Test GET /api/classes/...
+
+        Test Cases:
+        - Input: None
+            - Response status should be 200
+            - Number of classes in response must be 1
+            - Number of fields in a class must be 6
+        """
         print("\n\nTesting GET /api/classes/...")
         response = self.client.get("/api/classes/", format="json")
         self.assertEqual(response.status_code, 200)
@@ -45,6 +54,18 @@ class ClassTestCase(APITestCase):
         print("..OK")
 
     def test_class_list_post(self):
+        """
+        Test POST /api/classes/...
+
+        Test Cases:
+        - Input: Bad teacher ID
+            - Response status should be 400
+        - Input: Missing field
+            - Response status should be 400
+        - Input: All inputs valid
+            - Response status should be 201
+            - Number of classes in database should be 2 (was 1)
+        """
         print("\n\nTesting POST /api/classes/...")
         data = {
             "name": "Test Class 2",
@@ -80,6 +101,21 @@ class ClassTestCase(APITestCase):
 
     
     def test_add_student(self):
+        """
+        Test POST /api/classes/student/enroll/...
+
+        Test Cases:
+        - Input: Bad registration code
+            - Response status should be 400
+        - Input: Bad student ID
+            - Response status should be 400
+        - Input: Bad student ID and bad registration code
+            - Response status should be 400
+        - Input: All inputs valid
+            - Response status should be 201
+        - Input: Duplicate student
+            - Response status should be 400
+        """
         bad_code = {
             'code': 'a13fs',
             'student_id': self.student.id
@@ -126,6 +162,19 @@ class ClassTestCase(APITestCase):
         print("..OK")
 
     def test_class_by_teacher(self):
+        """
+        Test for GET /api/classes/teacher/:teacher_id
+
+        Test Cases
+        - Input: Valid teacher ID
+            - Response status should be 200
+            - Returned data should have length 1 (only 1 class)
+            - Returned ID should be same as setUp class
+            - Returned name should be Test Class
+            - Returned term should be Fall
+            - Returned year should be 2019
+            - Returned registration code should be same as setUp generated one
+        """
         print("\n\nTesting /api/classes/teacher/:teacher_id")
         response = self.client.get("/api/classes/teacher/999", format='json')
         self.assertEqual(response.status_code, 200)
@@ -144,6 +193,18 @@ class ClassTestCase(APITestCase):
         print("..OK\n")
 
     def test_class_by_student(self):
+        """
+        Test for GET /api/classes/student/:student_id
+
+        Test Cases:
+        - Input: Bad student ID
+            - Response status should be 200
+            - Returned data list should be empty
+        Input: All valid inputs
+            - Response status should be 200
+            - Response length should be 1
+            - Returned class should have 8 fields
+        """
         print("\n\nTesting /api/classes/student/:student_id...")
         data = {
             'code': self.class_info.registration_code,
@@ -194,6 +255,18 @@ class AttendanceTestCase(APITestCase):
                                 registration_code=code)
 
     def test_start_lecture(self):
+        """
+        Test for POST api/attendance/start/
+
+        Test Cases:
+        - Inputs: Bad class ID
+            - Response status should be 400
+            - No Lecture objects created
+        - Inputs: All valid inputs
+            - Response status should be 201
+            - Exactly 1 Lecture object created
+            - Lecture created should have in_session=True
+        """
         print("\n\nTesting api/attendance/start/...")
         data = {
             "c_id": self.class_info.id,
@@ -226,6 +299,16 @@ class AttendanceTestCase(APITestCase):
         print("..OK\n")
 
     def test_end_lecture(self):
+        """
+        Test for POST api/attendance/stop/
+
+        Test Cases:
+        - Input: Bad lecture ID
+            - Response status should be 400
+        - Input: All valid inputs
+            - Response status should be 200
+            - Lecture should have in_session=False
+        """
         print("\n\nTesting api/attendance/stop/...")
         data = {
             "c_id": self.class_info.id,
@@ -248,6 +331,20 @@ class AttendanceTestCase(APITestCase):
         print("..OK\n")
 
     def test_attend(self):
+        """
+        Test for POST /api/attendance/attend/
+
+        Test Cases:
+        - Input: Bad lecture ID
+            - Response status should be 400
+            - No LectureAttendance object created
+        - Input: Bad student ID
+            - Response status should be 400
+            - No LectureAttendance object created
+        - Input: All valid inputs
+            - Response status should be 201
+            - Exactly 1 LectureAttendance object created
+        """
         print("\n\nTesting /api/attendance/attend/...")
         lecture = Lecture.objects.create(c_id=self.class_info.id, in_session=True)
 
@@ -281,6 +378,18 @@ class AttendanceTestCase(APITestCase):
         print("..OK\n")
 
     def test_get_attendance(self):
+        """
+        Test for GET /api/attendance/:class_id
+
+        Test Cases:
+        - Input: Bad class ID
+            - Response status should be 200
+            - Response should be empty
+        - Input: All valid inputs
+            - Response stats should be 200
+            - Response length should be 1
+            - Response lecture ID should be the one created for test
+        """
         print("\n\nTesting /api/attendance/:class_id...")
         lecture = Lecture.objects.create(c_id=self.class_info.id, in_session=False)
 
@@ -299,6 +408,23 @@ class AttendanceTestCase(APITestCase):
         print("..OK\n")
 
     def test_get_student_attendance(self):
+        """
+        Test for GET /api/attendance/:class_id/:student_id
+
+        Test Cases:
+        - Input: Bad class ID
+            - Response status should be 200
+            - days_attended should be empty
+            - days_absent should be empty
+        - Input: Bad student ID
+            - Response status should be 200
+            - days_attended should be empty
+            - days_absent should be empty
+        - Input: All valid inputs
+            - Response stats should be 200
+            - days_attended should have length 1
+            - days_absent should have length 1
+        """
         print("\n\nTesting /api/attendance/:class_id/:student_id...")
         lecture = Lecture.objects.create(c_id=self.class_info.id, in_session=False)
         lecture_attendance = LectureAttendance.objects.create(lecture_id=lecture.id, student_id=self.student_info.id)
