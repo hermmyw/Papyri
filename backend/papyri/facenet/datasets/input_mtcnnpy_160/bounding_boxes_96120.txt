@@ -1,0 +1,33 @@
+datasets/input_mtcnnpy_160/matt/matt_5.png 123 175 580 744
+datasets/input_mtcnnpy_160/matt/matt_3.png 112 137 631 788
+datasets/input_mtcnnpy_160/matt/matt_test.png 123 130 555 671
+datasets/input_mtcnnpy_160/matt/matt_4.png 151 185 564 692
+datasets/input_mtcnnpy_160/matt/matt_1.png 129 129 470 569
+datasets/input_mtcnnpy_160/matt/matt_2.png 102 127 356 455
+datasets/input_mtcnnpy_160/nicole/Photo on 11-20-19 at 2.25 PM #2.png 59 63 277 340
+datasets/input_mtcnnpy_160/nicole/Photo on 11-20-19 at 2.24 PM.png 101 42 324 320
+datasets/input_mtcnnpy_160/nicole/Photo on 11-20-19 at 2.24 PM #2.png 77 36 275 299
+datasets/input_mtcnnpy_160/nicole/Photo on 11-20-19 at 2.25 PM.png 62 20 271 267
+datasets/input_mtcnnpy_160/nicole/Photo on 11-20-19 at 2.24 PM #3.png 45 37 256 297
+datasets/input_mtcnnpy_160/sam/sam_4.png 161 191 561 677
+datasets/input_mtcnnpy_160/sam/sam_3.png 374 167 1213 1247
+datasets/input_mtcnnpy_160/sam/sam_1.png 210 157 614 703
+datasets/input_mtcnnpy_160/sam/sam_2.png 110 84 360 404
+datasets/input_mtcnnpy_160/sam/sam_test.png 139 116 492 602
+datasets/input_mtcnnpy_160/sam/sam_5.png 190 143 748 962
+datasets/input_mtcnnpy_160/max/Photo on 11-20-19 at 2.29 PM #5.png 67 31 249 235
+datasets/input_mtcnnpy_160/max/Photo on 11-20-19 at 2.29 PM #2.png 62 45 248 272
+datasets/input_mtcnnpy_160/max/Photo on 11-20-19 at 2.29 PM #4.png 67 67 265 334
+datasets/input_mtcnnpy_160/max/Photo on 11-20-19 at 2.29 PM #3.png 78 9 261 239
+datasets/input_mtcnnpy_160/max/Photo on 11-20-19 at 2.29 PM.png 39 10 234 274
+datasets/input_mtcnnpy_160/lewis/Photo on 11-20-19 at 2.20 PM #3.png 61 47 385 470
+datasets/input_mtcnnpy_160/lewis/Photo on 11-20-19 at 2.20 PM #2.png 13 38 320 403
+datasets/input_mtcnnpy_160/lewis/lewis_3.png 40 31 181 210
+datasets/input_mtcnnpy_160/lewis/Photo on 11-20-19 at 2.21 PM.png 27 128 385 576
+datasets/input_mtcnnpy_160/lewis/Photo on 11-20-19 at 2.20 PM #4.png 21 67 353 514
+datasets/input_mtcnnpy_160/lewis/lewis_4.png 344 400 837 1042
+datasets/input_mtcnnpy_160/lewis/Photo on 11-20-19 at 2.20 PM.png 20 76 330 476
+datasets/input_mtcnnpy_160/lewis/lewis_test.png 149 159 625 758
+datasets/input_mtcnnpy_160/lewis/lewis_2.png 463 440 1483 1704
+datasets/input_mtcnnpy_160/lewis/lewis_5.png 40 33 211 251
+datasets/input_mtcnnpy_160/lewis/lewis_1.png 86 86 406 491
