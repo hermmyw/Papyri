@@ -56,6 +56,8 @@ class ReleaseQuizAPI(generics.RetrieveUpdateAPIView):
         quiz_id = self.kwargs['id']
         answers = Answer.objects.filter(quiz_id=quiz_id)
         num_students = len(answers)
+        if num_students == 0:
+            num_students = 1
 
         # calculate percentage
         num_0 = 0
