@@ -13,6 +13,7 @@ import 'react-day-picker/lib/style.css';
 import './Dashboard.css';
 import EnrollClass from './EnrollClass';
 import handleLogout from '../functions/logout';
+import Topbar from '../components/Topbar';
 
 
 
@@ -153,7 +154,7 @@ class StudentDashboard extends React.Component {
                         {this.state.classes.map(function(item, index) {
                             console.log("The class is active: ", item.active);
                             return (
-                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id, index)}>
+                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id, index)} style={{ cursor: "pointer" }}>
                                     <Card.Header className="card-header">{item.name}</Card.Header>
                                     <Card.Body className="card-body">
                                     <Card.Title>Professor {item.teacher_name}</Card.Title>
@@ -188,6 +189,7 @@ class StudentDashboard extends React.Component {
         
         return( 
             <div className="regular-container">
+                <Topbar/>
                 <Container>
                     <div className="subheader">
                         Hello,  {localStorage.getItem('firstName')}!
@@ -195,7 +197,7 @@ class StudentDashboard extends React.Component {
                     {main}
                     {detail}
                 <Row>
-                        <Col><Button className="yellow-button" size="lg" block onClick={this.handleEnroll}>Enroll in Class</Button></Col>
+                        <Col><Button className="white-button" size="lg" block onClick={this.handleEnroll}>Enroll in Class</Button></Col>
                     </Row>
                     {/*<EnrollClass />*/}
                     <Row>

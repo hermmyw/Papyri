@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import CardDeck from 'react-bootstrap/CardDeck';
 import { Row, Col } from 'react-bootstrap';
 import handleLogout from '../functions/logout';
+import Topbar from '../components/Topbar';
 
 
 
@@ -166,6 +167,7 @@ class InstructorDashboard extends React.Component {
         obj = this;
         return(
             <div className="regular-container">
+            <Topbar/>
             <Container>
                 <div className="subheader">
                     Hello, Professor {localStorage.getItem('lastName')}!
@@ -185,7 +187,7 @@ class InstructorDashboard extends React.Component {
                             );
                         }*/
                         return (
-                            <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id)}>
+                            <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id)} style={{ cursor: "pointer" }}>
                                 <Card.Header className="card-header">{item.name}</Card.Header>
                                 <Card.Body className="card-body">
                                 <Card.Title>{item.term.toUpperCase()} {item.year}</Card.Title>
@@ -200,7 +202,7 @@ class InstructorDashboard extends React.Component {
                     })}
                 </CardDeck>
                 <Row>
-                    <Col><Button className="yellow-button" size="lg" block onClick={this.handleCreateClass}>Create Class</Button></Col>
+                    <Col><Button className="white-button" size="lg" block onClick={this.handleCreateClass}>Create Class</Button></Col>
                 </Row>
                 <Row>
                     <Col><Button className="yellow-button" size="lg" block onClick={() => handleLogout(this)}>Log Out</Button></Col>

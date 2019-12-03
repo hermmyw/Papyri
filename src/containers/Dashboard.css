@@ -4,6 +4,7 @@
 }
 
 .subheader {
+    font-family: 'Comfortaa', cursive;
     background-color: white;
     font-size: 1.5rem;
     font-weight: bold;
@@ -17,7 +18,7 @@
 }
 
 .user-name {
-    background-color: #F9DC5C;
+    background-color: #FFEEE4;
     padding: 4px 2px;
     width: 100%;
 }
@@ -68,7 +69,12 @@
 }
 
 .regular-container {
-    padding-top: 5%;
+    
     height: 100%;
     background-color: white;
+}
+
+.attendance-graph {
+    margin-top: 10%;
+    margin-bottom: 10%;
 }
