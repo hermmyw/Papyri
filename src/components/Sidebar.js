@@ -2,7 +2,7 @@ import React from 'react';
 import { SelectedButton, NonselectedButton } from './UI/SidebarComponents.js';
 import headshot from '../containers/images/headshot.png';
 import './UI/UI.css';
-import { withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import * as docCookies from 'doc-cookies';
 import handleLogout from '../functions/logout';
 

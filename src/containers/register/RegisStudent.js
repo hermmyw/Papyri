@@ -8,6 +8,7 @@ import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'reac
 import { IoIosArrowBack } from "react-icons/io";
 import * as docCookies from 'doc-cookies';
 import '../Dashboard.css';
+import Topbar from '../../components/Topbar';
 
 const userInfoURL = "http://127.0.0.1:8000/api/user/";
 const registerURL = "http://127.0.0.1:8000/api/user/register/";
@@ -432,7 +433,9 @@ class RegisStudent extends React.Component {
         }
         return (
             <div className="regular-container">
+            <Topbar/>
             <Container className="wide-container">
+                
                 <Row>
                     <Col><p className="register-heading">Become a Student</p></Col>
                 </Row>

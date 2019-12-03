@@ -374,9 +374,13 @@ class StudentClass extends React.Component {
                     <Sidebar view="class home"/>
                     <Row>
                     <Col>
-                        <div className="main-content">
+                        <div className="main-area">
                             <Row>
-                                <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
+                                <Col>
+                                    <Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>
+                                        Exit Class
+                                    </Button>
+                                </Col>
                             </Row>
                             <h3 className="subheader">Attendance</h3>
                             <div className="calendar">

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
+import Topbar from "../../components/Topbar.js"
 import './Register.css';
 import authorization from '../../functions/authorization'
 import * as docCookies from 'doc-cookies';
@@ -239,16 +240,20 @@ class RegisInstr extends React.Component {
         }
 
         return (
+            <div>
+            
             <div className="regular-container">
+            <Topbar/>
             <Container className="wide-container">
-                <Row>
-                    <Col><p className="register-heading">Become an Instructor</p></Col>
-                </Row>
+                
+                    <p className="register-heading">Become an Instructor</p>
+                
                 <div>
                     {display}
                     {backButton}
                 </div>
             </Container>
+            </div>
             </div>
         )
     }

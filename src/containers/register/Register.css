@@ -1,8 +1,9 @@
 body {
-    background-image: url("../../images/background-image.png");
+    font-family: 'Comfortaa', cursive;
 }
 
 .register-heading {
+    font-family: 'Comfortaa', cursive;
     color: #011837;
     font-size: 20pt;
     text-align: center;
@@ -13,6 +14,7 @@ body {
 }
 
 .register-input {
+    font-family: 'Comfortaa', cursive;
     font-size: 1.25rem;
     padding: .5rem 1rem;
     margin: 0px 20px;
@@ -21,6 +23,7 @@ body {
 }
 
 .register-input-center {
+    font-family: 'Comfortaa', cursive;
     font-size: 1.25rem;
     padding: .5rem 1rem;
     margin: auto auto;
@@ -29,29 +32,33 @@ body {
 }
 
 .submit-button {
-    background-color: #F9DC5C;
+    font-family: 'Comfortaa', cursive;
+    background-color: #EC7357;
+    border: none;
     margin: 50px 0px 0px 75%;
     text-align: center;
-    color:#011936;
+    color:white;
     width: 200px;
     height: 50px;
     font-size: 24px;
 }
 
 .submit-button-center {
-    background-color: #F9DC5C;
+    background-color: #EC7357;
+    border: none;
     margin: 50px auto;
     text-align: center;
-    color:#011936;
+    color:white;
     width: 200px;
     height: 50px;
     font-size: 24px;
 }
 
 .snap-button {
-    background-color: #F9DC5C;
+    background-color: #754F44;
+    border: none;
     margin: 20px auto;
-    color:#011936;
+    color: white;
     width: 90px;
 }
 
@@ -65,8 +72,6 @@ body {
     width: 120px;
     height: 150px;
     margin: 50px auto 0px;
-    border: 2px solid #F9DC5C;
-    border-radius: 2px;
 }
 
 .box-grey {
