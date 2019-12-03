@@ -46,7 +46,7 @@ def align_face(image_path, output_path, image_size=160, margin=32, gpu_memory_fr
 
         filename = os.path.splitext(os.path.split(image_path)[1])[0]
         output_filename = os.path.join(output_class_dir, filename+'_aligned.png')
-        print(image_path)
+        print("##### ",image_path, output_filename)
         if not os.path.exists(output_filename):
             try:
                 img = misc.imread(image_path)

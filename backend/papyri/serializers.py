@@ -5,10 +5,13 @@ from .models import UserInfo, ProfilePic, ClassInfo, StudentClassRelationship
 from .models import Lecture, LectureAttendance
 from .models import Quiz, Answer, Result
 from django.utils.crypto import get_random_string
+from .facenet.src.process_dataset import process_dataset
+from .facenet.src.train import train
 
 ### from package drf-base64
 import base64
 import uuid
+import os
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework.fields import SkipField
@@ -77,6 +80,15 @@ class CreateUserSerializer(serializers.Serializer):
                                     pic4=validated_data['pic4'],
                                     pic5=validated_data['pic5'])
         profile_pic.save()
+
+        starting_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        input_dir = starting_dir + "/media/profile_pics"
+        output_dir = starting_dir + "/media/aligned_pics"
+        model_path = starting_dir + "/papyri/facenet/models/20180402-114759/20180402-114759.pb"
+        classifier_filename = starting_dir + '/papyri/facenet/models/my_classifier.pkl'
+
+        process_dataset(input_dir, output_dir)
+        train(output_dir, model_path, classifier_filename)
         return user
 
 

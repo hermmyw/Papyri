@@ -67,7 +67,7 @@ def classify(encoded_string, output_path, model_path, classifier_path, image_siz
 
             delete_decoded_files(output_path)
 
-    return class_names[best_class_indices[0]]
+    return class_names[best_class_indices[0]], best_class_probabilities[0]
 
 
 def load_image(image_path, do_random_crop, do_random_flip, image_size, do_prewhiten=True):
