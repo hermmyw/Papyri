@@ -222,7 +222,7 @@ class StudentClass extends React.Component {
                         body: JSON.stringify({
                             lecture_id: thisClass.state.mostRecentLecture,
                             student_id: thisClass.props.match.params.userid,
-                            // img: imgSubmit
+                            photo_string: imgSubmit
                         }),
                     })
                         .then(res => res.json())
@@ -237,7 +237,6 @@ class StudentClass extends React.Component {
                             }
                         )
                 }
-                
             }
     
             function handleLocationError() {

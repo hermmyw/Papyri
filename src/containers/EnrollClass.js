@@ -3,6 +3,7 @@ import Sidebar from '../components/SidebarStudent.js';
 import { Container, Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText} from 'reactstrap';
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
+import Topbar from '../components/Topbar.js';
 
 const enrollClassURL = "http://127.0.0.1:8000/api/classes/student/enroll/";
 
@@ -137,7 +138,7 @@ class EnrollClass extends React.Component {
         }
 
         else {
-            inputField = (
+            inputField = (                
                 <FormGroup>
                     <Label>Enroll in a Class</Label>
                     <Input 
@@ -154,6 +155,7 @@ class EnrollClass extends React.Component {
         if (this.state.enrolled) {
             display = (
                 <Container>
+                    <Topbar/>
                     Success! You have enrolled in {this.state.className}
                     <Row>
                         <Col><Button className="link-button" color="link" onClick={this.handleBackClick}><IoIosArrowBack />Enroll in another class</Button></Col>
@@ -164,6 +166,8 @@ class EnrollClass extends React.Component {
 
         else {
             display = (
+                <div>
+                <Topbar/>
                 <Container>
                     <Form>
                         {inputField}
@@ -175,6 +179,7 @@ class EnrollClass extends React.Component {
                         </Row>
                     </Form>
                 </Container>
+                </div>
             );
         }
 

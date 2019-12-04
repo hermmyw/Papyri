@@ -1,0 +1,28 @@
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/lizhenghao99@outlook.com/f403f43f-a2f9-4ee6-9646-a4c9d115ae95.png 42 43 131 148
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/lizhenghao99@outlook.com/ab50a8c2-aa54-4a65-a803-082b212f280d.png 76 44 179 170
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/lizhenghao99@outlook.com/148dd1d3-afe7-4104-8197-50ff7dbf2182.png 74 45 154 149
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/lizhenghao99@outlook.com/d56506db-3a7f-4a77-b659-43c47d4b391d.png 23 48 137 175
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/lizhenghao99@outlook.com/baec5fdd-620a-47b5-bc1f-c2339ec7abf7.png 58 40 166 171
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/testtest/6c20e0dc-7b0b-4ced-be4a-f65a4d50cc5a.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/testtest/c1f85241-802d-4cb1-a6d4-18e939debf0a.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/bf8dd502-5a87-433c-8bfd-56030e888839.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/2b042f18-8e21-4da9-bcab-8445c506306f.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/dceab332-82a0-466b-9ea5-b917709550fc.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/f8f017d3-1872-49fb-95ac-0d8031cffbf9.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/61250079-eaf9-432a-91ea-9be88b87da67.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/3dc91b19-f022-4a39-9ddf-c63d74afa932.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/ab98bc43-8e17-4ffc-812d-6429f93e4004.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/71fedb00-84d2-4807-92f2-5dbbd46e6f26.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/13f038f1-267d-42fb-b784-ece321d7af85.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent001@gmail.com/c88f5325-def9-49d7-be35-b935a15a1130.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent2@gmail.com/f19c1942-3e14-4010-9b12-ad857b644c5b.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent2@gmail.com/98250da2-97ce-43f6-a9e8-342774ed3eb0.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent2@gmail.com/6238ebd9-7e4f-4bba-9f3b-bf1df3d6bc12.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent2@gmail.com/b9e5a5ff-5f6f-48eb-bc78-4595784a6a09.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent2@gmail.com/c1d9559a-b66b-4caa-8a51-aeed391c608b.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/testtest@new.com/e46d2974-7c33-49ae-b05b-34a9090d666b.png
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent@gmail.com/623a69fe-e3ae-4dde-9ba2-95353a97565e.png 49 0 184 145
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent@gmail.com/e095d984-a193-4121-88c5-4ab050063e3c.png 93 0 200 145
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent@gmail.com/afc956aa-c30c-4d0f-a53d-8c6bf6be38ae.png 79 0 200 146
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent@gmail.com/4fcf88f6-edd6-4d57-ad27-6be073201044.png 17 0 137 144
+/Users/hermmy/Documents/2019-2020/CS130/CS130_project/backend/media/aligned_pics/teststudent@gmail.com/2744e597-c408-4f51-8578-928306ab5a42.png 40 0 172 141
