@@ -92,6 +92,8 @@ class RegisStudent extends React.Component {
     handleSubmitClick(e) {
         e.preventDefault();
         console.log("student submitted!");
+
+        console.log(this.state.email);
         /*this.setState(state => ({
             submitClicked: true
         }));*/
