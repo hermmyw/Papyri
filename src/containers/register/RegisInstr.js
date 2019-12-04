@@ -153,7 +153,7 @@ class RegisInstr extends React.Component {
                                 </FormGroup>
                             </Col>
                         </Row>
-                        <Row>
+                        {/* <Row>
                             <Col>
                             <FormGroup>
                                 <Label>University ID</Label>
@@ -169,7 +169,7 @@ class RegisInstr extends React.Component {
                                 />
                             </FormGroup>
                             </Col>
-                        </Row>
+                        </Row> */}
                         <Row>
                             <Col>
                                 <FormGroup>

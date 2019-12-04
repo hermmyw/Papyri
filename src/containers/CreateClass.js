@@ -3,6 +3,7 @@ import { Row, Col, Button, Form, FormGroup, FormText, Input, Label, CustomInput}
 import '../components/UI/UI.css';
 import { Container } from 'react-bootstrap';
 import { IoIosArrowBack } from "react-icons/io";
+import Topbar from '../components/Topbar';
 
 const createClassURL = "http://127.0.0.1:8000/api/classes/";
 
@@ -155,6 +156,7 @@ class CreateClass extends React.Component {
 
         return (
             <div className="regular-container">
+            <Topbar/>
             <Container>
                 <Form  onSubmit={ (e) => this.createClass(e) }>
                     <FormGroup>

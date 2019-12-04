@@ -193,9 +193,10 @@ class InstructorDashboard extends React.Component {
                                 <Card.Title>{item.term.toUpperCase()} {item.year}</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
                                 <Card.Text>
-                                {/*attendanceButton*/}
+                                Registration Code <br></br>
+                                <div style={{ color: '#EC7357'}} >{obj.state.classes[index].registration_code}</div>
                                 </Card.Text>
-                                <Button variant='outline-primary' onClick={() => obj.handleRegCode(index)}>Show Registration Code</Button>
+                                {/*<Button variant='outline-primary' onClick={() => obj.handleRegCode(index)}>Show Registration Code</Button>*/}
                                 </Card.Body>
                             </Card>
                         );

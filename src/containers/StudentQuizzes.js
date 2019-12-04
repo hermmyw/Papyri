@@ -103,7 +103,7 @@ class StudentQuizzes extends React.Component {
      * makes api call to get list of pending quizzes and creates pretty display
      */
     getStudentQuizzes() {
-        fetch(`http://127.0.0.1:8000/api/quiz/list/active/${this.props.match.params.classid}/`, {
+        fetch(`http://127.0.0.1:8000/api/quiz/list/released/${this.props.match.params.classid}/`, {
             method: "GET",
             headers: {
                 Accept: 'application/json',

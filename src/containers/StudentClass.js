@@ -225,7 +225,14 @@ class StudentClass extends React.Component {
                             photo_string: imgSubmit
                         }),
                     })
-                        .then(res => res.json())
+                        .then(res => {
+                            if (res.ok) {
+                                return res.json();
+                            }
+                            else {
+                                throw new Error("error");
+                            }
+                        })
                         .then(
                             (result) => {
                                 console.log(result);
@@ -236,6 +243,9 @@ class StudentClass extends React.Component {
                                 }));
                             }
                         )
+                        .catch(error => {
+                            alert("Attendance not taken because your face is not recognizable");    
+                        }) 
                 }
             }
     
