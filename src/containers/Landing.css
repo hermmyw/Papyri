@@ -11,8 +11,10 @@
 }
 
 .papyri-heading {
-    color: #F9DC5C;
-    font-size: 64pt;
+    color: white;
+    font-family: 'Indie Flower', cursive;
+    font-size: 84pt;
+    font-weight: lighter;
     text-align: center;
 }
 
@@ -26,10 +28,7 @@
 }
 
 .wide-container {
-    max-width: 1200px;
-    margin-top: auto;
-    margin-bottom: auto;
-    vertical-align: top;
+    max-width: 80%;
     display: inline-block;
 }
 
@@ -48,7 +47,8 @@
 .landing-container {
     padding-top: 5%;
     height: 100%;
-    background-image: url("../images/background-image.png");
+    /*background-image: url("../images/background-image.png");*/
+    background: linear-gradient(#EC7357, #FBFFB9);
     background-repeat: no-repeat;
-    background-color: #011936;
+    background-color: #34314c;
 }

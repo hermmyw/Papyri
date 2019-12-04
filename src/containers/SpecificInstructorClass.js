@@ -284,7 +284,7 @@ class SpecificInstructorClass extends React.Component {
         if (this.state.isActive === false) {
             var attendanceButton = (
                 <Row>
-                    <Col><Button className="yellow-button" size="lg" block onClick={() => this.handleTakeAttendance(this)}>Start Lecture</Button></Col>
+                    <Col><Button className="white-button" size="lg" block onClick={() => this.handleTakeAttendance(this)}>Start Lecture</Button></Col>
                 </Row>
             )
         }
@@ -306,12 +306,14 @@ class SpecificInstructorClass extends React.Component {
                                 <Col><Button className="yellow-button" size="lg" block onClick={this.handleExitClass}>Exit Class</Button></Col>
                             </Row>
                             {attendanceButton}
+                            <div className="attendance-graph">
                             {graph}
+                            </div>
                             <Container>
                                 <h3>Recently Closed Quizzes</h3>
                             </Container>
                             {recentQuizzes}
-                            <Button className="yellow-button" size="lg" block onClick={this.handleViewAllClosedQuizzes}>
+                            <Button className="white-button" size="lg" block onClick={this.handleViewAllClosedQuizzes}>
                                 View All Past Quizzes
                             </Button>
                         </div>

@@ -1,50 +1,59 @@
-.yellow-button {
-    background-color: #F9DC5C;
+.white-button {
+    font-family: 'Comfortaa', cursive;
+    background-color:#EC7357;
     border: none;
     margin: 4px 2px;
-    color:#011936;
+    color:white;
 }
 
 
-.white-button {
-    background-color: white;
+.yellow-button {
+    font-family: 'Comfortaa', cursive;
+    background-color: #754F44;
+    border: none;
     margin: 4px 2px;
-    color:#011936;
+    color: white;
 }
 
 .standard-button:hover {
-    background-color: #011936;
+    font-family: 'Comfortaa', cursive;
+    background-color: #F17F42;
     color: white;
     transition: 1s;
 }
 
 .link-button {
-    color:#F9DC5C;
+    font-family: 'Comfortaa', cursive;
+    color:#754F44;
 }
 
 .cancel-button {
-    color:#F9DC5C;
+    font-family: 'Comfortaa', cursive;
+    color:#754F44;
     margin: auto auto auto 75%;
 }
 
 .link-button:hover {
-    color: #F9DC5C;
+    font-family: 'Comfortaa', cursive;
+    color: #FFEEE4;
 }
 
 .custom-input {
+    font-family: 'Comfortaa', cursive;
     font-size: 1.25rem;
     padding: .5rem 1rem;
     margin: 4px 2px;
 }
 
 .dashboard-sidebar {
+    font-family: 'Comfortaa', cursive;
     height: 100%;
     width: 250px;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #011936;
+    background-color: #EC7357;
     overflow-x: hidden;
     padding-top: 20px;
 }
@@ -55,7 +64,8 @@
 
 
 .selected-sidebar-button {
-    background-color: #F9DC5C;
+    font-family: 'Comfortaa', cursive;
+    background-color: #FFEEE4;
     padding: 10px 2px;
     width: 100%;
     font-weight: 500;
@@ -63,7 +73,8 @@
 }
 
 .nonselected-sidebar-button {
-    background-color: #011936;
+    font-family: 'Comfortaa', cursive;
+    background-color: #EC7357;
     padding: 10px 2px;
     width: 100%;
     font-weight: 500;
@@ -72,7 +83,8 @@
 }
 
 .nonselected-sidebar-button:hover {
-    background-color: #F9DC5C;
+    font-family: 'Comfortaa', cursive;
+    background-color: #FFEEE4;
     transition: background-color .5s ease;
 }
 
@@ -81,10 +93,23 @@
     margin-left: 250px;
     height: 100%;
     padding: 4%;
+    width: 60%;
 }
 
 .main-area-create-quiz {
+    margin-top: 4%;
     margin-left: 250px;
     padding-left: 4%;
     padding-right: 4%;
+}
+
+.top-bar {
+    background-color: #EC7357;
+    height: 60px;
+    width: 100%;
+    margin-bottom: 1rem;
+    color: white;
+    font-family: 'Indie Flower', cursive;
+    text-align: center;
+    font-size: 30pt;
 }

@@ -85,6 +85,10 @@ class PendingQuizModal extends React.Component {
                         released: true,
                         active: false
                     })
+                    this.setState({
+                        released: true,
+                        active: false
+                    })
                 }
                 else {
                     throw Error(res.statusText);

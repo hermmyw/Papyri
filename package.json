@@ -5,6 +5,7 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "doc-cookies": "^1.1.0",
+    "geo-lib": "^0.3.1",
     "geolib": "^3.1.0",
     "javadoc": "^1.0.6",
     "react": "^16.11.0",
