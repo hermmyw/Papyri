@@ -294,7 +294,9 @@ class InstrSpecificQuiz extends React.Component {
                     {this.state.quiz.question}
                     {display}
                     <Row>
+                        <Col>
                         Class Score: {this.state.studentResponseArray[this.state.correctAnswer]} out of {this.state.numStudents} responses correct.
+                        </Col>
                     </Row>
                 </div>
             )
