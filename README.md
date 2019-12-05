@@ -1,4 +1,4 @@
-# CS130_project
+# Papyri
 
 ## Usage
 
