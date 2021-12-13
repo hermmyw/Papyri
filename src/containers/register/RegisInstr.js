@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { IoIosArrowBack } from "react-icons/io";
 import Topbar from "../../components/Topbar.js"
@@ -8,7 +8,7 @@ import authorization from '../../functions/authorization'
 import * as docCookies from 'doc-cookies';
 import '../Dashboard.css';
 
-const userInfoURL = "http://127.0.0.1:8000/api/user/";
+//const userInfoURL = "http://127.0.0.1:8000/api/user/";
 const registerURL = "http://127.0.0.1:8000/api/user/register/";
 
 
@@ -106,7 +106,7 @@ class RegisInstr extends React.Component {
     }
 
     render() {
-        const { firstname, lastname, uid, email, password } = this.state;
+        const { firstname, lastname,  email, password } = this.state;
         var display, backButton, errorDisplay = null;
 
         if (this.state.error) {

@@ -11,7 +11,7 @@ import CardDeck from 'react-bootstrap/CardDeck';
 import { Row, Col } from 'react-bootstrap';
 import 'react-day-picker/lib/style.css';
 import './Dashboard.css';
-import EnrollClass from './EnrollClass';
+//import EnrollClass from './EnrollClass';
 import handleLogout from '../functions/logout';
 import Topbar from '../components/Topbar';
 
@@ -144,7 +144,7 @@ class StudentDashboard extends React.Component {
     
     
     render() {
-        var main, detail, classView = null;
+        var main, detail = null;
         var obj = this;
         //if (this.state.detailClass === null) {
         if (this.state.classes.length > 0) {
@@ -154,7 +154,7 @@ class StudentDashboard extends React.Component {
                         {this.state.classes.map(function(item, index) {
                             console.log("The class is active: ", item.active);
                             return (
-                                <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id, index)} style={{ cursor: "pointer" }}>
+                                <Card style={{ width: '14rem', cursor: "pointer" }} key={index} onClick={() => obj.handleEnterClass(item.id, index)}>
                                     <Card.Header className="card-header">{item.name}</Card.Header>
                                     <Card.Body className="card-body">
                                     <Card.Title>Professor {item.teacher_name}</Card.Title>

@@ -225,7 +225,7 @@ class CreateQuiz extends React.Component {
         )
     }
 }
-
+/*
 class AnswerList extends React.Component {
     constructor(props) {
         super(props);
@@ -302,6 +302,6 @@ class AnswerList extends React.Component {
             </div>
         )
     }
-}
+}*/
 
 export default CreateQuiz;

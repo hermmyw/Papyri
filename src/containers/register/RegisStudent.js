@@ -10,7 +10,7 @@ import * as docCookies from 'doc-cookies';
 import '../Dashboard.css';
 import Topbar from '../../components/Topbar';
 
-const userInfoURL = "http://127.0.0.1:8000/api/user/";
+//const userInfoURL = "http://127.0.0.1:8000/api/user/";
 const registerURL = "http://127.0.0.1:8000/api/user/register/";
 
 class RegisStudent extends React.Component {
@@ -179,7 +179,7 @@ class RegisStudent extends React.Component {
 
     render() {
         const { firstname, lastname, uid, email, password} = this.state;
-        var display, backButton, camera, sample, snap1, snap2, snap3, snap4, snap5, submitButton = null;
+        var display, backButton, camera, sample, snap1, snap2, snap3, snap4, snap5 = null;
         const videoConstraints = {
             width: 200,
             height: 200,
@@ -231,7 +231,8 @@ class RegisStudent extends React.Component {
                         type="image" 
                         name="image1"
                         id="image1"
-                        src={this.state.imgData1} />
+                        src={this.state.imgData1}
+                        alt = ""/>
                 );
             } else {
                 snap1 = (
