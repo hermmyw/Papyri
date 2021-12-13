@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {     
-    Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button,
+    Card,  CardBody,
+     Button,
 
     Collapse,
 
-    Progress,
     
-    Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
+    
+    Row, Col } from 'reactstrap';
 import './Dashboard.css';
 
 
@@ -53,6 +53,8 @@ const ToggleHook = (props) => {
                 return collapse_2;
             case 3:
                 return collapse_3;
+            default:
+
         }
     }
     console.log('props: ', props);
@@ -279,7 +281,7 @@ class InstrSpecificQuiz extends React.Component {
         console.log('states: ', this.state);
         var display = null;
         if (this.state.classifiedAnswers !== null) {
-            var display = (
+            display = (
                 <ToggleHook 
                     answers={this.state.answersOptions} 
                     classifiedAnswers={this.state.classifiedAnswers} 

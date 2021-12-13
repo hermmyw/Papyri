@@ -187,7 +187,7 @@ class InstructorDashboard extends React.Component {
                             );
                         }*/
                         return (
-                            <Card style={{ width: '14rem' }} key={index} onClick={() => obj.handleEnterClass(item.id)} style={{ cursor: "pointer" }}>
+                            <Card style={{ width: '14rem', cursor: "pointer"  }} key={index} onClick={() => obj.handleEnterClass(item.id)} >
                                 <Card.Header className="card-header">{item.name}</Card.Header>
                                 <Card.Body className="card-body">
                                 <Card.Title>{item.term.toUpperCase()} {item.year}</Card.Title>

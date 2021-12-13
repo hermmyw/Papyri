@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar.js';
-import { Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText, Container } from 'reactstrap';
+import { Row, Col, Button,  Container } from 'reactstrap';
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 import Chart from 'react-google-charts';
@@ -74,7 +74,7 @@ class SpecificInstructorClass extends React.Component {
 
     getLectures() {
         console.log("lectures");
-
+        /*
         const fillLecture = (lecs => {
             const promise = new Promise(() => {
                 while (lecs.length < 10) {
@@ -86,7 +86,8 @@ class SpecificInstructorClass extends React.Component {
                 console.log('filled lectures: ', lecs);
                 return lecs;
             })
-        })
+            
+        })*/
 
         fetch(`http://127.0.0.1:8000/api/attendance/${this.props.match.params.classid}`, {
             method: "GET",
@@ -101,8 +102,8 @@ class SpecificInstructorClass extends React.Component {
                 var lecID = null;
                 var insess = false;
                 if (result.length > 0 && result[0].in_session) {
-                    var lecID = result[0].lecture_id;
-                    var insess = result[0].in_session;
+                    lecID = result[0].lecture_id;
+                    insess = result[0].in_session;
                 }
                 return (
                     [result.map((lecture) => (
@@ -282,14 +283,14 @@ class SpecificInstructorClass extends React.Component {
         recentQuizzes = this.showRecentClosedQuizzes();
 
         if (this.state.isActive === false) {
-            var attendanceButton = (
+            attendanceButton = (
                 <Row>
                     <Col><Button className="white-button" size="lg" block onClick={() => this.handleTakeAttendance(this)}>Start Lecture</Button></Col>
                 </Row>
             )
         }
         else {
-            var attendanceButton = (
+            attendanceButton = (
                 <Row>
                     <Col><Button className="yellow-button" size="lg" block onClick={() => this.handleStopAttendance(this)}>End Lecture</Button></Col>
                 </Row>

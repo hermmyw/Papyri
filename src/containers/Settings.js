@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar.js';
-import { Container, Row, Col, Button, Form, FormGroup, Input } from 'reactstrap';
+//import { Container, Row, Col, Button, Form, FormGroup, Input } from 'reactstrap';
 
 /**
  * Container for the Settings page

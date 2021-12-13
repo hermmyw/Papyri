@@ -3,13 +3,13 @@ import { SelectedButton, NonselectedButton } from './UI/SidebarComponents.js';
 import headshot from '../containers/images/headshot.png';
 import './UI/UI.css';
 import { withRouter } from 'react-router-dom';
-import * as docCookies from 'doc-cookies';
+//import * as docCookies from 'doc-cookies';
 import handleLogout from '../functions/logout';
 
 // dummy user, class, and quiz id
-var ids = {
+/*var ids = {
     quizid: 12345
-}
+}*/
 
 /**
  * Renders a sidebar for all the different pages on the User interface.
@@ -204,8 +204,8 @@ class Sidebar extends React.Component {
 
         return (
             <div className="dashboard-sidebar">
-                <img className="profile-image" src={headshot} />
-                <SelectedButton style="margin-top: 20px">{instructorName}</SelectedButton>
+                <img className="profile-image" src={headshot} alt="" />
+                <SelectedButton>{instructorName}</SelectedButton>
                 {navDisplay}
             </div>
         )

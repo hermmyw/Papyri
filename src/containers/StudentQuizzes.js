@@ -1,12 +1,13 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import '../components/UI/UI.css';
-import { Container, Row, Col, Button, Form, FormGroup, Input } from 'reactstrap';
-import handleQuizClick from '../functions/handleQuizClick';
+import { Container, Row, Col, Button } from 'reactstrap';
+//import handleQuizClick from '../functions/handleQuizClick';
 import convertDate from '../functions/convertDate';
-import * as docCookies from 'doc-cookies';
+//import * as docCookies from 'doc-cookies';
 import { IoIosArrowBack } from "react-icons/io";
 
+/*
 var sampleQuizzes = [
     {
         question: "What is the definition of strategy design pattern?",
@@ -24,6 +25,7 @@ var sampleQuizzes = [
         quiz_id: "78768"
     },
 ]
+*/
 
 /**
  * Container for the (Past) Quizzes page shown on the Student Sidebar
@@ -167,7 +169,7 @@ class StudentQuizzes extends React.Component {
             </Row>
         )
         if (this.state.viewQuiz) {
-            var display = backButton;
+            display = backButton;
             let quiz = this.state.quizSelected;
             let answerLabel = ['A', 'B', 'C', 'D'];
             let quizAnswers = [quiz.answer_0, quiz.answer_1, quiz.answer_2, quiz.answer_3];
@@ -197,7 +199,7 @@ class StudentQuizzes extends React.Component {
                 )
 
                 if (idx === quiz.correct_answer) {
-                    var answerButton = (
+                    answerButton = (
                         <Button color="success" size="lg" block>
                             {answerLabel[idx]}: {answer}
                         </Button>
@@ -219,7 +221,7 @@ class StudentQuizzes extends React.Component {
                             Oh no! Your answer is incorrect.
                         </Row>
                     )
-                    var answerButton = (
+                    answerButton = (
                         <Button color="danger" size="lg" block>
                             {answerLabel[idx]}: {answer}
                         </Button>
@@ -233,7 +235,7 @@ class StudentQuizzes extends React.Component {
                 );
             });
 
-            var display = (
+            display = (
                 <Container>
                     <Row>
                         {quiz.question}
@@ -245,7 +247,7 @@ class StudentQuizzes extends React.Component {
             )
         }
         else {
-            var display = this.state.quizzesDisplay;
+            display = this.state.quizzesDisplay;
         }
 
         return (

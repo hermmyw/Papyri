@@ -1,8 +1,8 @@
 import React from 'react';
 import '../components/UI/UI.css';
-import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Container, Row,  Button, Modal,  ModalBody, ModalFooter } from 'reactstrap';
 import convertDate from '../functions/convertDate';
-import * as docCookies from 'doc-cookies';
+//import * as docCookies from 'doc-cookies';
 
 class PendingQuizModal extends React.Component {
 
@@ -130,7 +130,7 @@ class PendingQuizModal extends React.Component {
             )
 
             if (idx === thisQuiz.correct_answer) {
-                var answerButton = (
+                answerButton = (
                     <Button className="yellow-button" size="lg" block>
                         {answerLabel[idx]}: {answer}
                     </Button>

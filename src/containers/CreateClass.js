@@ -15,7 +15,7 @@ class CreateClass extends React.Component {
 
     constructor(props) {
         super(props);
-        var date = new Date,
+        var date = new Date(),
             years = [],
             year = date.getFullYear();
 

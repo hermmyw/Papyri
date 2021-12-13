@@ -1,7 +1,7 @@
 import React from 'react';
 import { SelectedButton, NonselectedButton } from './UI/SidebarComponents.js';
 import headshot from '../containers/images/headshot.png';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
 import './UI/UI.css';
 import { withRouter} from 'react-router-dom';
 import * as docCookies from 'doc-cookies';
@@ -134,7 +134,7 @@ class SidebarStudent extends React.Component {
         var studentName = localStorage.getItem('firstName') + " " + localStorage.getItem('lastName');
         return (
             <div className="dashboard-sidebar">
-                <img className="profile-image" src={this.props.profilePic} />
+                <img className="profile-image" src={this.props.profilePic} alt="" />
                 <SelectedButton style="margin-top: 20px">{studentName}</SelectedButton>
                 {this.getNavButtons()}
             </div>

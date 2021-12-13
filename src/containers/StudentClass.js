@@ -9,7 +9,7 @@ import './Dashboard.css';
 import Sidebar from '../components/Sidebar.js';
 import Modal from 'react-bootstrap/Modal';
 import Webcam from 'react-webcam';
-import headshot from './images/headshot.png';
+//import headshot from './images/headshot.png';
 import { getDistance } from 'geolib';
 
 class StudentClass extends React.Component {
@@ -344,7 +344,7 @@ class StudentClass extends React.Component {
         var quizDisplay = null;
         if (this.state.currentQuiz.length > 0 && !this.state.submittedQuiz) {
             var currQuiz = this.state.currentQuiz[0];
-            var quizDisplay = (
+             quizDisplay = (
                 <Card className="quiz">
                     <Card.Header as="h5">Current Quiz</Card.Header>
                     <Card.Body>
@@ -367,7 +367,7 @@ class StudentClass extends React.Component {
         var finalDisplay = null
 
         if (this.state.missed !== null && this.state.attended !== null) {
-            var finalDisplay = (
+             finalDisplay = (
                 <DayPicker 
                     className="day-picker"
                     modifiers={modifiers}

@@ -8,7 +8,7 @@ import * as docCookies from 'doc-cookies';
 import authorization from '../functions/authorization'
 
 const loginURL = "http://127.0.0.1:8000/api/user/login/";
-const userInfoURL = "http://127.0.0.1:8000/api/user/";
+//const userInfoURL = "http://127.0.0.1:8000/api/user/";
 
 /**
  * Landing page for our web application

@@ -5,8 +5,8 @@
 
 import React from 'react';
 import {     
-    Card, CardImg, CardText, CardBody, CardDeck,
-    CardTitle, CardSubtitle, Button, Row, Col, Container} from 'reactstrap';
+    Card,  CardText, CardBody, CardDeck,
+    CardTitle,  Button, Row, Col, Container} from 'reactstrap';
 import './Dashboard.css';
 import convertDate from '../functions/convertDate';
 import Sidebar from '../components/Sidebar';
@@ -147,10 +147,10 @@ class InstrListQuizzes extends React.Component {
     render() {
         var display = null;
         if (this.state.showQuiz === false) {
-            var display = this.renderQuizzes()
+            display = this.renderQuizzes()
         }
         else {
-            var display = (
+            display = (
                 <div>
                     <InstrSpecificQuiz quiz={this.state.quizToShow} />
                     <Row>

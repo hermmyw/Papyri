@@ -1,6 +1,6 @@
 import React from 'react';
-import Sidebar from '../components/SidebarStudent.js';
-import { Container, Row, Col, Button, Form, FormGroup, Input, Label, FormFeedback, FormText} from 'reactstrap';
+//import Sidebar from '../components/SidebarStudent.js';
+import { Container, Row, Col, Button, Form, FormGroup, Input, Label,  FormText} from 'reactstrap';
 import '../components/UI/UI.css';
 import { IoIosArrowBack } from "react-icons/io";
 import Topbar from '../components/Topbar.js';

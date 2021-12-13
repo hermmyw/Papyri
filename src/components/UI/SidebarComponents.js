@@ -1,6 +1,7 @@
 import React from 'react'
 import './UI.css'
 
+/*
 class SidebarOld extends React.Component {
     render() {
         return (
@@ -8,6 +9,7 @@ class SidebarOld extends React.Component {
         )
     }
 }
+*/
 
 class SelectedButton extends React.Component {
 

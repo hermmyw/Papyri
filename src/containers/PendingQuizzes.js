@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Sidebar from '../components/Sidebar';
 import '../components/UI/UI.css';
 import './Dashboard.css';
 import { Row, Col, Container, Button } from 'reactstrap';
 import PendingQuizModal from './PendingQuizModal';
-import * as docCookies from 'doc-cookies';
+//import * as docCookies from 'doc-cookies';
 
 /**
  * Container for the Pending Quizzes page shown on the Instructor Sidebar
